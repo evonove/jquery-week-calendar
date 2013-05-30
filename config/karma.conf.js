@@ -8,8 +8,8 @@ files = [
   QUNIT,
   QUNIT_ADAPTER,
   'src/assets/jquery/jquery.js',
-  'src/assets/jquery-ui/jquery-ui.js',
-  'src/assets/jquery-ui/i18n/jquery-ui-i18n.js',
+  'src/assets/jquery-ui/ui/jquery-ui.js',
+  'src/assets/jquery-ui/ui/i18n/jquery-ui-i18n.js',
   'src/jquery.weekcalendar.js',
   'src/assets/datejs/build/date.js',
   'test/tests.js'
