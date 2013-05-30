@@ -1,0 +1,11 @@
+{
+  "name": "jquery-week-calendar",
+  "version": "0.1.0",
+  "dependencies": {
+    "jquery": "~1.4.4",
+    "jquery-ui": "~1.8.11",
+    "datejs": "latest"
+  },
+  "devDependencies" : {
+  } 
+}
