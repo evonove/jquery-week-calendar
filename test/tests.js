@@ -62,7 +62,7 @@ test('date parsing', function() {
 
   expect(15);
 
-  var _cleanDate = $.proxy($calendar.data('weekCalendar'), '_cleanDate'),
+  var _cleanDate = $.proxy($calendar.data('ui-weekCalendar'), '_cleanDate'),
       _curdate,
       testData = [
         {value: new Date('Fri Jul 16 2010 14:15:00'), expected: new Date('Fri Jul 16 2010 14:15:00').getTime()},
@@ -74,10 +74,10 @@ test('date parsing', function() {
         {value: '2010-06-16T12:15', expected: 1276683300000},
       ];
 
-  ok($.isFunction($calendar.data('weekCalendar')._cleanDate), 'check _cleanDate is a function');
+  ok($.isFunction($calendar.data('ui-weekCalendar')._cleanDate), 'check _cleanDate is a function');
 
   $(testData).each(function(i, item) {
-    _curdate = $calendar.data('weekCalendar')._cleanDate(item.value);
+    _curdate = $calendar.data('ui-weekCalendar')._cleanDate(item.value);
     ok(_curdate instanceof Date, 'Case ' + i + ': "_cleanDate" returns a Date instance');
     equal(_curdate.getTime(), item.expected, 'Case ' + i + ': The returned date is correct.');
   });
@@ -250,7 +250,7 @@ test("issue # 60: eventHeader doesn't take care of use24Hour option", function()
       'title': 'Lunch with Mike'}
       ];
   // trick to call private function
-  var _privateWeekCalendar = $calendar.data('weekCalendar');
+  var _privateWeekCalendar = $calendar.data('ui-weekCalendar');
   _events = _privateWeekCalendar._cleanEvents.call(_privateWeekCalendar, _events);
 
   var eventHeaderFunc = $calendar.weekCalendar('option', 'eventHeader');
@@ -295,7 +295,7 @@ test('issue #49: wrong calculation of DateLastMilliOfWeek', function() {
       'title': 'Lunch with Mike'}
       ];
 
-  var _privateInstance = $calendar.data('weekCalendar');
+  var _privateInstance = $calendar.data('ui-weekCalendar');
   ok($.isFunction(_privateInstance._dateLastDayOfWeek), 'check _dateLastDayOfWeek is a function');
   ok($.isFunction(_privateInstance._dateFirstDayOfWeek), 'check _dateFirstDayOfWeek is a function');
   ok($.isFunction(_privateInstance._dateLastMilliOfWeek), 'check _dateLastMilliOfWeek is a function');
