@@ -9,6 +9,11 @@ function formatTimeZone() {
   return TZ['sign'] + (TZ['hour'] < 10 ? '0' : '') + TZ['hour'] + ':' + (TZ['minute'] < 10 ? '0' : '') + TZ['minute'];
 }
 
+// Mock calendar div element
+var mockDiv = document.createElement("div"); 
+mockDiv.id = "calendar"; 
+document.body.appendChild(mockDiv); 
+
 test('Default Options', function() {
 
     var $calendar = $('#calendar');
@@ -303,39 +308,39 @@ test('issue #49: wrong calculation of DateLastMilliOfWeek', function() {
 
   _curDate = _dateFirstDayOfWeek(new Date('Apr 21 2011'));
   ok(_curDate instanceof Date, '_dateFirstDayOfWeek returns a date');
-  equals(_curDate.toString(), (new Date('Apr 18 2011')).toString(), '_dateFirstDayOfWeek returns monday');
+  equal(_curDate.toString(), (new Date('Apr 18 2011')).toString(), '_dateFirstDayOfWeek returns monday');
 
   _curDate = _dateLastDayOfWeek(new Date('Apr 21 2011'));
   ok(_curDate instanceof Date, '_dateLastDayOfWeek returns a date');
-  equals(_curDate.toString(), (new Date('Apr 24 2011')).toString(), '_dateLastDayOfWeek returns sunday');
+  equal(_curDate.toString(), (new Date('Apr 24 2011')).toString(), '_dateLastDayOfWeek returns sunday');
 
   _curDate = _dateLastMilliOfWeek(new Date('Apr 21 2011'));
 
   ok(_curDate instanceof Date, '_dateLastMilliOfWeek returns a date');
-  equals(_curDate.toString(), (new Date('Apr 25 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight');
+  equal(_curDate.toString(), (new Date('Apr 25 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight');
 
   //change firstDayOvWeek to sunday
   $calendar.weekCalendar('option', 'firstDayOfWeek', 0);
 
   //Middle of month
   _curDate = _dateFirstDayOfWeek(new Date('Apr 21 2011'));
-  equals(_curDate.toString(), (new Date('Apr 17 2011')).toString(), '_dateFirstDayOfWeek returns sunday');
+  equal(_curDate.toString(), (new Date('Apr 17 2011')).toString(), '_dateFirstDayOfWeek returns sunday');
 
   _curDate = _dateLastDayOfWeek(new Date('Apr 21 2011'));
-  equals(_curDate.toString(), (new Date('Apr 23 2011')).toString(), '_dateLastDayOfWeek returns monday');
+  equal(_curDate.toString(), (new Date('Apr 23 2011')).toString(), '_dateLastDayOfWeek returns monday');
 
   _curDate = _dateLastMilliOfWeek(new Date('Apr 21 2011'));
-  equals(_curDate.toString(), (new Date('Apr 24 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight');
+  equal(_curDate.toString(), (new Date('Apr 24 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight');
 
   // case date for start of mont
   _curDate = _dateFirstDayOfWeek(new Date('Apr 01 2011'));
-  equals(_curDate.toString(), (new Date('Mar 27 2011')).toString(), '_dateFirstDayOfWeek returns sunday 27 Mar');
+  equal(_curDate.toString(), (new Date('Mar 27 2011')).toString(), '_dateFirstDayOfWeek returns sunday 27 Mar');
 
   _curDate = _dateLastDayOfWeek(new Date('Apr 01 2011'));
-  equals(_curDate.toString(), (new Date('Apr 2 2011')).toString(), '_dateLastDayOfWeek returns Sat 2 APr');
+  equal(_curDate.toString(), (new Date('Apr 2 2011')).toString(), '_dateLastDayOfWeek returns Sat 2 APr');
 
   _curDate = _dateLastMilliOfWeek(new Date('Apr 01 2011'));
-  equals(_curDate.toString(), (new Date('Apr 03 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight 3 Apr ');
+  equal(_curDate.toString(), (new Date('Apr 03 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight 3 Apr ');
 
 
   //change firstDayOvWeek to monday
@@ -343,37 +348,37 @@ test('issue #49: wrong calculation of DateLastMilliOfWeek', function() {
 
   // case date for end of month
   _curDate = _dateFirstDayOfWeek(new Date('Apr 30 2011'));
-  equals(_curDate.toString(), (new Date('Apr 25 2011')).toString(), '_dateFirstDayOfWeek returns monday 25');
+  equal(_curDate.toString(), (new Date('Apr 25 2011')).toString(), '_dateFirstDayOfWeek returns monday 25');
 
   _curDate = _dateLastDayOfWeek(new Date('Apr 30 2011'));
-  equals(_curDate.toString(), (new Date('May 01 2011')).toString(), '_dateLastDayOfWeek returns Sun 1');
+  equal(_curDate.toString(), (new Date('May 01 2011')).toString(), '_dateLastDayOfWeek returns Sun 1');
 
   _curDate = _dateLastMilliOfWeek(new Date('Apr 30 2011'));
-  equals(_curDate.toString(), (new Date('May 02 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight 2');
+  equal(_curDate.toString(), (new Date('May 02 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight 2');
 
   //change firstDayOvWeek to sunday
   $calendar.weekCalendar('option', 'firstDayOfWeek', 0);
 
   // case date for end of week
   _curDate = _dateFirstDayOfWeek(new Date('Apr 23 2011'));
-  equals(_curDate.toString(), (new Date('Apr 17 2011')).toString(), '_dateFirstDayOfWeek returns sunday 17');
+  equal(_curDate.toString(), (new Date('Apr 17 2011')).toString(), '_dateFirstDayOfWeek returns sunday 17');
 
   _curDate = _dateLastDayOfWeek(new Date('Apr 23 2011'));
-  equals(_curDate.toString(), (new Date('Apr 23 2011')).toString(), '_dateLastDayOfWeek returns Saturday  23');
+  equal(_curDate.toString(), (new Date('Apr 23 2011')).toString(), '_dateLastDayOfWeek returns Saturday  23');
 
   _curDate = _dateLastMilliOfWeek(new Date('Apr 23 2011'));
-  equals(_curDate.toString(), (new Date('Apr 24 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight 24');
+  equal(_curDate.toString(), (new Date('Apr 24 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight 24');
 
 
   // case date in february leap year
   _curDate = _dateFirstDayOfWeek(new Date('Mar 01 2000'));
-  equals(_curDate.toString(), (new Date('Feb 27 2000')).toString(), '_dateFirstDayOfWeek returns sunday 27');
+  equal(_curDate.toString(), (new Date('Feb 27 2000')).toString(), '_dateFirstDayOfWeek returns sunday 27');
 
   _curDate = _dateLastDayOfWeek(new Date('Mar 01 2000'));
-  equals(_curDate.toString(), (new Date('Mar 04 2000')).toString(), '_dateLastDayOfWeek returns monday 4 ');
+  equal(_curDate.toString(), (new Date('Mar 04 2000')).toString(), '_dateLastDayOfWeek returns monday 4 ');
 
   _curDate = _dateLastMilliOfWeek(new Date('Mar 01 2000'));
-  equals(_curDate.toString(), (new Date('Mar 05 2000 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight 5');
+  equal(_curDate.toString(), (new Date('Mar 05 2000 00:00:00')).toString(), '_dateLastMilliOfWeek returns next sunday midnight 5');
 
   //change firstDayOvWeek to monday
   $calendar.weekCalendar('option', 'firstDayOfWeek', 1);
@@ -381,25 +386,25 @@ test('issue #49: wrong calculation of DateLastMilliOfWeek', function() {
   // case daylight saving +
   date = new Date('Mar 22 2011');
   _curDate = _dateFirstDayOfWeek(date);
-  equals(_curDate.toString(), (new Date('Mar 21 2011')).toString(), '_dateFirstDayOfWeek returns monday 21');
+  equal(_curDate.toString(), (new Date('Mar 21 2011')).toString(), '_dateFirstDayOfWeek returns monday 21');
 
   _curDate = _dateLastDayOfWeek(date);
-  equals(_curDate.toString(), (new Date('Mar 27 2011')).toString(), '_dateLastDayOfWeek returns sunday 27');
+  equal(_curDate.toString(), (new Date('Mar 27 2011')).toString(), '_dateLastDayOfWeek returns sunday 27');
 
   _curDate = _dateLastMilliOfWeek(date);
-  equals(_curDate.toString(), (new Date('Mar 28 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight 28');
+  equal(_curDate.toString(), (new Date('Mar 28 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight 28');
 
 
   // case daylight saving -
   date = new Date('Oct 26 2011');
   _curDate = _dateFirstDayOfWeek(date);
-  equals(_curDate.toString(), (new Date('Oct 24 2011')).toString(), '_dateFirstDayOfWeek returns monday 24');
+  equal(_curDate.toString(), (new Date('Oct 24 2011')).toString(), '_dateFirstDayOfWeek returns monday 24');
 
   _curDate = _dateLastDayOfWeek(date);
-  equals(_curDate.toString(), (new Date('Oct 30 2011')).toString(), '_dateLastDayOfWeek returns sunday 30 ');
+  equal(_curDate.toString(), (new Date('Oct 30 2011')).toString(), '_dateLastDayOfWeek returns sunday 30 ');
 
   _curDate = _dateLastMilliOfWeek(date);
-  equals(_curDate.toString(), (new Date('Oct 31 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight 31');
+  equal(_curDate.toString(), (new Date('Oct 31 2011 00:00:00')).toString(), '_dateLastMilliOfWeek returns next monday midnight 31');
 
 
 });
