@@ -10,13 +10,9 @@ module.exports = function (grunt) {
 
   // configurable paths
   var yeomanConfig = {
-    app: 'app',
+    app: 'src',
     dist: 'dist'
   };
-
-  try {
-    yeomanConfig.app = require('./component.json').appPath || yeomanConfig.app;
-  } catch (e) {}
 
   grunt.initConfig({
     yeoman: yeomanConfig,
@@ -24,10 +20,8 @@ module.exports = function (grunt) {
       livereload: {
         files: [
           '<%= yeoman.app %>/**/*.html',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-          '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-          '{.tmp,<%= yeoman.app %>}/js/{,*/}*.js',
-          '{.tmp,<%= yeoman.app %>}/a/js/{,*/}*.js'
+          '{.tmp,<%= yeoman.app %>}/**/*.css',
+          '{.tmp,<%= yeoman.app %>}/**/*.js'
         ],
         tasks: ['livereload']
       }
@@ -84,8 +78,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/js/{,*/}*.js',
-        '<%= yeoman.app %>/a/js/{,*/}*.js'
+        '<%= yeoman.app %>/*.js'
       ]
     },
     karma: {
