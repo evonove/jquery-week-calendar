@@ -59,11 +59,11 @@
         showHeader: true,
         buttons: true,
         buttonText: {
-          today: 'today',
-          lastWeek: 'previous',
-          nextWeek: 'next'
+          today: 'Today',
+          lastWeek: 'Previous',
+          nextWeek: 'Next'
         },
-        switchDisplay: {},
+        switchDisplay: {'Day': 1, '3 days': 3, '7 days': 7},
         scrollToHourMillis: 500,
         allowEventDelete: false,
         allowCalEventOverlap: false,
@@ -697,69 +697,54 @@
         if (options.buttons) {
             var calendarNavHtml = '';
 
+            // Rendering header without switchDisplay
             calendarNavHtml += '<div class=\"row-fluid\">';
-                calendarNavHtml += '<div class=\"wc-display\"></div>';
-                calendarNavHtml += '<div class=\"wc-nav\">';
-                  calendarNavHtml += '<button class=\"wc-prev\">' + options.buttonText.lastWeek + '</button>';
-                  calendarNavHtml += '<button class=\"wc-today\">' + options.buttonText.today + '</button>';
-                  calendarNavHtml += '<button class=\"wc-next\">' + options.buttonText.nextWeek + '</button>';
+              calendarNavHtml += '<div class=\"wc-nav span12\">';
+                  calendarNavHtml += '<button class=\"btn wc-today\"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
+                  calendarNavHtml += '<div class=\"btn-group\">';
+                    calendarNavHtml += '<button class=\"btn wc-prev\"><i class="icon-chevron-left"></i></button>';
+                    calendarNavHtml += '<button class=\"btn wc-next\"><i class="icon-chevron-right"></i></button>';
+                  calendarNavHtml += '</div>';
+                  calendarNavHtml += '<div class=\"wc-display btn-group pull-right\" data-toggle=\"buttons-radio\"></div>';
                 calendarNavHtml += '</div>';
-                calendarNavHtml += '<h1 class=\"wc-title\"></h1>';
-            calendarNavHtml += '</div>';
-
+            calendarNavHtml += '</div><br/>';
             $(calendarNavHtml).appendTo($calendarContainer);
 
-            $calendarContainer.find('.wc-nav .wc-today')
-              .button({
-                icons: {primary: 'ui-icon-home'}})
+            // Add listener to buttons
+            $calendarContainer.find('.wc-today')
               .click(function() {
                     self.today();
                     return false;
                   });
 
-            $calendarContainer.find('.wc-nav .wc-prev')
-              .button({
-                text: false,
-                icons: {primary: 'ui-icon-seek-prev'}})
+            $calendarContainer.find('.wc-prev')
               .click(function() {
                   self.element.weekCalendar('prev');
                   return false;
                 });
 
-            $calendarContainer.find('.wc-nav .wc-next')
-              .button({
-                text: false,
-                icons: {primary: 'ui-icon-seek-next'}})
+            $calendarContainer.find('.wc-next')
               .click(function() {
                   self.element.weekCalendar('next');
                   return false;
                 });
 
-            // now add buttons to switch display
+            // Add buttons to switch display
             if (this.options.switchDisplay && $.isPlainObject(this.options.switchDisplay)) {
               var $container = $calendarContainer.find('.wc-display');
               $.each(this.options.switchDisplay, function(label, option) {
-                      var _id = 'wc-switch-display-' + option;
-                      var _input = $('<input type="radio" id="' + _id + '" name="wc-switch-display" class="wc-switch-display"/>');
-                      var _label = $('<label for="' + _id + '"></label>');
-                      _label.html(label);
+                      var _input = $('<button class="btn">' + label + '</button>');
                       _input.val(option);
                       if (parseInt(self.options.daysToShow, 10) === parseInt(option, 10)) {
                         _input.attr('checked', 'checked');
                       }
                       $container
                         .append(_input)
-                        .append(_label);
                     });
-              $container.find('input').change(function() {
+              $container.find('button').click(function() {
                   self.setDaysToShow(parseInt($(this).val(), 10));
                 });
             }
-            $calendarContainer.find('.wc-nav, .wc-display').buttonset();
-            var _height = $calendarContainer.find('.wc-nav').outerHeight();
-            $calendarContainer.find('.wc-title')
-              .height(_height)
-              .css('line-height', _height + 'px');
         }else{
             var calendarNavHtml = '';
             calendarNavHtml += '<div class=\"ui-widget-header wc-toolbar\">';
