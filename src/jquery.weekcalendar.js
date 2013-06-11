@@ -663,14 +663,11 @@
         var self = this;
         var options = this.options;
 
-        $calendarContainer = $('<div class=\"wc-container\">').appendTo(self.element);
+        $calendarContainer = self.element;
 
-        //render the different parts
-          // nav links
+        // Render the different parts of calendar
         self._renderCalendarButtons($calendarContainer);
-          // header
         self._renderCalendarHeader($calendarContainer);
-          // body
         self._renderCalendarBody($calendarContainer);
 
         $weekDayColumns = $calendarContainer.find('.wc-day-column-inner');
@@ -765,16 +762,16 @@
         }
 
         // Days row
-        calendarHeaderHtml = '<div class=\"wc-header\">';
-        calendarHeaderHtml += '<table><tbody><tr><td class=\"wc-time-column-header\"></td>';
+        calendarHeaderHtml = '<div class=\"row-fluid\">';
+        calendarHeaderHtml += '<div class=\"wc-header span12\">';
+        calendarHeaderHtml += '<table><thead><tr><th class=\"wc-time-column-header\"></th>';
         for (var i = 1; i <= options.daysToShow; i++) {
-          calendarHeaderHtml += '<td class=\"wc-day-column-header wc-day-' + i + '\"></td>';
+          calendarHeaderHtml += '<th class=\"wc-day-column-header wc-day-' + i + '\"></th>';
         }
-        calendarHeaderHtml += '<td class=\"wc-scrollbar-shim\"' + rowspan + '></td></tr>';
 
         // Users row
         if (showAsSeparatedUser) {
-          calendarHeaderHtml += '<tr><td class=\"wc-time-column-header\"></td>';
+          calendarHeaderHtml += '<tr><th class=\"wc-time-column-header\"></th>';
           var uLength = options.users.length,
               _headerClass = '';
 
@@ -793,14 +790,14 @@
               else {
                 _headerClass = _headerClass.join(' ');
               }
-              calendarHeaderHtml += '<td class=\"' + _headerClass + ' wc-user-header wc-day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
+              calendarHeaderHtml += '<th class=\"' + _headerClass + ' wc-user-header wc-day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
               calendarHeaderHtml += self._getUserName(j);
-              calendarHeaderHtml += '</td>';
+              calendarHeaderHtml += '</th>';
             }
           }
           calendarHeaderHtml += '</tr>';
         }
-        calendarHeaderHtml += '</tbody></table></div><br/><hr>';
+        calendarHeaderHtml += '</thead></table></div></div>';
 
         $(calendarHeaderHtml).appendTo($calendarContainer);
       },
@@ -879,7 +876,7 @@
 
         renderRow = '<tr class=\"wc-grid-row-timeslot\">';
         renderRow += '<td class=\"wc-grid-timeslot-header\"' + rowspan + '></td>';
-        renderRow += '<td colspan=\"' + options.daysToShow * (showAsSeparatedUser ? options.users.length : 1) + '\">';
+        renderRow += '<td class=\"wc-timeslot-placeholder\" colspan=\"' + options.users.length + '\">';
         renderRow += '<div class=\"wc-no-height-wrapper wc-time-slot-wrapper\">';
         renderRow += '<div class=\"wc-time-slots\">';
 
@@ -924,7 +921,7 @@
                 var uLength = options.users.length;
                 for (var j = 0; j < uLength; j++) {
                     oddEven = (oddEven == 'odd' ? 'even' : 'odd');
-                    renderRow += '<td class=\"wc-day-column day-' + i + '\">';
+                    renderRow += '<td class=\"wc-day-column day-' + i + ' wc-user-' + j + '\">';
                     renderRow += '<div class=\"wc-no-height-wrapper wc-oddeven-wrapper\">';
                     renderRow += '<div class=\"wc-full-height-column ' + oddEvenClasses[oddEven] + '\" ></div>';
                     renderRow += '</div>';
@@ -961,7 +958,7 @@
               else {
                 var uLength = options.users.length;
                 for (var j = 0; j < uLength; j++) {
-                    renderRow += '<td class=\"wc-day-column day-' + i + '\">';
+                    renderRow += '<td class=\"wc-day-column day-' + i + ' wc-user-' + j + '\">';
                     renderRow += '<div class=\"wc-no-height-wrapper wc-freebusy-wrapper\">';
                     renderRow += '<div class=\"wc-full-height-column wc-column-freebusy wc-day-' + i;
                     renderRow += ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
@@ -1017,13 +1014,13 @@
             for (var j = 0; j < uLength; j++) {
               columnclass = [];
               if (j == 0) {
-                columnclass.push('wc-day-column-first');
+                columnclass.push('wc-day-column-first wc-user-' + j);
               }
               if (j == uLength - 1) {
-                columnclass.push('wc-day-column-last');
+                columnclass.push('wc-day-column-last wc-user-' + j);
               }
               if (!columnclass.length) {
-                columnclass = 'wc-day-column-middle';
+                columnclass = 'wc-day-column-middle wc-user-' + j;
               }
               else {
                 columnclass = columnclass.join(' ');
@@ -1271,7 +1268,7 @@
           var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
           var todayClass = 'state-active wc-today';
 
-          self.element.find('.wc-header td.wc-day-column-header').each(function(i, val) {
+          self.element.find('.wc-header th.wc-day-column-header').each(function(i, val) {
             $(this).html(self._getHeaderDate(currentDay));
             if (self._isToday(currentDay)) {
                 $(this).addClass(todayClass);
@@ -1285,7 +1282,7 @@
           currentDay = self._cloneDate(self.element.data('startDate'));
           if (showAsSeparatedUser)
           {
-            self.element.find('.wc-header td.wc-user-header').each(function(i, val) {
+            self.element.find('.wc-header th.wc-user-header').each(function(i, val) {
               if (self._isToday(currentDay)) {
                   $(this).addClass(todayClass);
               } else {
@@ -2920,4 +2917,17 @@
         }
     });
 
+  $(document).ready(function() {
+    /* TODO: value of colspan must be dynamic according to day or user length
+     * Register a callback for mobile view 
+     */
+    enquire.register("screen and (max-width: 767px)", {
+      match : function() {
+        $(".wc-timeslot-placeholder").attr('colspan', 3);
+      },
+      unmatch : function() {
+        $(".wc-timeslot-placeholder").attr('colspan', 4);
+      }
+    });
+  });
 })(jQuery);

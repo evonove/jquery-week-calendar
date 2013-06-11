@@ -10,60 +10,11 @@
   <link rel='stylesheet' type='text/css' href='jquery.weekcalendar.css' />
   <link rel='stylesheet' type='text/css' href='mobile.css' />
 
+  <script type='text/javascript' src='assets/enquire/dist/enquire.js'></script>
   <script type='text/javascript' src='assets/jquery/jquery.js'></script>
   <script type='text/javascript' src='assets/jquery-ui/ui/jquery-ui.js'></script>
   <script type="text/javascript" src="assets/datejs/build/date.js"></script>
   <script type="text/javascript" src="jquery.weekcalendar.js"></script>
-  <script type="text/javascript">
-  (function($) {
-    $(document).ready(function() {
-      var $calendar = $('#calendar').weekCalendar({
-        // Generic configuration
-        use24Hour: true,
-        timeslotsPerHour: 4,
-        hourLine: true,
-        scrollToHourMillis : 0,
-        height: function($calendar){
-          return $(window).height() - $('h1').outerHeight(true);
-        },
-        eventRender : function(calEvent, $event) {
-          if (calEvent.end.getTime() < new Date().getTime()) {
-            $event.css('backgroundColor', '#aaa');
-            $event.find('.wc-time').css({
-              backgroundColor: '#999',
-              border:'1px solid #888'
-            });
-          }
-        },
-        data: function(start, end, callback) {
-          var dataSource = $('#data_source').val();
-          if (dataSource === '1') {
-            callback(eventData1);
-          } else if(dataSource === '2') {
-            callback(eventData2);
-          } else {
-            callback({
-              options: {
-                defaultFreeBusy: {
-                  free:true
-                }
-              },
-              events: []
-            });
-          }
-        },
-        users: ['User 1', 'User 2', 'User 3', 'User 4'],
-        showAsSeparateUser: true,
-        displayOddEven: true,
-        displayFreeBusys: true,
-        daysToShow: 1,
-        headerSeparator: ' ',
-        useShortDayNames: true,
-        dateFormat: 'd F'
-      });
-    });
-  })(jQuery);
-  </script>
 </head>
 <body>
   <div class="container-fluid">
@@ -74,9 +25,55 @@
         management and freebusy display / computation.
       </p>
     </div>
-    <div class="row-fluid">
-      <div id="calendar"></div>
-    </div>
+    <div id="calendar" class="row-fluid" />
   </div>
+  <script type="text/javascript">
+    (function($) {
+        var $calendar = $('#calendar').weekCalendar({
+          // Generic configuration
+          use24Hour: true,
+          timeslotsPerHour: 4,
+          hourLine: true,
+          scrollToHourMillis : 0,
+          height: function($calendar){
+            return $(window).height() - $('h1').outerHeight(true);
+          },
+          eventRender : function(calEvent, $event) {
+            if (calEvent.end.getTime() < new Date().getTime()) {
+              $event.css('backgroundColor', '#aaa');
+              $event.find('.wc-time').css({
+                backgroundColor: '#999',
+                border:'1px solid #888'
+              });
+            }
+          },
+          data: function(start, end, callback) {
+            var dataSource = $('#data_source').val();
+            if (dataSource === '1') {
+              callback(eventData1);
+            } else if(dataSource === '2') {
+              callback(eventData2);
+            } else {
+              callback({
+                options: {
+                  defaultFreeBusy: {
+                    free:true
+                  }
+                },
+                events: []
+              });
+            }
+          },
+          users: ['User 1', 'User 2', 'User 3', 'User 4'],
+          showAsSeparateUser: true,
+          displayOddEven: true,
+          displayFreeBusys: true,
+          daysToShow: 1,
+          headerSeparator: ' ',
+          useShortDayNames: true,
+          dateFormat: 'd F'
+        });
+    })(jQuery);
+  </script>
 </body>
 </html>
