@@ -8,7 +8,7 @@
 
   <link rel='stylesheet' type='text/css' href='assets/jquery-ui/themes/smoothness/jquery-ui.css' />
   <link rel='stylesheet' type='text/css' href='jquery.weekcalendar.css' />
-  <link rel='stylesheet' type='text/css' href='default.css' />
+  <link rel='stylesheet' type='text/css' href='mobile.css' />
 
   <script type='text/javascript' src='assets/jquery/jquery.js'></script>
   <script type='text/javascript' src='assets/jquery-ui/ui/jquery-ui.js'></script>
@@ -71,7 +71,9 @@
             return false;
           }
 
+          /* TODO do something
           alert('You\'ve added a new event. You would capture this event, add the logic for creating a new event with your own fields, data and whatever backend persistence you require.');
+          */
 
           calEvent.id = calEvent.userId +'_'+ calEvent.start.getTime();
           $(calendar).weekCalendar('updateFreeBusy', {
