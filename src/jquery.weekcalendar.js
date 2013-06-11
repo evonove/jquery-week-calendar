@@ -21,10 +21,6 @@
  */
 
 (function($) {
-  // check the jquery version
-  var _v = $.fn.jquery.split('.'),
-      _jQuery14OrLower = (10 * _v[0] + _v[1]) < 15;
-
   $.widget('ui.weekCalendar', (function() {
     var _currentAjaxCall, _hourLineTimeout;
 
@@ -41,10 +37,10 @@
                   if ($(calendar).weekCalendar('option', 'daysToShow') != 5) {
                     return 0;
                   } else {
-                    //workweek
+                    // Workweek
                     return 1;
                   }
-              }, // 0 = Sunday, 1 = Monday, 2 = Tuesday, ... , 6 = Saturday
+              },
         useShortDayNames: false,
         timeSeparator: ' to ',
         startParam: 'start',
@@ -667,7 +663,7 @@
         var self = this;
         var options = this.options;
 
-        $calendarContainer = $('<div class=\"ui-widget wc-container\">').appendTo(self.element);
+        $calendarContainer = $('<div class=\"wc-container\">').appendTo(self.element);
 
         //render the different parts
           // nav links
@@ -747,7 +743,7 @@
             }
         }else{
             var calendarNavHtml = '';
-            calendarNavHtml += '<div class=\"ui-widget-header wc-toolbar\">';
+            calendarNavHtml += '<div class=\"wc-toolbar\">';
               calendarNavHtml += '<h1 class=\"wc-title\"></h1>';
             calendarNavHtml += '</div>';
             $(calendarNavHtml).appendTo($calendarContainer);
@@ -768,15 +764,15 @@
           colspan = ' colspan=\"' + options.users.length + '\" ';
         }
 
-        //first row
-        calendarHeaderHtml = '<div class=\"ui-widget-content wc-header\">';
+        // Days row
+        calendarHeaderHtml = '<div class=\"wc-header\">';
         calendarHeaderHtml += '<table><tbody><tr><td class=\"wc-time-column-header\"></td>';
         for (var i = 1; i <= options.daysToShow; i++) {
-          calendarHeaderHtml += '<td class=\"wc-day-column-header wc-day-' + i + '\"' + colspan + '></td>';
+          calendarHeaderHtml += '<td class=\"wc-day-column-header wc-day-' + i + '\"></td>';
         }
         calendarHeaderHtml += '<td class=\"wc-scrollbar-shim\"' + rowspan + '></td></tr>';
 
-        //users row
+        // Users row
         if (showAsSeparatedUser) {
           calendarHeaderHtml += '<tr><td class=\"wc-time-column-header\"></td>';
           var uLength = options.users.length,
@@ -798,16 +794,13 @@
                 _headerClass = _headerClass.join(' ');
               }
               calendarHeaderHtml += '<td class=\"' + _headerClass + ' wc-user-header wc-day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
-//              calendarHeaderHtml+=    "<div class=\"wc-user-header wc-day-" + i + " wc-user-" + self._getUserIdFromIndex(j) +"\" >";
               calendarHeaderHtml += self._getUserName(j);
-//              calendarHeaderHtml+=    "</div>";
               calendarHeaderHtml += '</td>';
             }
           }
           calendarHeaderHtml += '</tr>';
         }
-        //close the header
-        calendarHeaderHtml += '</tbody></table></div>';
+        calendarHeaderHtml += '</tbody></table></div><br/><hr>';
 
         $(calendarHeaderHtml).appendTo($calendarContainer);
       },
@@ -915,7 +908,7 @@
               showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
               oddEven,
               // let's take advantage of the jquery ui framework
-              oddEvenClasses = {'odd': 'wc-column-odd', 'even': 'ui-state-hover wc-column-even'};
+              oddEvenClasses = {'odd': 'wc-column-odd', 'even': 'wc-column-even'};
 
           //now let's display oddEven placeholders
           for (var i = 1; i <= options.daysToShow; i++) {
@@ -998,7 +991,7 @@
         renderRow = '<tr class=\"wc-grid-row-events\">';
         renderRow += '<td class=\"wc-grid-timeslot-header\">';
         for (var i = start; i < end; i++) {
-          var bhClass = (options.businessHours.start <= i && options.businessHours.end > i) ? 'ui-state-active wc-business-hours' : 'ui-state-default';
+          var bhClass = (options.businessHours.start <= i && options.businessHours.end > i) ? 'state-active wc-business-hours' : '';
           renderRow += '<div class=\"wc-hour-header ' + bhClass + '\">';
           if (options.use24Hour) {
             renderRow += '<div class=\"wc-time-header-cell\">' + self._24HourForIndex(i) + '</div>';
@@ -1276,7 +1269,7 @@
           var options = this.options;
           var currentDay = self._cloneDate(self.element.data('startDate'));
           var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
-          var todayClass = 'ui-state-active wc-today';
+          var todayClass = 'state-active wc-today';
 
           self.element.find('.wc-header td.wc-day-column-header').each(function(i, val) {
             $(this).html(self._getHeaderDate(currentDay));
@@ -1311,11 +1304,11 @@
             if (self._isToday(currentDay)) {
                 $(this).parent()
                     .addClass(todayClass)
-                    .removeClass('ui-state-default');
+                    .removeClass('state-default');
             } else {
                 $(this).parent()
                     .removeClass(todayClass)
-                    .addClass('ui-state-default');
+                    .addClass('state-default');
             }
 
             if (!showAsSeparatedUser || !((i + 1) % options.users.length)) {

@@ -3,36 +3,19 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <title>jQuery Week Calendar</title>
+
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
-
   <link rel='stylesheet' type='text/css' href='assets/jquery-ui/themes/smoothness/jquery-ui.css' />
   <link rel='stylesheet' type='text/css' href='jquery.weekcalendar.css' />
   <link rel='stylesheet' type='text/css' href='mobile.css' />
 
   <script type='text/javascript' src='assets/jquery/jquery.js'></script>
   <script type='text/javascript' src='assets/jquery-ui/ui/jquery-ui.js'></script>
-  <script type='text/javascript' src='assets/jquery-ui/ui/i18n/jquery-ui-i18n.js'></script>
   <script type="text/javascript" src="assets/datejs/build/date.js"></script>
   <script type="text/javascript" src="jquery.weekcalendar.js"></script>
   <script type="text/javascript">
   (function($) {
-    function updateMessage() {
-      var dataSource = $('#data_source').val();
-
-      $('#message').fadeOut(function() {
-        if (dataSource === '1') {
-          $('#message').text('Displaying event data set 1 with timeslots per hour of 4 and timeslot height of 20px. Moreover, the calendar is free by default.');
-        } else if(dataSource === '2') {
-          $('#message').text('Displaying event data set 2 with timeslots per hour of 3 and timeslot height of 30px. Moreover, the calendar is busy by default.');
-        } else {
-          $('#message').text('Displaying no events.');
-          }
-
-        $(this).fadeIn();
-      });
-    }
-
     $(document).ready(function() {
       var $calendar = $('#calendar').weekCalendar({
         // Generic configuration
@@ -51,37 +34,6 @@
               border:'1px solid #888'
             });
           }
-        },
-        eventNew : function(calEvent, $event, FreeBusyManager, calendar) {
-          var isFree = true;
-          $.each(FreeBusyManager.getFreeBusys(calEvent.start, calEvent.end), function() {
-            if (
-              this.getStart().getTime() != calEvent.end.getTime()
-              && this.getEnd().getTime() != calEvent.start.getTime()
-              && !this.getOption('free')
-            ){
-              isFree = false;
-              return false;
-            }
-          });
-
-          if (!isFree) {
-            alert('looks like you tried to add an event on busy part !');
-            $(calendar).weekCalendar('removeEvent',calEvent.id);
-            return false;
-          }
-
-          /* TODO do something
-          alert('You\'ve added a new event. You would capture this event, add the logic for creating a new event with your own fields, data and whatever backend persistence you require.');
-          */
-
-          calEvent.id = calEvent.userId +'_'+ calEvent.start.getTime();
-          $(calendar).weekCalendar('updateFreeBusy', {
-            userId: calEvent.userId,
-            start: calEvent.start,
-            end: calEvent.end,
-            free:false
-          });
         },
         data: function(start, end, callback) {
           var dataSource = $('#data_source').val();
@@ -107,21 +59,8 @@
         daysToShow: 1,
         headerSeparator: ' ',
         useShortDayNames: true,
-        // I18N
-        firstDayOfWeek: $.datepicker.regional['en-GB'].firstDay,
-        shortDays: $.datepicker.regional['en-GB'].dayNamesShort,
-        longDays: $.datepicker.regional['en-GB'].dayNames,
-        shortMonths: $.datepicker.regional['en-GB'].monthNamesShort,
-        longMonths: $.datepicker.regional['en-GB'].monthNames,
-        dateFormat: 'd F y'
+        dateFormat: 'd F'
       });
-
-      $('#data_source').change(function() {
-        $calendar.weekCalendar('refresh');
-        updateMessage();
-      });
-
-      updateMessage();
     });
   })(jQuery);
   </script>
