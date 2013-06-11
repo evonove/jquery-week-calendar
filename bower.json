@@ -4,7 +4,8 @@
   "dependencies": {
     "jquery": "~2.0.1",
     "jquery-ui": "~1.10.3",
-    "datejs": "latest"
+    "datejs": "latest",
+    "enquire": "~2.0.2"
   },
   "devDependencies" : {
   } 
