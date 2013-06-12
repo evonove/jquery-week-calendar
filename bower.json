@@ -6,6 +6,7 @@
     "jquery-ui": "~1.10.3",
     "datejs": "latest",
     "enquire": "~2.0.2"
+    "jquery.slimscroll": "1.2.0"
   },
   "devDependencies" : {
   } 
