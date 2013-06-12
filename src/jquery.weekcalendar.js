@@ -561,7 +561,7 @@
         if (options && $.isFunction(options.height)) {
         }
       },
-      
+
       /*
         * TODO: remove this useless function
         */
@@ -1893,6 +1893,7 @@
           var self = this;
           var options = this.options;
           var $scrollable = this.element.find('.wc-scrollable-grid');
+
           var slot = hour;
           if (self.options.businessHours.limitDisplay) {
             if (hour <= self.options.businessHours.start) {
@@ -1915,6 +1916,13 @@
             else {
               $scrollable.animate({scrollTop: scroll}, 0);
             }
+
+            /* Enhanced scrollbar */
+            $scrollable.slimScroll({
+                height: 'auto',
+                wheelStep: '5',
+                start: $target
+            });
           });
       },
 
