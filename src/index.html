@@ -17,15 +17,15 @@
   <script type="text/javascript" src="jquery.weekcalendar.js"></script>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row-fluid">
+  <div class="container-fluid fill">
+    <div id="header" class="row-fluid">
       <h1>jQuery Week Calendar</h1>
       <p class="description">
         This calendar demonstrates the differents new options that allow user
         management and freebusy display / computation.
       </p>
     </div>
-    <div id="calendar" class="row-fluid" />
+    <div id="calendar" class="row-fluid fill" />
   </div>
   <script type="text/javascript">
     (function($) {
@@ -36,7 +36,7 @@
           hourLine: true,
           scrollToHourMillis : 0,
           height: function($calendar){
-            return $(window).height() - $('h1').outerHeight(true);
+            return $(window).height() - $("#header").height();
           },
           eventRender : function(calEvent, $event) {
             if (calEvent.end.getTime() < new Date().getTime()) {

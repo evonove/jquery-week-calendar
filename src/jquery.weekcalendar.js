@@ -32,7 +32,7 @@
         alwaysDisplayTimeMinutes: true,
         use24Hour: false,
         daysToShow: 7,
-        minBodyHeight: 100,
+        minBodyHeight: 300,
         firstDayOfWeek: function(calendar) {
                   if ($(calendar).weekCalendar('option', 'daysToShow') != 5) {
                     return 0;
@@ -553,33 +553,19 @@
       },
 
       /*
+        * TODO: remove this useless function
         * Resize the calendar scrollable height based on the provided function in options.
         */
       _resizeCalendar: function() {
         var options = this.options;
         if (options && $.isFunction(options.height)) {
-          var calendarHeight = options.height(this.element);
-          var headerHeight = this.element.find('.wc-header').outerHeight();
-          var navHeight = this.element.find('.wc-toolbar').outerHeight();
-          var scrollContainerHeight = Math.max(calendarHeight - navHeight - headerHeight, options.minBodyHeight);
-          var timeslotHeight = this.element.find('.wc-time-slots').outerHeight();
-          this.element.find('.wc-scrollable-grid').height(scrollContainerHeight);
-          if (timeslotHeight <= scrollContainerHeight) {
-            this.element.find('.wc-scrollbar-shim').width(0);
-          }
-          else {
-            this.element.find('.wc-scrollbar-shim').width(this._findScrollBarWidth());
-          }
-          this._trigger('resize', this.element);
         }
       },
-
+      
+      /*
+        * TODO: remove this useless function
+        */
       _findScrollBarWidth: function() {
-        var parent = $('<div style="width:50px;height:50px;overflow:auto"><div/></div>').appendTo('body');
-        var child = parent.children();
-        var width = child.innerWidth() - child.height(99).innerWidth();
-        parent.remove();
-        return width || /* default to 16 that is the average */ 16;
       },
 
       /*
@@ -691,7 +677,7 @@
             var calendarNavHtml = '';
 
             // Rendering header without switchDisplay
-            calendarNavHtml += '<div class=\"row-fluid\">';
+            calendarNavHtml += '<div class=\"row-fluid calendar-buttons\">';
               calendarNavHtml += '<div class=\"wc-nav span12\">';
                   calendarNavHtml += '<button class=\"btn wc-today\"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
                   calendarNavHtml += '<div class=\"btn-group\">';
@@ -762,7 +748,7 @@
         }
 
         // Days row
-        calendarHeaderHtml = '<div class=\"row-fluid\">';
+        calendarHeaderHtml = '<div class=\"row-fluid calendar-header\">';
         calendarHeaderHtml += '<div class=\"wc-header span12\">';
         calendarHeaderHtml += '<table><thead><tr><th class=\"wc-time-column-header\"></th>';
         for (var i = 1; i <= options.daysToShow; i++) {
@@ -813,11 +799,13 @@
             showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
             $calendarBody, $calendarTableTbody;
         // create the structure
-        $calendarBody = '<div class=\"wc-scrollable-grid\">';
+        $calendarBody = '<div class=\"row-fluid fill\">';
+        $calendarBody += '<div class=\"wc-scrollable-grid\">';
         $calendarBody += '<table class=\"wc-time-slots\">';
         $calendarBody += '<tbody>';
         $calendarBody += '</tbody>';
         $calendarBody += '</table>';
+        $calendarBody += '</div>';
         $calendarBody += '</div>';
         $calendarBody = $($calendarBody);
         $calendarTableTbody = $calendarBody.find('tbody');
