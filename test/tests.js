@@ -19,13 +19,12 @@ test('Default Options', function() {
     var $calendar = $('#calendar');
     $calendar.weekCalendar();
 
-    expect(30);
+    expect(29);
 
     deepEqual($calendar.weekCalendar('option', 'alwaysDisplayTimeMinutes'), true);
     deepEqual($calendar.weekCalendar('option', 'use24Hour'), false);
     deepEqual($calendar.weekCalendar('option', 'firstDayOfWeek')(), 0);
     deepEqual($calendar.weekCalendar('option', 'daysToShow'), 7);
-    deepEqual($calendar.weekCalendar('option', 'minBodyHeight'), 100);
     deepEqual($calendar.weekCalendar('option', 'useShortDayNames'), false);
     deepEqual($calendar.weekCalendar('option', 'timeSeparator'), ' to ');
     deepEqual($calendar.weekCalendar('option', 'startParam'), 'start');
