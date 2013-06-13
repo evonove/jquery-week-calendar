@@ -208,10 +208,10 @@ table.wc-time-slots {
 }
 
 .wc-cal-event {
-  /* Modern Browsers */ opacity: 0.8;
-  /* Netscape */ -moz-opacity: 0.8;
-  /* Safari 1 */ -khtml-opacity: 0.8;
-  background-color: #68a1e5;
+  /* Modern Browsers */ opacity: 1.0;
+  /* Netscape */ -moz-opacity: 1.0;
+  /* Safari 1 */ -khtml-opacity: 1.0;
+  background-color: #1796b0;
   position: absolute;
   text-align: center;
   overflow: hidden;
@@ -233,8 +233,8 @@ table.wc-time-slots {
 }
 
 .wc-cal-event .wc-time {
-  background-color: #2b72d0;
-  border: 1px solid #1b62c0;
+  background-color: #1796b0;
+  
   color: #fff;
   padding: 0;
   font-weight: bold;
