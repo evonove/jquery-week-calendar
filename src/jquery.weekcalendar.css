@@ -228,13 +228,14 @@ table.wc-time-slots {
   height: 16px;
 }
 
-.wc-cal-event.ui-resizable-resizing {
-  cursor: s-resize;
+.wc-resizable {
+  font-size: 7px;
+  height: 15px;
+  bottom: 0px;
 }
 
 .wc-cal-event .wc-time {
   background-color: #1796b0;
-  
   color: #fff;
   padding: 0;
   font-weight: bold;
@@ -246,12 +247,6 @@ table.wc-time-slots {
 
 .wc-cal-event .wc-title {
   position: relative;
-}
-
-.wc-container .ui-resizable-s {
-  height: 10px;
-  line-height: 10px;
-  bottom: -2px;
 }
 
 .wc-container .ui-draggable-dragging {

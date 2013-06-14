@@ -1846,7 +1846,8 @@
           }
         });
 
-        $('.ui-resizable-handle', $calEvent).text('=');
+        $('.ui-resizable-handle', $calEvent).html('===');
+        $('.ui-resizable-handle').addClass('wc-resizable');
       },
 
       /*
