@@ -41,13 +41,14 @@
         timeSeparator: ' to ',
         startParam: 'start',
         endParam: 'end',
-        businessHours: {start: 8, end: 18, limitDisplay: false},
+        businessHours: { start: 8, end: 18, limitDisplay: false },
         newEventText: 'New Event',
         timeslotHeight: 20,
         defaultEventLength: 2,
         timeslotsPerHour: 4,
         minDate: null,
         maxDate: null,
+        data: [],
         showHeader: true,
         buttons: true,
         buttonText: {
@@ -55,9 +56,9 @@
           lastWeek: 'Previous',
           nextWeek: 'Next'
         },
-        switchDisplay: {'Day': 1, '3 days': 3, '7 days': 7},
+        switchDisplay: { 'Day': 1, '3 days': 3, '7 days': 7 },
         scrollToHourMillis: 0,
-        allowEventDelete: false,
+        allowEventDelete: true,
         allowCalEventOverlap: false,
         overlapEventsSeparate: false,
         totalEventsWidthPercentInOneColumn: 100,
@@ -111,7 +112,6 @@
         },
         noEvents: function() {
         },
-        data: [],
         eventHeader: function(calEvent, calendar) {
           var options = calendar.weekCalendar('option');
           var one_hour = 3600000;
