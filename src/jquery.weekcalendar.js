@@ -1198,8 +1198,6 @@
         } else if (options.data) {
           self._renderEvents(options.data, $weekDayColumns);
         }
-
-        self._disableTextSelect($weekDayColumns);
       },
 
       /*
@@ -1974,25 +1972,6 @@
         if (!event.end) {
           event.end = this._addDays(this._cloneDate(event.start), 1);
         }
-      },
-
-      /*
-       * Disable text selection of the elements in different browsers
-       */
-      _disableTextSelect: function($elements) {
-        $elements.each(function() {
-          if (typeof this.style.MozUserSelect !== 'undefined') {
-            $(this).css('MozUserSelect', 'none');
-          } else if (typeof this.onselectstart !== 'undefined') {
-            $(this).bind('selectstart', function() {
-              return false;
-            });
-          } else {
-            $(this).mousedown(function() {
-              return false;
-            });
-          }
-        });
       },
 
       /*

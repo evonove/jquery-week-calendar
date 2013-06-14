@@ -2,6 +2,14 @@ html, body, .fill {
   height: 94%;
 }
 
+#calendar {
+  /* Prevent user selection */
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .wc-toolbar {
   padding: 1em;
 }
