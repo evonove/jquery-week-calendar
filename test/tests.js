@@ -22,10 +22,10 @@ test('Default Options', function() {
     expect(29);
 
     deepEqual($calendar.weekCalendar('option', 'alwaysDisplayTimeMinutes'), true);
-    deepEqual($calendar.weekCalendar('option', 'use24Hour'), false);
+    deepEqual($calendar.weekCalendar('option', 'use24Hour'), true);
     deepEqual($calendar.weekCalendar('option', 'firstDayOfWeek')(), 0);
-    deepEqual($calendar.weekCalendar('option', 'daysToShow'), 7);
-    deepEqual($calendar.weekCalendar('option', 'useShortDayNames'), false);
+    deepEqual($calendar.weekCalendar('option', 'daysToShow'), 1);
+    deepEqual($calendar.weekCalendar('option', 'useShortDayNames'), true);
     deepEqual($calendar.weekCalendar('option', 'timeSeparator'), ' to ');
     deepEqual($calendar.weekCalendar('option', 'startParam'), 'start');
     deepEqual($calendar.weekCalendar('option', 'endParam'), 'end');
@@ -39,7 +39,7 @@ test('Default Options', function() {
     deepEqual($calendar.weekCalendar('option', 'minDate'), null);
     deepEqual($calendar.weekCalendar('option', 'maxDate'), null);
     deepEqual($calendar.weekCalendar('option', 'buttons'), true);
-    deepEqual($calendar.weekCalendar('option', 'scrollToHourMillis'), 500);
+    deepEqual($calendar.weekCalendar('option', 'scrollToHourMillis'), 0);
     deepEqual($calendar.weekCalendar('option', 'allowCalEventOverlap'), false);
     deepEqual($calendar.weekCalendar('option', 'overlapEventsSeparate'), false);
     deepEqual($calendar.weekCalendar('option', 'readonly'), false);
@@ -47,7 +47,7 @@ test('Default Options', function() {
 
     deepEqual($calendar.weekCalendar('option', 'displayOddEven'), false);
     deepEqual($calendar.weekCalendar('option', 'textSize'), 13);
-    deepEqual($calendar.weekCalendar('option', 'headerSeparator'), '<br />');
+    deepEqual($calendar.weekCalendar('option', 'headerSeparator'), ' ');
     deepEqual($calendar.weekCalendar('option', 'getHeaderDate'), null);
     deepEqual($calendar.weekCalendar('option', 'preventDragOnEventCreation'), false);
 
