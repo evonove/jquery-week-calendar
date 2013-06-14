@@ -29,25 +29,26 @@
       options: {
         date: new Date(),
         timeFormat: null,
-        dateFormat: 'M d, Y',
+        dateFormat: 'd F',
         alwaysDisplayTimeMinutes: true,
-        use24Hour: false,
-        daysToShow: 7,
+        use24Hour: true,
+        daysToShow: 1,
         minBodyHeight: 300,
         firstDayOfWeek: function(calendar) {
           return $(calendar).weekCalendar('option', 'daysToShow') !== 5 ? 0 : 1;
         },
-        useShortDayNames: false,
+        useShortDayNames: true,
         timeSeparator: ' to ',
         startParam: 'start',
         endParam: 'end',
-        businessHours: {start: 8, end: 18, limitDisplay: false},
+        businessHours: { start: 8, end: 18, limitDisplay: false },
         newEventText: 'New Event',
         timeslotHeight: 20,
         defaultEventLength: 2,
         timeslotsPerHour: 4,
         minDate: null,
         maxDate: null,
+        data: [],
         showHeader: true,
         buttons: true,
         buttonText: {
@@ -55,15 +56,15 @@
           lastWeek: 'Previous',
           nextWeek: 'Next'
         },
-        switchDisplay: {'Day': 1, '3 days': 3, '7 days': 7},
-        scrollToHourMillis: 500,
-        allowEventDelete: false,
+        switchDisplay: { 'Day': 1, '3 days': 3, '7 days': 7 },
+        scrollToHourMillis: 0,
+        allowEventDelete: true,
         allowCalEventOverlap: false,
         overlapEventsSeparate: false,
         totalEventsWidthPercentInOneColumn: 100,
         readonly: false,
         allowEventCreation: true,
-        hourLine: false,
+        hourLine: true,
         deletable: function(calEvent, element) {
           return true;
         },
@@ -75,8 +76,14 @@
         },
         eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
         },
-        eventRender: function(calEvent, element) {
-          return element;
+        eventRender: function(calEvent, $event) {
+          if (calEvent.end.getTime() < new Date().getTime()) {
+            $event.css('backgroundColor', '#aaa');
+            $event.find('.wc-time').css({
+              backgroundColor: '#999',
+              border:'1px solid #888'
+            });
+          }
         },
         eventAfterRender: function(calEvent, element) {
           return element;
@@ -142,7 +149,7 @@
          * one user.
          * @type {boolean}
          */
-        showAsSeparateUsers: true,
+        showAsSeparateUsers: false,
         /**
          * Callback used to read user id from a user object.
          * @param {Object} user the user to retrieve the id from.
@@ -237,7 +244,7 @@
          * class
          * @type {boolean}
          */
-        displayOddEven: false,
+        displayOddEven: true,
         textSize: 13,
         /**
          * the title attribute for the calendar. possible placeholders are:
@@ -257,7 +264,7 @@
          * @type {object|function(#calendar)}
          */
         jsonOptions: {},
-        headerSeparator: '<br />',
+        headerSeparator: ' ',
         /**
           * returns formatted header for day display
           * @type {function(date,calendar)}
@@ -570,8 +577,8 @@
         var options = this.options;
 
         this.element.click(function(event) {
-          var $target = $(event.target),
-              freeBusyManager;
+          var $target = $(event.target);
+          var freeBusyManager;
 
           // Click is disabled
           if ($target.data('preventClick')) {
