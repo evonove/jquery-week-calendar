@@ -244,7 +244,7 @@
          * class
          * @type {boolean}
          */
-        displayOddEven: true,
+        displayOddEven: false,
         textSize: 13,
         /**
          * the title attribute for the calendar. possible placeholders are:
