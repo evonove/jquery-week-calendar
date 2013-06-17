@@ -103,11 +103,6 @@ table.wc-time-slots {
   border-style: dashed;
 }
 
-.wc-scrollable-grid .wc-day-column-first {
-  border-width: 0 0 0 3px; 
-  border-style: double;
-}
-
 .wc-day-column-inner {
   width: 100%;
   position:relative;
@@ -133,6 +128,7 @@ table.wc-time-slots {
 .wc-time-slots {
   position: absolute;
   width: 100%;
+  margin-top: 2px;
 }
 
 .wc-column-odd,
