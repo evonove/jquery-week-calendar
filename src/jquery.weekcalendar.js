@@ -65,6 +65,7 @@
         readonly: false,
         allowEventCreation: true,
         hourLine: true,
+        modalTemplate: '/template/modal.html',
         deletable: function(calEvent, element) {
           return true;
         },
@@ -98,6 +99,10 @@
         eventResize: function(calEvent, element) {
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, mouseupEvent) {
+          var $modal = $('#ajax-modal');
+          $modal.load(this.modalTemplate, '', function(){
+            $modal.modal();
+          });
         },
         eventMouseover: function(calEvent, $event) {
         },
@@ -285,6 +290,7 @@
         var self = this;
         self._computeOptions();
         self._setupEventDelegation();
+        self._loadModalForm();
         self._renderCalendar();
         self._loadCalEvents();
         self._resizeCalendar();
@@ -638,6 +644,14 @@
       _isDraggingOrResizing: function($target) {
         return $target.hasClass('ui-draggable-dragging') ||
                $target.hasClass('ui-resizable-resizing');
+      },
+
+      /*
+       * Append modal form to calendar div
+       */
+      _loadModalForm: function() {
+        var $calendarContainer = this.element;
+        $calendarContainer.append('<div id="ajax-modal" class="modal hide fade" tabindex="-1"/>');
       },
 
       /*
