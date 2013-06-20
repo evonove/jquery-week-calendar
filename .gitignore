@@ -2,4 +2,5 @@ node_modules/
 coverages/
 dist/
 src/assets/
-.tmp
+*.tmp
+*.log
