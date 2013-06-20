@@ -1,49 +1,56 @@
-<div class="modal-header">
-	<h3>New calendar event</h3>
-</div>
+	<div class="modal-header">
+		<input id="title" type="text" class="input-title input-block-level" placeholder="Event name..."/>
+	</div>
 
-<div class="modal-body ajax-modal">
-	<form>
-		<div class="control-group">
-			<label class="control-label" for="startDate">Start date:</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input id="startDate" type="text" value="02/16/12" data-date-format="mm/dd/yy" class="datepicker input-small"/>
-					<span class="add-on"><i class="icon-calendar"></i></span>
-				</div>
-				<div class="offset1 input-append bootstrap-timepicker">
-					<input id="startTime" type="text" class="bootstrap-timepicker timepicker input-small">
-					<span class="add-on"><i class="icon-time"></i></span>
-				</div>
+	<div class="modal-body">
+	  	<legend><h5>Assign to</h5></legend>
+		<fieldset>
+			<select id="user" class="input-block-level">
+				<option value="0">User 1</option>
+				<option value="1">User 2</option>
+				<option value="2">User 3</option>
+				<option value="3">User 4</option>
+			</select>
+	  	</fieldset>
+	    <legend><h5>Event date and time</h5></legend>
+		<fieldset class="text-center" >
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+				<input id="startDate" type="text" class="input-small datepicker"/>
 			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="endDate">End date:</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input id="endDate" type="text" value="02/16/12" data-date-format="mm/dd/yy" class="datepicker input-small"/>
-					<span class="add-on"><i class="icon-calendar"></i></span>
-				</div>
-				<div class="offset1 input-append">
-					<div class="bootstrap-timepicker inline">
-						<input id="endTime" type="text" class="input-small">
-					</div>
-					<span class="add-on"><i class="icon-time"></i></span>
-				</div>
+		    <div class="input-prepend">
+		    	<span class="add-on"><i class="icon-time"></i></span>
+				<input id="startTime" type="text" class="input-small timepicker"/>
 			</div>
-		</div>
-	</form>
-</div>
+			<span class="visible-desktop">-</span>
+			<hr class="hidden-desktop"/>
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+				<input id="endDate" type="text" class="input-small datepicker"/>
+			</div>
+			<div class="input-prepend">
+		    	<span class="add-on"><i class="icon-time"></i></span>
+				<input id="endTime" type="text" class="input-small timepicker"/>
+			</div>
+	  	</fieldset>
+	  	<legend><h5>Description</h5></legend>
+		<fieldset>
+			<textarea id="description" rows="4" class="input-block-level"/>
+	  	</fieldset>
+	</div>
 
-<div class="modal-footer">
-	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary">Save</button>
+		<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+	</div>
 
-<script>
-	$('.datepicker').datepicker();
-	$('#endTime').timepicker({
-		minuteStep: 5,
-        showInputs: false,
-        disableFocus: true
-	});
-</script>
+	<script>
+		// Set timepicker
+		var timeInterval = 60 / $('#calendar').weekCalendar(initOptions).data('ui-weekCalendar').options.timeslotsPerHour;
+		$('.timepicker').pickatime({
+			interval: timeInterval,
+		});
+
+		// Set datepicker
+		$('input.datepicker').pickadate();
+	</script>

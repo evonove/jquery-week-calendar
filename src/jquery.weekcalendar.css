@@ -2,14 +2,6 @@ html, body, .fill {
   height: 94%;
 }
 
-#calendar {
-  /* Prevent user selection */
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
 .wc-toolbar {
   padding: 1em;
 }
@@ -271,4 +263,63 @@ table.wc-time-slots {
   overflow: hidden;
   position: absolute;
   width: inherit;
+}
+
+/* Prevent user selection */
+#calendar {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 980px) {
+  .modal-event {
+    width: 650px;
+  }
+}
+
+input.input-title {
+  height: 40px;
+  font-size: 1.6em;
+  line-height: 40px;
+  margin-top: 8px;
+}
+
+/* Bootstrap overrides */
+.modal-body {
+  position: static;
+  max-height: 450px;
+}
+
+input[readonly] {
+  background-color: white;
+}
+
+span.visible-desktop {
+  display: inline !important;
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  span.hidden-desktop {
+    display: inline !important;
+  }
+  span.visible-desktop {
+    display: none !important;
+  }
+  span.visible-tablet {
+    display: inline !important;
+  }
+}
+
+@media (max-width: 767px) {
+  span.hidden-desktop {
+    display: inline !important;
+  }
+  span.visible-desktop {
+    display: none !important;
+  }
+  span.visible-phone {
+    display: inline !important;
+  }
 }

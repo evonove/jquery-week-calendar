@@ -651,7 +651,7 @@
        */
       _loadModalForm: function() {
         var $calendarContainer = this.element;
-        $calendarContainer.append('<div id="ajax-modal" class="modal hide fade" tabindex="-1"/>');
+        $calendarContainer.append('<div id="ajax-modal" class="modal modal-event hide fade" />');
       },
 
       /*
