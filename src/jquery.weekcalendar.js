@@ -290,6 +290,7 @@
         var self = this;
         self._computeOptions();
         self._setupEventDelegation();
+        self._addClassesWidget();
         self._loadModalForm();
         self._renderCalendar();
         self._loadCalEvents();
@@ -644,6 +645,17 @@
       _isDraggingOrResizing: function($target) {
         return $target.hasClass('ui-draggable-dragging') ||
                $target.hasClass('ui-resizable-resizing');
+      },
+
+      /*
+       * Set global classes to calendar widget
+       */
+      _addClassesWidget: function() {
+        var $calendarContainer = this.element;
+        $calendarContainer
+          .addClass('row-fluid')
+          .addClass('fill')
+          .addClass('wc-calendar');
       },
 
       /*

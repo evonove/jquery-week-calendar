@@ -266,7 +266,7 @@ table.wc-time-slots {
 }
 
 /* Prevent user selection */
-#calendar {
+.wc-calendar {
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
