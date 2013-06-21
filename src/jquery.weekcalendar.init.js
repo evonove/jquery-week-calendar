@@ -1,4 +1,6 @@
 var initOptions = {
-  users: ['User 1', 'User 2', 'User 3', 'User 4'],
+  users: [{'id':22, 'name':'User 1'}, {'id':1, 'name':'User 2'}, {'id':2, 'name':'User 3'}, {'id':3, 'name':'User 4'}],
+  loadedUsers: [{'id':22, 'name':'User 1'}, {'id':1, 'name':'User 2'}, {'id':2, 'name':'User 3'}, {'id':3, 'name':'User 4'}],
+  removedUserIds: [],
   showAsSeparateUsers: true
 };

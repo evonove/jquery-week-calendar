@@ -292,6 +292,13 @@ input.input-title {
   max-height: 450px;
 }
 
+#dropdown-user > li > a:hover, #dropdown-user > li > a:focus, #dropdown-user .dropdown-submenu:hover > a, #dropdown-user .dropdown-submenu:focus > a {
+  background-color: white;
+  background-image: none;
+  filter: none;
+  color: black;
+}
+
 input[readonly] {
   background-color: white;
 }
