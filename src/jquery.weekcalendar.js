@@ -99,10 +99,9 @@
         eventResize: function(calEvent, element) {
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, mouseupEvent) {
-          var $modal = $('#ajax-modal');
-          $modal.load(this.modalTemplate, '', function(){
-            $modal.modal();
-          });
+          var modal = $('#ajax-modal').modal();
+          modal.data('modal').options.calEvent = calEvent;
+          modal.modal('show');
         },
         eventMouseover: function(calEvent, $event) {
         },
@@ -659,11 +658,13 @@
       },
 
       /*
-       * Append modal form to calendar div
+       * Append modal form to calendar div loading dynamically all contents
        */
       _loadModalForm: function() {
-        var $calendarContainer = this.element;
-        $calendarContainer.append('<div id="ajax-modal" class="modal modal-event hide fade" />');
+        var calendarContainer = this.element;
+
+        calendarContainer.append('<div id="ajax-modal" class="modal modal-event hide fade"/>');
+        $('#ajax-modal').load(this.options.modalTemplate);
       },
 
       /*
