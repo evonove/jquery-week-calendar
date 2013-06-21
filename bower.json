@@ -9,7 +9,8 @@
     "datejs": "*",
     "enquire": "2.0.2",
     "jquery.slimscroll": "1.2.0",
-    "pickadate": "3.0.5"
+    "pickadate": "3.0.5",
+    "moment": "2.0.0"
   },
   "devDependencies" : {
   } 
