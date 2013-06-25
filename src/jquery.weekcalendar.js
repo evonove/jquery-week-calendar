@@ -741,26 +741,14 @@
               });
               $container.find("[data-propagation=\"false\"]").click(function(event) {
                 event.stopPropagation();
+                var utils = TimelyUi.utils;
                 var userId = $(this).data('user-id');
                 var $wcUser = $('.wc-user-' + userId);
-                var $placeholder = $('.wc-timeslot-placeholder');
-                
+
                 $wcUser.toggle();
 
-                var colspan = parseInt($placeholder.attr('colspan'));
-                var utils = TimelyUi.utils;
+                ($wcUser.is(":visible")) ? utils.hideUserColumn(userId): utils.showUserColumn(userId);
 
-                if ($wcUser.is(":visible")){
-                  options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
-                  options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
-                  colspan++;
-                  $placeholder.attr('colspan', colspan);
-                } else {
-                  options.removedUserIds.push(userId);
-                  options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
-                  colspan--;
-                  $placeholder.attr('colspan', colspan);
-                }
                 
                 $(this).button("toggle");
               });

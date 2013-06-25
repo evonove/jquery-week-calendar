@@ -33,6 +33,28 @@
 		return endArray;
 	};
 
+	TimelyUi.utils.hideUserColumn = function(userId){
+		var options = TimelyUi.calendar.options;
+		var utils = TimelyUi.utils;
+		options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
+		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);	
+		var $placeholder = $('.wc-timeslot-placeholder');
+		var colspan = parseInt($placeholder.attr('colspan'));
+		colspan++;
+		$placeholder.attr('colspan', colspan);
+    };
+
+    TimelyUi.utils.showUserColumn = function(userId){
+		var options = TimelyUi.calendar.options;
+		var utils = TimelyUi.utils;
+		options.removedUserIds.push(userId);
+		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
+		var $placeholder = $('.wc-timeslot-placeholder');
+		var colspan = parseInt($placeholder.attr('colspan'));
+		colspan--;
+		$placeholder.attr('colspan', colspan);
+    };
+
 	/**************
 	* Modal utils *
 	**************/
