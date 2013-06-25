@@ -1,4 +1,3 @@
-'use strict';
 /*
  * jQuery.weekCalendar v2.0-dev
  *
@@ -22,6 +21,8 @@
  */
 
 (function($) {
+  'use strict';
+  
   $.widget('ui.weekCalendar', (function() {
     var _currentAjaxCall, _hourLineTimeout;
 
@@ -747,14 +748,16 @@
                 $wcUser.toggle();
 
                 var colspan = parseInt($placeholder.attr('colspan'));
+                var utils = TimelyUi.utils;
+
                 if ($wcUser.is(":visible")){
                   options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
-                  options.users = refeshUsers(options.loadedUsers, options.removedUserIds);
+                  options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
                   colspan++;
                   $placeholder.attr('colspan', colspan);
                 } else {
                   options.removedUserIds.push(userId);
-                  options.users = refeshUsers(options.loadedUsers, options.removedUserIds);
+                  options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
                   colspan--;
                   $placeholder.attr('colspan', colspan);
                 }

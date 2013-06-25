@@ -14,20 +14,6 @@
   <link rel="stylesheet" type="text/css" href="assets/pickadate/lib/themes/classic.time.css" />
   <link rel="stylesheet" type="text/css" href="jquery.weekcalendar.css" />
   <link rel="stylesheet" type="text/css" href="mobile.css" />
-
-  <script type="text/javascript" src="assets/enquire/dist/enquire.js"></script>
-  <script type="text/javascript" src="assets/jquery/jquery.js"></script>
-  <script type="text/javascript" src="assets/jquery-ui/ui/jquery-ui.js"></script>
-  <script type="text/javascript" src="assets/jquery.slimscroll/jquery.slimscroll.js"></script>
-  <script type="text/javascript" src="assets/datejs/build/date.js"></script>
-  <script type="text/javascript" src="assets/components-bootstrap/js/bootstrap.js"></script>
-  <script type="text/javascript" src="assets/pickadate/lib/picker.js"></script>
-  <script type="text/javascript" src="assets/pickadate/lib/picker.date.js"></script>
-  <script type="text/javascript" src="assets/pickadate/lib/picker.time.js"></script>
-  <script type="text/javascript" src="assets/moment/moment.js"></script>
-  <script type="text/javascript" src="utils.js"></script>
-  <script type="text/javascript" src="jquery.weekcalendar.js"></script>
-  <script type="text/javascript" src="jquery.weekcalendar.init.js"></script>
 </head>
 <body>
   <div class="container-fluid fill">
@@ -40,9 +26,32 @@
     </div>
     <div id="calendar" />
   </div>
+
+  <script type="text/javascript" src="assets/enquire/dist/enquire.js"></script>
+  <script type="text/javascript" src="assets/jquery/jquery.js"></script>
+  <script type="text/javascript" src="assets/jquery-ui/ui/jquery-ui.js"></script>
+  <script type="text/javascript" src="assets/jquery.slimscroll/jquery.slimscroll.js"></script>
+  <script type="text/javascript" src="assets/datejs/build/date.js"></script>
+  <script type="text/javascript" src="assets/components-bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/pickadate/lib/picker.js"></script>
+  <script type="text/javascript" src="assets/pickadate/lib/picker.date.js"></script>
+  <script type="text/javascript" src="assets/pickadate/lib/picker.time.js"></script>
+  <script type="text/javascript" src="assets/moment/moment.js"></script>
+  <script type="text/javascript" src="jquery.weekcalendar.init.js"></script>
+  <script type="text/javascript" src="utils.js"></script>
+  <script type="text/javascript" src="jquery.weekcalendar.js"></script>
+
+  <!-- Widget initialization -->
   <script type="text/javascript">
     (function($) {
-      $('#calendar').weekCalendar(initOptions);
+      var conf = {
+        users: [{'id':22, 'name':'User 1'}, {'id':1, 'name':'User 2'}, {'id':2, 'name':'User 3'}, {'id':3, 'name':'User 4'}],
+        loadedUsers: [{'id':22, 'name':'User 1'}, {'id':1, 'name':'User 2'}, {'id':2, 'name':'User 3'}, {'id':3, 'name':'User 4'}],
+        removedUserIds: [],
+        showAsSeparateUsers: true
+      };
+
+      TimelyUi.init('calendar', conf);
     })(jQuery);
   </script>
 </body>

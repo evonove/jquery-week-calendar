@@ -5,8 +5,9 @@
  */
 (function($) {
 	/* Set all date and time widgets */
-	var $weekCalendar = $('#calendar').weekCalendar().data('ui-weekCalendar');
-	var timeInterval;
+	var $weekCalendar = $('#calendar').weekCalendar().data('ui-weekCalendar'),
+		utils = TimelyUi.utils,
+		timeInterval = 0;
 
 	timeInterval = 60 / $weekCalendar.options.timeslotsPerHour;
 	$('.datepicker').pickadate();
@@ -19,10 +20,10 @@
 			return event.preventDefault();
 		} else {
 			// Set values to inputs
-			setDateValue($('#startDate'), self.options.calEvent.start);
-			setTimeValue($('#startTime'), self.options.calEvent.start);
-			setDateValue($('#endDate'), self.options.calEvent.end);
-			setTimeValue($('#endTime'), self.options.calEvent.end);
+			utils.setDateValue(('startDate'), self.options.calEvent.start);
+			utils.setTimeValue(('startTime'), self.options.calEvent.start);
+			utils.setDateValue(('endDate'), self.options.calEvent.end);
+			utils.setTimeValue(('endTime'), self.options.calEvent.end);
 		}
 	});
 
