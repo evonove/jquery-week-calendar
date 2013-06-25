@@ -162,7 +162,8 @@
          * @return {int|String} the user id.
          */
         getUserId: function(user, index, calendar) {
-          return index;
+          //return index;
+          return user.id;
         },
         /**
          * Callback used to read user name from a user object.
@@ -172,7 +173,8 @@
          * @return {String} the user name.
          */
         getUserName: function(user, index, calendar) {
-          return user;
+          //return user;
+          return user.name;
         },
         /**
          * Reads the id(s) of user(s) for who the event should be displayed.
@@ -704,17 +706,62 @@
           if (options.buttons) {
 
             // Rendering header without switchDisplay
-            calendarNavHtml += '<div class=\"row-fluid calendar-buttons\">';
-            calendarNavHtml += '<div class=\"wc-nav span12\">';
-            calendarNavHtml += '<button class=\"btn wc-today\"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
-            calendarNavHtml += '<div class=\"btn-group\">';
-            calendarNavHtml += '<button class=\"btn wc-prev\"><i class="icon-chevron-left"></i></button>';
-            calendarNavHtml += '<button class=\"btn wc-next\"><i class="icon-chevron-right"></i></button>';
+            calendarNavHtml += '<div class="row-fluid calendar-buttons">';
+            calendarNavHtml += '<div class="wc-nav span12">';
+            calendarNavHtml += '<button class="btn wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
+            calendarNavHtml += '<div class="btn-group">';
+            calendarNavHtml += '<button class="btn wc-prev"><i class="icon-chevron-left"></i></button>';
+            calendarNavHtml += '<button class="btn wc-next"><i class="icon-chevron-right"></i></button>';
             calendarNavHtml += '</div>';
-            calendarNavHtml += '<div class=\"wc-display btn-group pull-right\" data-toggle=\"buttons-radio\"></div>';
+            calendarNavHtml += '<div class="wc-display btn-group pull-right" data-toggle="buttons-radio"></div>';
             calendarNavHtml += '</div>';
             calendarNavHtml += '</div><br/>';
             $(calendarNavHtml).appendTo($calendarContainer);
+
+            // Rendering users filter if they are more than 1
+            if (options.users && options.users.length > 1) {
+              var userNavHtml = '';
+              var $calendarNavContainer = $calendarContainer.find('.wc-nav');
+
+              userNavHtml += '<div class="btn-group pull-right">';
+              userNavHtml += '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">';
+              userNavHtml += 'Users ';
+              userNavHtml += '<span class="caret"></span>';
+              userNavHtml += '</a>';
+              userNavHtml += '<ul id="dropdown-user" class="dropdown-menu">';
+              userNavHtml += '</ul>';
+              userNavHtml += '</div>';
+              $(userNavHtml).appendTo($calendarNavContainer);
+
+              var $container = $calendarContainer.find('#dropdown-user');
+              $.each(options.users, function(index, user) {
+                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn" data-toggle="button" data-propagation="false" data-user-id="'+user.id+'">' + user.name + '</button></a></li>');
+                $container.append(_input);
+              });
+              $container.find("[data-propagation=\"false\"]").click(function(event) {
+                event.stopPropagation();
+                var userId = $(this).data('user-id');
+                var $wcUser = $('.wc-user-' + userId);
+                var $placeholder = $('.wc-timeslot-placeholder');
+                
+                $wcUser.toggle();
+
+                var colspan = parseInt($placeholder.attr('colspan'));
+                if ($wcUser.is(":visible")){
+                  options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
+                  options.users = refeshUsers(options.loadedUsers, options.removedUserIds);
+                  colspan++;
+                  $placeholder.attr('colspan', colspan);
+                } else {
+                  options.removedUserIds.push(userId);
+                  options.users = refeshUsers(options.loadedUsers, options.removedUserIds);
+                  colspan--;
+                  $placeholder.attr('colspan', colspan);
+                }
+                
+                $(this).button("toggle");
+              });
+            }
 
             // Add listener to buttons
             $calendarContainer.find('.wc-today').click(function() {
@@ -866,7 +913,7 @@
         if (showAsSeparatedUser) {
           for (var i = 0, uLength = options.users.length; i < uLength; i++) {
             $calendarContainer.find('.wc-user-' + self._getUserIdFromIndex(i))
-              .data('wcUser', options.users[i])
+              .data('wcUser', options.users[i].name)
               .data('wcUserIndex', i)
               .data('wcUserId', self._getUserIdFromIndex(i));
           }
@@ -944,7 +991,7 @@
               var uLength = options.users.length;
               for (var j = 0; j < uLength; j++) {
                 oddEven = (oddEven === 'odd' ? 'even' : 'odd');
-                renderRow += '<td class=\"wc-day-column day-' + i + ' wc-user-' + j + '\">';
+                renderRow += '<td class=\"wc-day-column day-' + i + ' wc-user-' + self._getUserIdFromIndex(j)  + '\">';
                 renderRow += '<div class=\"wc-no-height-wrapper wc-oddeven-wrapper\">';
                 renderRow += '<div class=\"wc-full-height-column ' + oddEvenClasses[oddEven] + '\" ></div>';
                 renderRow += '</div>';
@@ -982,7 +1029,7 @@
               } else {
                 var uLength = options.users.length;
                 for (var j = 0; j < uLength; j++) {
-                  renderRow += '<td class=\"wc-day-column day-' + i + ' wc-user-' + j + '\">';
+                  renderRow += '<td class=\"wc-day-column day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
                   renderRow += '<div class=\"wc-no-height-wrapper wc-freebusy-wrapper\">';
                   renderRow += '<div class=\"wc-full-height-column wc-column-freebusy wc-day-' + i;
                   renderRow += ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
@@ -1039,13 +1086,13 @@
             for (var j = 0; j < uLength; j++) {
               columnclass = [];
               if (j === 0) {
-                columnclass.push('wc-day-column-first wc-user-' + j);
+                columnclass.push('wc-day-column-first wc-user-' + self._getUserIdFromIndex(j));
               }
               if (j === uLength - 1) {
-                columnclass.push('wc-day-column-last wc-user-' + j);
+                columnclass.push('wc-day-column-last wc-user-' + self._getUserIdFromIndex(j));
               }
               if (!columnclass.length) {
-                columnclass = 'wc-day-column-middle wc-user-' + j;
+                columnclass = 'wc-day-column-middle wc-user-' + self._getUserIdFromIndex(j);
               }
               else {
                 columnclass = columnclass.join(' ');
@@ -2955,7 +3002,7 @@
      */
     enquire.register('screen and (max-width: 767px)', {
       match : function() {
-        $('.wc-timeslot-placeholder').attr('colspan', 3);
+        $('.wc-timeslot-placeholder').attr('colspan', 1);
       },
       unmatch : function() {
         $('.wc-timeslot-placeholder').attr('colspan', 4);

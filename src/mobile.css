@@ -1,10 +1,14 @@
 /* Responsive table */
 @media only screen and (max-width: 767px) {
-	th:nth-child(3),
-	th:nth-child(4),
-	th:nth-child(5),
-	td[class*="wc-user-3"],
-	div[class*="wc-user-3"] {
+	/*TODO focus on first visible and let slide the others */
+	th[class*="wc-user-"]:not([style*="display: none;"])+th, 
+	th[class*="wc-user-"]:not([style*="display: none;"])+th+th, 
+	th[class*="wc-user-"]:not([style*="display: none;"])+th+th+th, 
+	.wc-time-slots  td.wc-day-column.ui-state-default[class*="wc-user-"]:not([style*="display: none;"])+td, 
+	.wc-time-slots  td.wc-day-column.ui-state-default[class*="wc-user-"]:not([style*="display: none;"])+td+td, 
+	.wc-time-slots  td.wc-day-column.ui-state-default[class*="wc-user-"]:not([style*="display: none;"])+td+td+td {
 		display: none;
+		
 	}
+
 }
