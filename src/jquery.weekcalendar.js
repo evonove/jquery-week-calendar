@@ -1687,11 +1687,12 @@
         var self = this;
         self._cleanEvent(calEvent);
 
-        if (calEvent.id) {
+        /* TODO: avoid this useless loop. Use selector to find event */
+        if (typeof calEvent.id !== 'undefined') {
           self.element.find('.wc-cal-event').each(function() {
             if ($(this).data('calEvent').id === calEvent.id || $(this).hasClass('wc-new-cal-event')) {
               $(this).remove();
-              // return false;
+              return false;
             }
           });
         }
