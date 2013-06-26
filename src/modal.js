@@ -10,8 +10,14 @@
 	var calendar = TimelyUi.calendar,
 		utils = TimelyUi.utils,
 		modal = calendar.modal,
+		userSelect = $('.modal-body #user'),
 		timeInterval = 0,
 		eventId = 1; // TODO: remove this because it should be known by AngularJS
+
+	/* Load users dynamically */
+	$.each(calendar.options.users, function(index, user) {
+		userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.name));
+	});
 
 	/* Set all date and time widgets */
 	timeInterval = 60 / calendar.options.timeslotsPerHour;
