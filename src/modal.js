@@ -5,11 +5,12 @@
  */
 (function($) {
 	/* Set all date and time widgets */
-	var $weekCalendar = $('#calendar').weekCalendar().data('ui-weekCalendar'),
+	var calendar = TimelyUi.calendar,
 		utils = TimelyUi.utils,
-		timeInterval = 0;
+		timeInterval = 0,
+		id = 0; // TODO: it should be known by AngularJS
 
-	timeInterval = 60 / $weekCalendar.options.timeslotsPerHour;
+	timeInterval = 60 / calendar.options.timeslotsPerHour;
 	$('.datepicker').pickadate();
 	$('.timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
 
@@ -31,6 +32,6 @@
 		var self = $('#' + event.target.id).data('modal');
 
 		delete self.options.calEvent;
-		$('#calendar').weekCalendar('removeUnsavedEvents');
+		calendar.removeUnsavedEvents();
 	});
 })(jQuery);

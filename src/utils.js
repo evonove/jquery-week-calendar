@@ -93,7 +93,7 @@
 	 * @return {Array} date with format 'YYYY-MM-DD'
 	 */
 	TimelyUi.utils.getDateValue = function(inputId) {
-		return $('#' + inputId).pickadate('picker').get('select', 'yyyy-mm-dd');
+		return $('.modal-body #' + inputId).pickadate('picker').get('select', 'yyyy-mm-dd');
 	};
 
 	/**
@@ -102,7 +102,7 @@
 	 * @return {Array} time with format 'HH:MM'
 	 */
 	TimelyUi.utils.getTimeValue = function(inputId) {
-		return $('#' + inputId).pickatime('picker').get('select', 'HH:i');
+		return $('.modal-body #' + inputId).pickatime('picker').get('select', 'HH:i');
 	};
 
 	/**
@@ -111,7 +111,7 @@
 	 * @param {Object} datetime object to set
 	 */
 	TimelyUi.utils.setDateValue = function(inputId, value) {
-		$('#' + inputId).pickadate('picker').set('select', TimelyUi.utils.parseDate(value));
+		$('.modal-body #' + inputId).pickadate('picker').set('select', TimelyUi.utils.parseDate(value));
 	};
 
 	/**
@@ -120,7 +120,7 @@
 	 * @param {Object} datetime object to set
 	 */
 	TimelyUi.utils.setTimeValue = function(inputId, value) {
-		$('#' + inputId).pickatime('picker').set('select', TimelyUi.utils.parseTime(value));
+		$('.modal-body #' + inputId).pickatime('picker').set('select', TimelyUi.utils.parseTime(value));
 	};
 
 	/**
