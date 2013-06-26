@@ -700,8 +700,9 @@
        * Render the nav buttons on top of the calendar
        */
       _renderCalendarButtons: function($calendarContainer) {
-        var self = this, options = this.options;
-        var calendarNavHtml = '';
+        var self = this, options = this.options,
+          calendarNavHtml = '',
+          $container;
 
         if (options.showHeader) {
           if (options.buttons) {
@@ -734,12 +735,12 @@
               userNavHtml += '</div>';
               $(userNavHtml).appendTo($calendarNavContainer);
 
-              var $container = $calendarContainer.find('#dropdown-user');
+              $container = $calendarContainer.find('#dropdown-user');
               $.each(options.users, function(index, user) {
                 var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn" data-toggle="button" data-propagation="false" data-user-id="'+user.id+'">' + user.name + '</button></a></li>');
                 $container.append(_input);
               });
-              $container.find("[data-propagation=\"false\"]").click(function(event) {
+              $container.find('[data-propagation=\"false\"]').click(function(event) {
                 event.stopPropagation();
                 var utils = TimelyUi.utils;
                 var userId = $(this).data('user-id');
@@ -747,10 +748,13 @@
 
                 $wcUser.toggle();
 
-                ($wcUser.is(":visible")) ? utils.hideUserColumn(userId): utils.showUserColumn(userId);
-
+                if ($wcUser.is(':visible')) {
+                  utils.hideUserColumn(userId);
+                } else {
+                  utils.showUserColumn(userId);
+                }
                 
-                $(this).button("toggle");
+                $(this).button('toggle');
               });
             }
 
@@ -772,7 +776,7 @@
 
             // Add buttons to switch display
             if (this.options.switchDisplay && $.isPlainObject(this.options.switchDisplay)) {
-              var $container = $calendarContainer.find('.wc-display');
+              $container = $calendarContainer.find('.wc-display');
               $.each(this.options.switchDisplay, function(label, option) {
                 var _input = $('<button class="btn">' + label + '</button>');
                 _input.val(option);
@@ -963,11 +967,12 @@
        */
       _renderCalendarBodyOddEven: function($calendarTableTbody) {
         if (this.options.displayOddEven) {
-          var options = this.options;
-          var renderRow = '<tr class=\"wc-grid-row-oddeven\">';
-          var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
-          var oddEvenClasses = {'odd': 'wc-column-odd', 'even': 'wc-column-even'};
-          var oddEven;
+          var self = this,
+            options = self.options,
+            renderRow = '<tr class=\"wc-grid-row-oddeven\">',
+            showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
+            oddEvenClasses = {'odd': 'wc-column-odd', 'even': 'wc-column-even'},
+            oddEven;
 
           // Now let's display oddEven placeholders
           for (var i = 1; i <= options.daysToShow; i++) {

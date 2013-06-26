@@ -1,27 +1,29 @@
-(function(TimelyUi){
+(function(TimelyUi) {
 	'use strict';
-
-	var TimelyUi = TimelyUi || {};
 	TimelyUi.utils = TimelyUi.utils || {};
 
-	TimelyUi.utils._filter = function(array, attrName, attrValue){
-		// Array.filter method is implemented in JavaScript 1.6, supported by most modern browsers
-		// If for supporting the old browser, you could write your own one.
+	/*****************
+	 * Generic utils *
+	 ****************/
+
+	/* Array.filter method is implemented in JavaScript 1.6, supported by most modern browsers.
+	   If for supporting the old browser, you could write your own one. */
+	TimelyUi.utils._filter = function(array, attrName, attrValue) {
 		try {
-			var endArray = array.filter(function(el){
+			var endArray = array.filter(function(el) {
 				return el[attrName] !== attrValue;
 			});
-			return endArray
+			return endArray;
 		} catch(err) {
-			var endArray = array
-		 	$.each(array, function(index, obj){
-				if (obj[attrName] === attrValue){
+			var endArray = array;
+			$.each(array, function(index, obj) {
+				if (obj[attrName] === attrValue) {
 					endArray.splice(index, 1);
 				}
 			});
 			return endArray;
-		 } 
-	}
+		}
+	};
 
 	TimelyUi.utils.refreshUsers = function(loadedUsers, removedUserIds) {
 		var endArray = loadedUsers,
@@ -33,27 +35,33 @@
 		return endArray;
 	};
 
-	TimelyUi.utils.hideUserColumn = function(userId){
-		var options = TimelyUi.calendar.options;
-		var utils = TimelyUi.utils;
+	TimelyUi.utils.hideUserColumn = function(userId) {
+		var options = TimelyUi.calendar.options,
+			utils = TimelyUi.utils,
+			$placeholder,
+			colspan;
+
 		options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
-		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);	
-		var $placeholder = $('.wc-timeslot-placeholder');
-		var colspan = parseInt($placeholder.attr('colspan'));
+		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
+		$placeholder = $('.wc-timeslot-placeholder');
+		colspan = parseInt($placeholder.attr('colspan'), 10);
 		colspan++;
 		$placeholder.attr('colspan', colspan);
-    };
+	};
 
-    TimelyUi.utils.showUserColumn = function(userId){
-		var options = TimelyUi.calendar.options;
-		var utils = TimelyUi.utils;
+	TimelyUi.utils.showUserColumn = function(userId) {
+		var options = TimelyUi.calendar.options,
+			utils = TimelyUi.utils,
+			$placeholder,
+			colspan;
+
 		options.removedUserIds.push(userId);
 		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
-		var $placeholder = $('.wc-timeslot-placeholder');
-		var colspan = parseInt($placeholder.attr('colspan'));
+		$placeholder = $('.wc-timeslot-placeholder');
+		colspan = parseInt($placeholder.attr('colspan'), 10);
 		colspan--;
 		$placeholder.attr('colspan', colspan);
-    };
+	};
 
 	/**************
 	* Modal utils *
@@ -67,7 +75,7 @@
 	TimelyUi.utils.parseDate = function(date) {
 		var momentDate = moment(date);
 		return [momentDate.year(), momentDate.month(), momentDate.date()];
-	}
+	};
 
 	/**
 	 * Format date object to Pickadate.js valid time.
@@ -77,23 +85,25 @@
 	TimelyUi.utils.parseTime = function(date) {
 		var momentDate = moment(date);
 		return [momentDate.hour(), momentDate.minutes()];
-	}
+	};
 
 	/**
 	 * Use Pickadate.js to recover formatted date.
 	 * @param {Object} input id field get as a selector
+	 * @return {Array} date with format 'YYYY-MM-DD'
 	 */
 	TimelyUi.utils.getDateValue = function(inputId) {
-		$('#' + inputId).pickadate('picker').get('select', 'yyyy-mm-dd');
-	}
+		return $('#' + inputId).pickadate('picker').get('select', 'yyyy-mm-dd');
+	};
 
 	/**
 	 * Use Pickadate.js to recover formatted time.
 	 * @param {Object} input id field get as a selector
+	 * @return {Array} time with format 'HH:MM'
 	 */
 	TimelyUi.utils.getTimeValue = function(inputId) {
-		$('#' + inputId).pickatime('picker').get('select', 'HH:i');
-	}
+		return $('#' + inputId).pickatime('picker').get('select', 'HH:i');
+	};
 
 	/**
 	 * Use Pickadate.js to set formatted date.
@@ -102,7 +112,7 @@
 	 */
 	TimelyUi.utils.setDateValue = function(inputId, value) {
 		$('#' + inputId).pickadate('picker').set('select', TimelyUi.utils.parseDate(value));
-	}
+	};
 
 	/**
 	 * Use Pickadate.js to set formatted time.
@@ -111,7 +121,7 @@
 	 */
 	TimelyUi.utils.setTimeValue = function(inputId, value) {
 		$('#' + inputId).pickatime('picker').set('select', TimelyUi.utils.parseTime(value));
-	}
+	};
 
 	/**
 	 * Use Moment.js to parse date and time into ISO-8601 format.
@@ -120,5 +130,5 @@
 	 */
 	TimelyUi.utils.datetimeISOFormat = function(date, time) {
 		return moment(date + ' ' + time, 'YYYY-MM-DD hh:mm').format();
-	}
+	};
 })(TimelyUi);

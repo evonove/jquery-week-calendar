@@ -21,6 +21,8 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
-    "enquire": false
+    "enquire": false,
+    "moment": false,
+    "TimelyUi": true
   }
 }
