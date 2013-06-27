@@ -5,11 +5,11 @@
  */
 (function($) {
 	/* Create and register modal object */
-	TimelyUi.calendar.modal = $('#ajax-modal').modal({ show: false }).data('modal');
+	TimelyUi.modal = $('#ajax-modal').modal({ show: false }).data('modal');
 
 	var calendar = TimelyUi.calendar,
 		utils = TimelyUi.utils,
-		modal = calendar.modal,
+		modal = TimelyUi.modal,
 		timeInterval = 60 / calendar.options.timeslotsPerHour,
 		eventId = 1; // TODO: remove this because it should be known by AngularJS
 
