@@ -59,7 +59,7 @@
         },
         switchDisplay: { 'Day': 1, '3 days': 3, '7 days': 7 },
         scrollToHourMillis: 0,
-        allowEventDelete: true,
+        allowEventDelete: false,
         allowCalEventOverlap: false,
         overlapEventsSeparate: false,
         totalEventsWidthPercentInOneColumn: 100,
@@ -116,7 +116,6 @@
         eventMouseout: function(calEvent, $event) {
         },
         eventDelete: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
-          calendar.weekCalendar('removeEvent',calEvent.id);
         },
         calendarBeforeLoad: function(calendar) {
         },

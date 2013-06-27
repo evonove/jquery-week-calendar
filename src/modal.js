@@ -29,13 +29,24 @@
 		},
 
 		load: function() {
-			this.title.val(this.options.calEvent.title);
-			this.userId.val(this.options.calEvent.userId);
-			utils.setDateValue(('startDate'), this.options.calEvent.start);
-			utils.setTimeValue(('startTime'), this.options.calEvent.start);
-			utils.setDateValue(('endDate'), this.options.calEvent.end);
-			utils.setTimeValue(('endTime'), this.options.calEvent.end);
-			this.body.val(this.options.calEvent.body);
+			var chosenEvent = this.options.calEvent,
+				deleteButton = $('.modal-footer #modalDelete');
+
+			// Disable/Enable delete button if chosen event is already persisted
+			if (!!chosenEvent.id) {
+				deleteButton.show();
+			} else {
+				deleteButton.hide();
+			}
+
+			// Set all inputs with chosen event
+			this.title.val(chosenEvent.title);
+			this.userId.val(chosenEvent.userId);
+			utils.setDateValue(('startDate'), chosenEvent.start);
+			utils.setTimeValue(('startTime'), chosenEvent.start);
+			utils.setDateValue(('endDate'), chosenEvent.end);
+			utils.setTimeValue(('endTime'), chosenEvent.end);
+			this.body.val(chosenEvent.body);
 			return this;
 		},
 
@@ -52,6 +63,11 @@
 			calendar.updateEvent(this.options.calEvent);
 			eventId += 1; // TODO: remove this because it should be known by AngularJS
 			return this;
+		},
+
+		delete: function() {
+			calendar.removeEvent(this.options.calEvent.id);
+			return this;
 		}
 	});
 
@@ -64,9 +80,13 @@
 	$('.modal-body .datepicker').pickadate();
 	$('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
 
-	/* Save current event */
+	/* Buttons listeners */
 	$('.modal-footer #modalSave').click(function() {
 		self.save().hide();
+	});
+
+	$('.modal-footer #modalDelete').click(function() {
+		self.delete().hide();
 	});
 
 	/* Twitter bootstrap events handler */
