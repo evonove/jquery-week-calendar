@@ -45,7 +45,7 @@ html, body, .fill {
 
 .wc-grid-timeslot-header,
 .wc-header .wc-time-column-header {
-  width: 45px;
+  width: 45px !important;
 }
 
 .wc-header .wc-scrollbar-shim {
@@ -78,7 +78,7 @@ table.wc-time-slots {
 }
 
 .wc-day-column {
-  width: 13.5%;
+  /*width: 13.5%;*/
   overflow: visible;
   vertical-align: top;
 }
@@ -89,11 +89,22 @@ table.wc-time-slots {
   border-color:transparent;
 }
 
-.wc-scrollable-grid .wc-day-column-last,
-.wc-scrollable-grid .wc-day-column-middle {
-  border-width: 0 0 0 1px; 
-  border-style: dashed;
+.td-wrapper{
+  border: 0;
+  border-right-style: solid;
+  border-right-width: 1px; 
+  border-right-color: rgb(211, 211, 211);
+  
 }
+
+.wc-full-height-column {
+  border: 0;
+  border-right-width: 1px; 
+  border-right-style: dashed;
+  border-right-color: rgb(211, 211, 211);
+  
+}
+
 
 .wc-day-column-inner {
   width: 100%;
@@ -181,7 +192,8 @@ table.wc-time-slots {
 
 .wc-hour-header.ui-state-active,
 .wc-hour-header.ui-state-default{
-  border-width:0 0 1px 0;
+  /*border-width:0 0 1px 0;*/
+  border: 0;
 }
 
 .wc-hour-end, .wc-hour-header {
@@ -213,7 +225,8 @@ table.wc-time-slots {
   overflow: hidden;
   cursor: pointer;
   color: #fff;
-  width: 100%;
+  /*width: 100%;*/
+  width: 99%;
   display: none;
 }
 
@@ -291,6 +304,97 @@ input.input-title {
   position: static;
   max-height: 450px;
 }
+
+/*-----------------------------------------------------------------------------------------*/
+table {
+  border: 0;
+  border-spacing:0;
+  border-collapse:collapse;
+}
+
+html {
+  -ms-touch-action: none;
+}
+
+body, tr/*, td*/ {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+body {
+  font-size: 12px;
+  font-family: ubuntu, helvetica, arial;
+  overflow: hidden; /* this is important to prevent the whole page to bounce */
+}
+
+.scroller {
+  /*Needed (like "css('postion', 'static')"" in scroller DOM element refreshing javascript) before initialization of IScroll to view the layout of the page. MAH*/
+  position: absolute;
+  z-index: 1;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  width: 5000px;
+  height: 100%;
+  /*background-color: black;*/
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -o-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+#day-hours{
+  position: absolute; 
+  top: 5px; 
+  z-index:1000; 
+  width:45px; 
+  padding-left: 1px;
+  background-color: white;
+}
+
+/*css hack*/
+#hiding-block{
+  background-color:white; 
+  width: 80px; 
+  height: 25px; 
+  position: relative; 
+  float:left; 
+  top: -28px;
+  right: 30px;
+  z-index: 1000;
+}
+.wc-grid-timeslot-header .wc-hour-end, .wc-grid-timeslot-header .wc-hour-header{
+  color: white;
+}
+
+.wc-header{
+  height: 55px;
+}
+
+/*.wc-grid-row-events{
+  background-color: red;
+}*/
+
+/*.wc-time-slots .wc-day-column.ui-state-default{
+  display:none;
+}*/
+
+/*.wc-time-slots .wc-grid-row-events .wc-day-column.ui-state-default{
+  border: 1px solid black;
+}*/
+
+
+/*-----------------------------------------------------------------------------------------*/
 
 #dropdown-user > li > a:hover, #dropdown-user > li > a:focus, #dropdown-user .dropdown-submenu:hover > a, #dropdown-user .dropdown-submenu:focus > a {
   background-color: white;

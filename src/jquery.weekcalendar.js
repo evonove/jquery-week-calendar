@@ -798,16 +798,20 @@
           colspan = ' colspan=\"' + options.users.length + '\" ';
         }
 
-        // Days row
+        // Header containers
         calendarHeaderHtml = '<div class=\"row-fluid calendar-header\">';
         calendarHeaderHtml += '<div class=\"wc-header span12\">';
-        calendarHeaderHtml += '<table><thead><tr><th class=\"wc-time-column-header\"></th>';
+
+        // Days row
+        calendarHeaderHtml += '<table ><thead><tr><th class=\"wc-time-column-header\"></th>';
         for (var i = 1; i <= options.daysToShow; i++) {
-          calendarHeaderHtml += '<th class=\"wc-day-column-header wc-day-' + i + '\"></th>';
+          calendarHeaderHtml += '<th class=\"wc-day-column-header wc-day-' + i + '\"'+colspan+'></th>';
         }
+        calendarHeaderHtml += '</thead></table>';
 
         // Users row
         if (showAsSeparatedUser) {
+          calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper"><thead class="scroller">';
           calendarHeaderHtml += '<tr><th class=\"wc-time-column-header\"></th>';
           var uLength = options.users.length, _headerClass = '';
 
@@ -833,7 +837,9 @@
           }
           calendarHeaderHtml += '</tr>';
         }
-        calendarHeaderHtml += '</thead></table></div></div>';
+        calendarHeaderHtml += '</thead></table>';
+        calendarHeaderHtml += '<div id="hiding-block"></div>';
+        calendarHeaderHtml += '</div></div>';
 
         $(calendarHeaderHtml).appendTo($calendarContainer);
       },
@@ -850,13 +856,19 @@
         var $calendarBody, $calendarTableTbody;
 
         // Create the structure
-        $calendarBody = '<div class=\"row-fluid fill\">';
-        $calendarBody += '<div class=\"wc-scrollable-grid\">';
-        $calendarBody += '<table class=\"wc-time-slots\">';
+        $calendarBody = '';
+        
+        $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid fill \">';
+        $calendarBody += '<div id="calendar-body-wrapper" class=\"wc-scrollable-grid wrapper\">';
+        $calendarBody += '<div class=\"scroller\">';
+        $calendarBody += '<table class=\"wc-time-slots\" >';
         $calendarBody += '<tbody>';
         $calendarBody += '</tbody>';
         $calendarBody += '</table>';
         $calendarBody += '</div>';
+        $calendarBody += '<div id="day-hours">'+self._renderDayHours()+'</div>';
+        $calendarBody += '</div>';
+
         $calendarBody += '</div>';
         $calendarBody = $($calendarBody);
         $calendarTableTbody = $calendarBody.find('tbody');
@@ -1023,19 +1035,16 @@
         }
       },
 
-      /*
-       * Render the calendar body for event placeholders
-       */
-      _renderCalendarBodyEvents: function($calendarTableTbody) {
+
+      _renderDayHours: function() {
+        
         var self = this;
         var options = this.options;
-        var renderRow;
-        var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
         var start = (options.businessHours.limitDisplay ? options.businessHours.start : 0);
         var end = (options.businessHours.limitDisplay ? options.businessHours.end : 24);
+        var renderRow;
 
-        renderRow = '<tr class=\"wc-grid-row-events\">';
-        renderRow += '<td class=\"wc-grid-timeslot-header\">';
+        renderRow = '<div class=\"td-wrapper\">';
 
         for (var i = start; i < end; i++) {
           var bhClass = (options.businessHours.start <= i && options.businessHours.end > i) ? 'state-active wc-business-hours' : '';
@@ -1043,14 +1052,33 @@
           renderRow += '<div class=\"wc-time-header-cell\">' + self._24HourForIndex(i) + '</div>';
           renderRow += '</div>';
         }
+        renderRow += '</div>';
+        return renderRow;
+      },
+      /*
+       * Render the calendar body for event placeholders
+       */
+      _renderCalendarBodyEvents: function($calendarTableTbody) {
+        var self = this;
+        var options = this.options;
+        var renderRow;
+        var start = (options.businessHours.limitDisplay ? options.businessHours.start : 0);
+        var end = (options.businessHours.limitDisplay ? options.businessHours.end : 24);
+        var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+        
+
+        renderRow = '<tr class=\"wc-grid-row-events\">';
+        renderRow += '<td class=\"wc-grid-timeslot-header\">';
+        renderRow += self._renderDayHours();
         renderRow += '</td>';
 
         // Now let's display events placeholders
         var _columnBaseClass = 'ui-state-default wc-day-column';
-        for (i = 1; i <= options.daysToShow; i++) {
+        for (var i = 1; i <= options.daysToShow; i++) {
           if (!showAsSeparatedUser) {
             renderRow += '<td class=\"' + _columnBaseClass + ' wc-day-column-first wc-day-column-last day-' + i + '\">';
             renderRow += '<div class=\"wc-full-height-column wc-day-column-inner day-' + i + '\"></div>';
+            renderRow += '</div>';
             renderRow += '</td>';
           } else {
             var uLength = options.users.length;
@@ -1072,6 +1100,7 @@
               renderRow += '<td class=\"' + _columnBaseClass + ' ' + columnclass + ' day-' + i + '\">';
               renderRow += '<div class=\"wc-full-height-column wc-day-column-inner day-' + i;
               renderRow += ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
+              renderRow += '</div>';
               renderRow += '</div>';
               renderRow += '</td>';
             }

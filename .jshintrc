@@ -23,6 +23,7 @@
   "globals": {
     "enquire": false,
     "moment": false,
+    "IScroll": false,
     "TimelyUi": true
   }
 }

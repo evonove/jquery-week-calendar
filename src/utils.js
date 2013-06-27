@@ -39,6 +39,45 @@
 		}
 	};
 
+	TimelyUi.utils._addRemoveColSpan = function(isAdd) {
+		var options = TimelyUi.calendar.options,
+			utils = TimelyUi.utils,
+			$placeholder,
+			$header,
+			colspan;
+
+		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
+		$placeholder = $('.wc-timeslot-placeholder');
+		$header = $('.wc-day-column-header');
+		colspan = parseInt($placeholder.attr('colspan'), 10);
+		if (isAdd) {
+			colspan++;
+		} else {
+			colspan--;
+		}
+		$placeholder.attr('colspan', colspan);
+		$header.attr('colspan', colspan);
+	};
+
+	TimelyUi.utils.redimColumnsWidth = function(maxColumnNumber_) {
+		var options = TimelyUi.calendar.options,
+			width = $('#calendar-body-wrapper').width()-45,
+			maxColumnNumber = (maxColumnNumber_) ? maxColumnNumber_ : TimelyUi.columnsToShow,
+			divindend = (options.users.length > maxColumnNumber) ? maxColumnNumber : options.users.length,
+			rightSingleWidth = width/divindend,
+			rightWidth = rightSingleWidth*options.users.length+45;
+
+		TimelyUi.dispelVodooMagic();
+		$('.scroller, .wc-time-slots').width(rightWidth);
+		$('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
+			$(this).width(rightSingleWidth);
+		});
+		$.each(TimelyUi.elIScrolls, function(key, val){
+			val.refresh();
+		});
+		TimelyUi.vodooMagic();
+	};
+
 	TimelyUi.utils.refreshUsers = function(loadedUsers, removedUserIds) {
 		var endArray = loadedUsers,
 			filter = TimelyUi.utils._filter;
@@ -51,30 +90,20 @@
 
 	TimelyUi.utils.hideUserColumn = function(userId) {
 		var options = TimelyUi.calendar.options,
-			utils = TimelyUi.utils,
-			$placeholder,
-			colspan;
-
+			utils = TimelyUi.utils;
+			
 		options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
-		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
-		$placeholder = $('.wc-timeslot-placeholder');
-		colspan = parseInt($placeholder.attr('colspan'), 10);
-		colspan++;
-		$placeholder.attr('colspan', colspan);
+		utils._addRemoveColSpan(true);
+		utils.redimColumnsWidth();
 	};
 
 	TimelyUi.utils.showUserColumn = function(userId) {
 		var options = TimelyUi.calendar.options,
-			utils = TimelyUi.utils,
-			$placeholder,
-			colspan;
+			utils = TimelyUi.utils;
 
 		options.removedUserIds.push(userId);
-		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
-		$placeholder = $('.wc-timeslot-placeholder');
-		colspan = parseInt($placeholder.attr('colspan'), 10);
-		colspan--;
-		$placeholder.attr('colspan', colspan);
+		utils._addRemoveColSpan(false);
+		utils.redimColumnsWidth();
 	};
 
 	/*****************
