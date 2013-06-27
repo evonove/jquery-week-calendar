@@ -32,7 +32,7 @@ test('Default Options', function() {
     deepEqual($calendar.weekCalendar('option', 'businessHours').start, 8);
     deepEqual($calendar.weekCalendar('option', 'businessHours').end, 18);
     deepEqual($calendar.weekCalendar('option', 'businessHours').limitDisplay, false);
-    deepEqual($calendar.weekCalendar('option', 'newEventText'), 'New Event');
+    deepEqual($calendar.weekCalendar('option', 'newEventText'), '');
     deepEqual($calendar.weekCalendar('option', 'timeslotHeight'), 20);
     deepEqual($calendar.weekCalendar('option', 'defaultEventLength'), 2);
     deepEqual($calendar.weekCalendar('option', 'timeslotsPerHour'), 4);

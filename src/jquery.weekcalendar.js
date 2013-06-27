@@ -43,7 +43,7 @@
         startParam: 'start',
         endParam: 'end',
         businessHours: { start: 8, end: 18, limitDisplay: false },
-        newEventText: 'New Event',
+        newEventText: '',
         timeslotHeight: 20,
         defaultEventLength: 2,
         timeslotsPerHour: 4,
@@ -76,8 +76,6 @@
         resizable: function(calEvent, element) {
           return true;
         },
-        eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
-        },
         eventRender: function(calEvent, $event) {
           if (calEvent.end.getTime() < new Date().getTime()) {
             $event.css('backgroundColor', '#aaa');
@@ -100,9 +98,18 @@
         eventResize: function(calEvent, element) {
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, mouseupEvent) {
-          var modal = $('#ajax-modal').modal();
-          modal.data('modal').options.calEvent = calEvent;
-          modal.modal('show');
+          this.showModalForm(calEvent);
+          return true;
+        },
+        eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
+          this.showModalForm(calEvent);
+          return true;
+        },
+        showModalForm: function(calEvent) {
+          var modalForm = TimelyUi.modal;
+
+          modalForm.options.calEvent = calEvent;
+          modalForm.$element.modal('show');
         },
         eventMouseover: function(calEvent, $event) {
         },
