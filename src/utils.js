@@ -81,6 +81,10 @@
 	* Modal utils *
 	**************/
 
+	TimelyUi.utils.formatDate = function(date, format) {
+		return moment(date).format(format);
+	};
+
 	/**
 	 * Format date object to Pickadate.js valid date.
 	 * @param {Object} date object to parse

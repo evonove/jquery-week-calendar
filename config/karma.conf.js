@@ -10,7 +10,9 @@ files = [
   'src/assets/enquire/dist/enquire.js',
   'src/assets/jquery/jquery.js',
   'src/assets/jquery-ui/ui/jquery-ui.js',
-  'src/assets/jquery-ui/ui/i18n/jquery-ui-i18n.js',
+  'src/assets/moment/moment.js',
+  'src/jquery.weekcalendar.init.js',
+  'src/utils.js',
   'src/jquery.weekcalendar.js',
   'src/assets/jquery.slimscroll/jquery.slimscroll.js',
   'src/assets/datejs/build/date.js',
@@ -18,7 +20,7 @@ files = [
 ];
 
 preprocessors = {
-  'src/jquery.weekcalendar.js': 'coverage'
+  'src/*.js': 'coverage'
 };
 
 // list of files to exclude
