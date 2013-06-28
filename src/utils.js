@@ -77,22 +77,12 @@
 		$placeholder.attr('colspan', colspan);
 	};
 
-	/**************
-	* Modal utils *
-	**************/
+	/*****************
+	* Datetime utils *
+	*****************/
 
 	TimelyUi.utils.formatDate = function(date, format) {
 		return moment(date).format(format);
-	};
-
-	/**
-	 * Format date object to Pickadate.js valid date.
-	 * @param {Object} date object to parse
-	 * @return {Array} array with [year, month, day] values
-	 */
-	TimelyUi.utils.parseDate = function(date) {
-		var momentDate = moment(date);
-		return [momentDate.year(), momentDate.month(), momentDate.date()];
 	};
 
 	/**
@@ -100,45 +90,9 @@
 	 * @param {Object} date object to parse
 	 * @return {Array} array with [hour, minutes] values
 	 */
-	TimelyUi.utils.parseTime = function(date) {
+	TimelyUi.utils.timeToArray = function(date) {
 		var momentDate = moment(date);
 		return [momentDate.hour(), momentDate.minutes()];
-	};
-
-	/**
-	 * Use Pickadate.js to recover formatted date.
-	 * @param {Object} input id field get as a selector
-	 * @return {Array} date with format 'YYYY-MM-DD'
-	 */
-	TimelyUi.utils.getDateValue = function(inputId) {
-		return $('.modal-body #' + inputId).pickadate('picker').get('select', 'yyyy-mm-dd');
-	};
-
-	/**
-	 * Use Pickadate.js to recover formatted time.
-	 * @param {Object} input id field get as a selector
-	 * @return {Array} time with format 'HH:MM'
-	 */
-	TimelyUi.utils.getTimeValue = function(inputId) {
-		return $('.modal-body #' + inputId).pickatime('picker').get('select', 'HH:i');
-	};
-
-	/**
-	 * Use Pickadate.js to set formatted date.
-	 * @param {Object} input id field get as a selector
-	 * @param {Object} datetime object to set
-	 */
-	TimelyUi.utils.setDateValue = function(inputId, value) {
-		$('.modal-body #' + inputId).pickadate('picker').set('select', TimelyUi.utils.parseDate(value));
-	};
-
-	/**
-	 * Use Pickadate.js to set formatted time.
-	 * @param {Object} input id field get as a selector
-	 * @param {Object} datetime object to set
-	 */
-	TimelyUi.utils.setTimeValue = function(inputId, value) {
-		$('.modal-body #' + inputId).pickatime('picker').set('select', TimelyUi.utils.parseTime(value));
 	};
 
 	/**
@@ -147,6 +101,6 @@
 	 * @param {Object} time with a format HH:MM (23:59)
 	 */
 	TimelyUi.utils.datetimeISOFormat = function(date, time) {
-		return moment(date + ' ' + time, 'YYYY-MM-DD hh:mm').format();
+		return moment(date + ' ' + time, 'MM-DD-YYYY HH:mm').format();
 	};
 })(TimelyUi);

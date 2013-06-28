@@ -13,11 +13,17 @@
 		timeInterval = 60 / calendar.options.timeslotsPerHour,
 		eventId = 1; // TODO: remove this because it should be known by AngularJS
 
+	/* Set all date and time widgets */
+	$('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
+
 	/* Attach inputs and functions to bootstrap modal object */
 	$.extend(self, {
 		userSelect: $('.modal #user'),
 		title: $('.modal-header #title'),
 		userId: $('.modal-body #user'),
+		eventDate: $('.modal-body #eventDate'),
+		startTime:$('.modal-body #startTime').pickatime('picker'),
+		endTime:$('.modal-body #endTime').pickatime('picker'),
 		body: $('.modal-body #description'),
 
 		clear: function() {
@@ -42,21 +48,22 @@
 			// Set all inputs with chosen event
 			this.title.val(chosenEvent.title);
 			this.userId.val(chosenEvent.userId);
-			utils.setDateValue(('startDate'), chosenEvent.start);
-			utils.setTimeValue(('startTime'), chosenEvent.start);
-			utils.setDateValue(('endDate'), chosenEvent.end);
-			utils.setTimeValue(('endTime'), chosenEvent.end);
+			this.eventDate.html(utils.formatDate(chosenEvent.start, calendar.options.dateFormat));
+			this.startTime.set('select', utils.timeToArray(chosenEvent.start));
+			this.endTime.set('select', utils.timeToArray(chosenEvent.end));
 			this.body.val(chosenEvent.body);
 			return this;
 		},
 
 		save: function() {
+			var eventDate = utils.formatDate(this.options.calEvent.start, 'MM-DD-YYYY');
+
 			this.options.calEvent = {
 				id: this.options.calEvent.id || eventId,
 				title: this.title.val(),
 				userId: parseInt(this.userId.val(), 10),
-				start: utils.datetimeISOFormat(utils.getDateValue('startDate'), utils.getTimeValue('startTime')),
-				end: utils.datetimeISOFormat(utils.getDateValue('endDate'), utils.getTimeValue('endTime')),
+				start: utils.datetimeISOFormat(eventDate, this.startTime.get('select', 'HH:i')),
+				end: utils.datetimeISOFormat(eventDate, this.endTime.get('select', 'HH:i')),
 				body: this.body.val()
 			};
 
@@ -75,10 +82,6 @@
 	$.each(calendar.options.users, function(index, user) {
 		self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.name));
 	});
-
-	/* Set all date and time widgets */
-	$('.modal-body .datepicker').pickadate();
-	$('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
 
 	/* Buttons listeners */
 	$('.modal-footer #modalSave').click(function() {
