@@ -39,6 +39,10 @@
 		}
 	};
 
+	/**
+	 * Refresh the value of attr colspan in two DOM elements to render calendar widget correctly when users are added o removed.
+	 * @param {boolean} isAdd must be true when an user is added
+	 */
 	TimelyUi.utils._addRemoveColSpan = function(isAdd) {
 		var options = TimelyUi.calendar.options,
 			utils = TimelyUi.utils,
@@ -59,6 +63,10 @@
 		$header.attr('colspan', colspan);
 	};
 
+	/**
+	 * Refresh the value of attr width in some DOM elements to render calendar widget correctly when users are added o removed.
+	 * @param {Number} maxColumnNumber_ is the number of displayed user in same page by the widget. Default is 5.
+	 */
 	TimelyUi.utils.redimColumnsWidth = function(maxColumnNumber_) {
 		var options = TimelyUi.calendar.options,
 			width = $('#calendar-body-wrapper').width()-45,
@@ -78,6 +86,11 @@
 		TimelyUi.vodooMagic();
 	};
 
+	/**
+	 * Refresh the TimelyUi.conf.users dictonary subtracting removedUserIds from loadedUsers.
+	 * @param {Object} is a dictionary of users. Default is TimelyUi.conf.loadedUsers
+	 * @param {Object} is a array of user ids. Default is TimelyUi.conf.removedUserIds
+	 */
 	TimelyUi.utils.refreshUsers = function(loadedUsers, removedUserIds) {
 		var endArray = loadedUsers,
 			filter = TimelyUi.utils._filter;

@@ -241,6 +241,8 @@ table.wc-time-slots {
   font-size: 7px;
   height: 15px;
   bottom: 0px;
+  position: absolute;
+  right: 50%;
 }
 
 .wc-cal-event .wc-time {
