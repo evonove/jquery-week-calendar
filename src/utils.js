@@ -63,6 +63,20 @@
 		$header.attr('colspan', colspan);
 	};
 
+	TimelyUi.utils.disableIScrolls = function() {
+		$.each(TimelyUi.elIScrolls, function(key, iscroll){
+			iscroll.disable();
+		});
+	};
+
+	TimelyUi.utils.enableIScrolls = function() {
+		var event = jQuery.Event('mouseup');
+		$.each(TimelyUi.elIScrolls, function(key, iscroll){
+			iscroll.enable();
+			iscroll.handleEvent(event);
+		});
+	};
+
 	/**
 	 * Refresh the value of attr width in some DOM elements to render calendar widget correctly when users are added o removed.
 	 * @param {Number} maxColumnNumber_ is the number of displayed user in same page by the widget. Default is 5.

@@ -61,57 +61,46 @@ TimelyUi.init = function(id, conf) {
 	TimelyUi.boundIScrolls();
 	TimelyUi.vodooMagic();
 	TimelyUi.calendar.options.eventDrag = function(calEvent, element) {
-		$.each(TimelyUi.elIScrolls, function(key, iscroll){
-			iscroll.disable();
-		});	
+		TimelyUi.utils.disableIScrolls();
 	};
 	TimelyUi.calendar.options.eventDrop = function(calEvent, element) {
-			var event = jQuery.Event('mouseup');
-			$.each(TimelyUi.elIScrolls, function(key, iscroll){
-				iscroll.enable();
-				iscroll.handleEvent(event);
-			});
+		TimelyUi.utils.enableIScrolls();
+	};
+	TimelyUi.calendar.options.eventMousedownNewEvent = function(calEvent, element) {
+		TimelyUi.utils.disableIScrolls();
+	};
+	TimelyUi.calendar.options.eventMouseupNewEvent = function(calEvent, element) {
+		TimelyUi.utils.enableIScrolls();
 	};
 
-
-	var $weekDayColumns = $('td.wc-day-column');
-	$weekDayColumns.mouseenter(function(){
-		console.log('mouseenter');
-		var $weekDayColumnInners = $(this).find('.wc-day-column-inner');
-		$weekDayColumnInners.each(function(i, val) {
-			$(val).mouseup();
-		});
-	});
 	// TimelyUi.calendar.options.eventMouseover = function(calEvent, $event) {
 	// 	console.log('over');
 	// };
 	// TimelyUi.calendar.options.eventMouseout = function(calEvent, $event) {
 	// 	console.log('out');
 	// };
-
-	TimelyUi.calendar.options.eventClick = function(calEvent, $event) {
-		console.log('eventClick');
-	};
-	TimelyUi.calendar.options.eventNew = function(calEvent, $event) {
-		console.log('eventNew');
-	};
-
-	TimelyUi.calendar.options.eventResize = function(calEvent, $event) {
-		console.log('eventResize');
-	};
+	// TimelyUi.calendar.options.eventClick = function(calEvent, $event) {
+	// 	console.log('eventClick');
+	// };
+	// TimelyUi.calendar.options.eventNew = function(calEvent, $event) {
+	// 	console.log('eventNew');
+	// };
+	// TimelyUi.calendar.options.eventResize = function(calEvent, $event) {
+	// 	console.log('eventResize');
+	// };
 	// TimelyUi.calendar.options.eventHeader = function(calEvent, $event) {
 	// 	console.log('eventHeader');
 	// };
-
 	// TimelyUi.calendar.options.eventBody = function(calEvent, $event) {
 	// 	console.log('eventBody');
 	// };
-	TimelyUi.calendar.options.eventAfterRender = function(calEvent, $event) {
-		console.log('eventAfterRender');
-	};
-
-	TimelyUi.calendar.options.eventRefresh = function(calEvent, $event) {
-		console.log('eventRefresh');
-	};
-
+	// TimelyUi.calendar.options.showModalForm = function(calEvent) {
+	// 	console.log('showModalForm');
+	// };
+	// TimelyUi.calendar.options.eventAfterRender = function(calEvent, $event) {
+	// 	console.log('eventAfterRender');
+	// };
+	// TimelyUi.calendar.options.eventRefresh = function(calEvent, $event) {
+	// 	console.log('eventRefresh');
+	// };
 };

@@ -110,6 +110,10 @@
         },
         eventMouseout: function(calEvent, $event) {
         },
+        eventMousedownNewEvent: function(calEvent, $event) {
+        },
+        eventMouseupNewEvent: function(calEvent, $event) {
+        },
         eventDelete: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
         },
         calendarBeforeLoad: function(calendar) {
@@ -603,8 +607,10 @@
        * delegation for greater efficiency
        */
       _setupEventDelegation: function() {
+        //console.log('_setupEventDelegation');
         var self = this;
         var options = this.options;
+
 
         this.element.click(function(event) {
           var $target = $(event.target);
@@ -772,7 +778,6 @@
                 $container.append(_input);
               });
               $container.find('[data-propagation=\"false\"]').click(function(event) {
-                event.stopPropagation();
                 var userId = $(this).data('user-id');
                 var $wcUser = $('.wc-user-' + userId);
 
@@ -1108,6 +1113,8 @@
        * Render the calendar body for event placeholders
        */
       _renderCalendarBodyEvents: function($calendarTableTbody) {
+        //console.log('_renderCalendarBodyEvents');
+
         var self = this;
         var options = this.options;
         var renderRow;
@@ -1165,10 +1172,69 @@
        * Setup mouse events for capturing new events
        */
       _setupEventCreationForWeekDay: function($weekDay) {
+
         var self = this;
         var options = this.options;
 
-        $weekDay.mousedown(function(event) {
+        self.lastValidTagert = {};
+        self.mouseupEventCreation = function(event) {
+          //console.log('mouseupEventCreation');
+          $('html').unbind('mouseup');
+          var $target = self.lastValidTagert;
+          if ($target.closest) {
+            var $weekDay = $target.closest('.wc-day-column-inner');
+            var $newEvent = $weekDay.find('.wc-new-cal-event-creating');
+            
+            if ($newEvent.length) {
+              var createdFromSingleClick = !$newEvent.hasClass('ui-resizable-resizing');
+
+              // If even created from a single click only, default height
+              if (createdFromSingleClick) {
+                $newEvent.css({height: options.timeslotHeight * options.defaultEventLength}).show();
+              }
+              var top = parseInt($newEvent.css('top'), 10);
+              var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $newEvent, top);
+
+              $newEvent.remove();
+              var newCalEvent = {start: eventDuration.start, end: eventDuration.end, title: options.newEventText};
+              var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+
+              if (showAsSeparatedUser) {
+                newCalEvent = self._setEventUserId(newCalEvent, $weekDay.data('wcUserId'));
+              }
+              else if (!options.showAsSeparateUsers && options.users && options.users.length === 1) {
+                newCalEvent = self._setEventUserId(newCalEvent, self._getUserIdFromIndex(0));
+              }
+
+              var freeBusyManager = self.getFreeBusyManagerForEvent(newCalEvent);
+              var $renderedCalEvent = self._renderEvent(newCalEvent, $weekDay);
+
+              if (!options.allowCalEventOverlap) {
+                self._adjustForEventCollisions($weekDay, $renderedCalEvent, newCalEvent, newCalEvent);
+                self._positionEvent($weekDay, $renderedCalEvent);
+              } else {
+                self._adjustOverlappingEvents($weekDay);
+              }
+
+              var proceed = self._trigger('beforeEventNew', event, {
+                'calEvent': newCalEvent,
+                'createdFromSingleClick': createdFromSingleClick,
+                'calendar': self.element
+              });
+
+              if (proceed) {
+                options.eventNew(newCalEvent, $renderedCalEvent, freeBusyManager, self.element, event);
+                self.processed = true;
+              }
+              else {
+                $($renderedCalEvent).remove();
+              }
+            }
+            options.eventMouseupNewEvent();
+          }
+        };
+        $weekDay.mousedown('mousedown.newevent',function(event) {
+          //console.log('mousedown.newevent');
           var $target = $(event.target);
           if ($target.hasClass('wc-day-column-inner')) {
             var $newEvent = $('<div class=\"wc-cal-event wc-new-cal-event wc-new-cal-event-creating\"></div>');
@@ -1200,60 +1266,13 @@
                 $newEvent.addClass('ui-corner-all');
               });
             }
-          }
 
-        }).mouseup(function(event) {
-          var $target = $(event.target);
-          var $weekDay = $target.closest('.wc-day-column-inner');
-          var $newEvent = $weekDay.find('.wc-new-cal-event-creating');
-
-          if ($newEvent.length) {
-            var createdFromSingleClick = !$newEvent.hasClass('ui-resizable-resizing');
-
-            // If even created from a single click only, default height
-            if (createdFromSingleClick) {
-              $newEvent.css({height: options.timeslotHeight * options.defaultEventLength}).show();
-            }
-            var top = parseInt($newEvent.css('top'), 10);
-            var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $newEvent, top);
-
-            $newEvent.remove();
-            var newCalEvent = {start: eventDuration.start, end: eventDuration.end, title: options.newEventText};
-            var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
-
-            if (showAsSeparatedUser) {
-              newCalEvent = self._setEventUserId(newCalEvent, $weekDay.data('wcUserId'));
-            }
-            else if (!options.showAsSeparateUsers && options.users && options.users.length === 1) {
-              newCalEvent = self._setEventUserId(newCalEvent, self._getUserIdFromIndex(0));
-            }
-
-            var freeBusyManager = self.getFreeBusyManagerForEvent(newCalEvent);
-            var $renderedCalEvent = self._renderEvent(newCalEvent, $weekDay);
-
-            if (!options.allowCalEventOverlap) {
-              self._adjustForEventCollisions($weekDay, $renderedCalEvent, newCalEvent, newCalEvent);
-              self._positionEvent($weekDay, $renderedCalEvent);
-            } else {
-              self._adjustOverlappingEvents($weekDay);
-            }
-
-            var proceed = self._trigger('beforeEventNew', event, {
-              'calEvent': newCalEvent,
-              'createdFromSingleClick': createdFromSingleClick,
-              'calendar': self.element
-            });
-
-						if (proceed) {
-							options.eventNew(newCalEvent, $renderedCalEvent, freeBusyManager, self.element, event);
-						}
-						else {
-							$($renderedCalEvent).remove();
-						}
+            self.lastValidTagert = $target;
+            options.eventMousedownNewEvent();
+            $('html').mouseup('mouseup.newevent', self.mouseupEventCreation);
           }
         });
       },
-
       /*
        * Load calendar events for the week based on the date provided
        */
@@ -1854,8 +1873,8 @@
        * Add draggable capabilities to an event
        */
       _addDraggableToCalEvent: function(calEvent, $calEvent) {
+        //console.log('_addDraggableToCalEvent');
         var options = this.options;
-
         $calEvent.draggable({
           handle: '.wc-time',
           containment: 'div.wc-time-slots',
