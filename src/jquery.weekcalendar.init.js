@@ -1,6 +1,7 @@
 'use strict';
 var myScroll = myScroll || {};
 var TimelyUi = TimelyUi || {};
+
 TimelyUi.calendar = {};
 TimelyUi.elIScrolls = {};
 TimelyUi.columnsToShow = 5;
@@ -42,11 +43,13 @@ TimelyUi.attachIScroll  = function() {
 	TimelyUi.utils.redimColumnsWidth();
 };
 
+/* TODO: Remove 'magic' behaviour */
 TimelyUi.vodooMagic  = function() {
 	//Needed (like "postion:absolute;" in scroller DOM element css) after initialization of IScroll to refresh correctly the layout of the page. MAH
 	$('.scroller').css('position', 'relative');
 };
 
+/* TODO: Remove 'magic' behaviour */
 TimelyUi.dispelVodooMagic  = function() {
 	$('.scroller').css('position', 'absolute');
 };
