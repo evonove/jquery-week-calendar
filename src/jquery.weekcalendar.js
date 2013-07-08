@@ -49,6 +49,7 @@
         minDate: null,
         maxDate: null,
         data: [],
+        unsavedEvents: [],
         showHeader: true,
         buttons: true,
         buttonText: {
@@ -66,6 +67,7 @@
         allowEventCreation: true,
         hourLine: true,
         modalTemplate: '/template/modal.html',
+        popoverTemplate: '/template/popover.html',
         deletable: function(calEvent, element) {
           return true;
         },
@@ -97,12 +99,27 @@
         eventResize: function(calEvent, element) {
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, mouseupEvent) {
-          this.showModalForm(calEvent);
+          // Create a popover if rendered event is new
+          this.unsavedEvents.push(element);
+          this.showPopoverForm(calEvent, element);
           return true;
         },
         eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
+          // Show a modal to edit selected event
           this.showModalForm(calEvent);
           return true;
+        },
+        showPopoverForm: function(calEvent, element) {
+          var popoverForm = TimelyUi.popover;
+
+          // Remove existing popover and last unsaved event
+          if (typeof popoverForm.instance !== 'undefined') {
+            popoverForm.clear();
+            TimelyUi.calendar.removeLastUnsavedEvent();
+          }
+
+          popoverForm.options.calEvent = calEvent;
+          popoverForm.attachTo(element);
         },
         showModalForm: function(calEvent) {
           var modalForm = TimelyUi.modal;
@@ -296,6 +313,7 @@
         self._setupEventDelegation();
         self._addClassesWidget();
         self._loadModalForm();
+        self._loadPopoverForm();
         self._renderCalendar();
         self._loadCalEvents();
         self._resizeCalendar();
@@ -425,6 +443,19 @@
         self.element.find('.wc-day-column-inner').each(function() {
           self._adjustOverlappingEvents($(this));
         });
+      },
+
+      /*
+       * Removes last inserted event that doesn't have any id
+       * This is useful to remove the event during quick insert mode with popover.
+       */
+      removeLastUnsavedEvent: function() {
+        var self = this,
+            lastUnsavedEvent = self.options.unsavedEvents.shift();
+
+        if (typeof lastUnsavedEvent !== 'undefined') {
+          lastUnsavedEvent.remove();
+        }
       },
 
       /*
@@ -650,6 +681,16 @@
 
         calendarContainer.append('<div id="ajax-modal" class="modal modal-event hide fade"/>');
         $('#ajax-modal').load(this.options.modalTemplate);
+      },
+
+      /*
+       * Append popover form to calendar div loading dynamically all contents
+       */
+      _loadPopoverForm: function() {
+        var calendarContainer = this.element;
+
+        calendarContainer.append('<div id="popover-form" class="hide"/>');
+        $('#popover-form').load(this.options.popoverTemplate);
       },
 
       /*
