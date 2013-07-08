@@ -99,7 +99,12 @@
         eventResize: function(calEvent, element) {
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, mouseupEvent) {
-          // Create a popover if rendered event is new
+          // Remove existing popover and last unsaved event
+          if (typeof TimelyUi.popover.instance !== 'undefined') {
+            TimelyUi.popover.clear();
+            TimelyUi.calendar.removeLastUnsavedEvent();
+          }
+
           this.unsavedEvents.push(element);
           this.showPopoverForm(calEvent, element);
           return true;
@@ -111,12 +116,6 @@
         },
         showPopoverForm: function(calEvent, element) {
           var popoverForm = TimelyUi.popover;
-
-          // Remove existing popover and last unsaved event
-          if (typeof popoverForm.instance !== 'undefined') {
-            popoverForm.clear();
-            TimelyUi.calendar.removeLastUnsavedEvent();
-          }
 
           popoverForm.options.calEvent = calEvent;
           popoverForm.attachTo(element);
