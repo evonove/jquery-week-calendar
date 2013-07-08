@@ -51,7 +51,10 @@
 			return this;
 		},
 		edit: function() {
-			// TODO: call modal and close popover
+			var calendar = TimelyUi.calendar;
+			
+			calendar.options.showModalForm(self.options.calEvent);
+			return this;
 		},
 		initListeners: function() {
 			/* Attach listener to popover buttons */
