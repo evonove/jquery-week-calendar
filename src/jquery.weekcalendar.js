@@ -99,32 +99,12 @@
         eventResize: function(calEvent, element) {
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, mouseupEvent) {
-          // Remove existing popover and last unsaved event
-          if (typeof TimelyUi.popover.instance !== 'undefined') {
-            TimelyUi.popover.clear();
-            TimelyUi.calendar.removeLastUnsavedEvent();
-          }
-
-          this.unsavedEvents.push(element);
-          this.showPopoverForm(calEvent, element);
+          TimelyUi.calendar.showPopoverForm(calEvent, element);
           return true;
         },
         eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
-          // Show a modal to edit selected event
-          this.showModalForm(calEvent);
+          TimelyUi.calendar.showModalForm(calEvent);
           return true;
-        },
-        showPopoverForm: function(calEvent, element) {
-          var popoverForm = TimelyUi.popover;
-
-          popoverForm.options.calEvent = calEvent;
-          popoverForm.attachTo(element);
-        },
-        showModalForm: function(calEvent) {
-          var modalForm = TimelyUi.modal;
-
-          modalForm.options.calEvent = calEvent;
-          modalForm.$element.modal('show');
         },
         eventMouseover: function(calEvent, $event) {
         },
@@ -406,6 +386,35 @@
             self._resizeCalendar();
           });
         }
+      },
+
+      /*
+       * Create a popover attached to an element
+       */
+      showPopoverForm: function(calEvent, element) {
+        var calendar = TimelyUi.calendar,
+            popover = TimelyUi.popover;
+
+        // Remove existing popover and last unsaved event
+        if (typeof popover.instance !== 'undefined') {
+          popover.clear();
+          calendar.removeLastUnsavedEvent();
+        }
+
+        calendar.options.unsavedEvents.push(element);
+
+        popover.options.calEvent = calEvent;
+        popover.attachTo(element);
+      },
+
+      /*
+       * Show modal form to create/edit event details
+       */
+      showModalForm: function(calEvent) {
+        var modal = TimelyUi.modal;
+
+        modal.options.calEvent = calEvent;
+        modal.$element.modal('show');
       },
 
       /*

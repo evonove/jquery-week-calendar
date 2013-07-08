@@ -53,7 +53,7 @@
 		edit: function() {
 			var calendar = TimelyUi.calendar;
 			
-			calendar.options.showModalForm(self.options.calEvent);
+			calendar.showModalForm(self.options.calEvent);
 			return this;
 		},
 		initListeners: function() {
