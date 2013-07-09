@@ -110,8 +110,23 @@
 	* Datetime utils *
 	*****************/
 
+	/**
+	 * Moment.js wrapper
+	 * @param {Object} date with any format
+	 * @param {String} a valid Moment.js format string
+	 * @return {String} a formatted datetime
+	 */
 	TimelyUi.utils.formatDate = function(date, format) {
 		return moment(date).format(format);
+	};
+
+	/**
+	 * Moment.js wrapper
+	 * @param {Object} date with any format
+	 * @return {Date} a POJO date
+	 */
+	TimelyUi.utils.toDate = function(date) {
+		return moment(date).toDate();
 	};
 
 	/**
@@ -128,8 +143,18 @@
 	 * Use Moment.js to parse date and time into ISO-8601 format.
 	 * @param {Object} date with a format YYYY-MM-DD (2000-12-31)
 	 * @param {Object} time with a format HH:MM (23:59)
+	 * @return {String} a valid ISO-8601 format
 	 */
 	TimelyUi.utils.datetimeISOFormat = function(date, time) {
 		return moment(date + ' ' + time, 'MM-DD-YYYY HH:mm').format();
+	};
+
+	/**
+	 * Convert datetime to a valid UNIX timestamp
+	 * @param {Object} date with any format
+	 * @return {String} a valid UNIX timestamp
+	 */
+	TimelyUi.utils.toTimestamp = function(date) {
+		return moment(date).format('X');
 	};
 })(TimelyUi);

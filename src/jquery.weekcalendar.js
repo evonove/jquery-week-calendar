@@ -2220,30 +2220,18 @@
 
       /**
        * Return a Date instance for different representations.
-       * Valid representations are:
-       *  * timestamps
-       *  * Date objects
-       *  * textual representations (only these accepted by the Date
-       *    constructor)
-       *
-       *  @return {Date} The clean date object.
+       * @param {Object} date in any representations
+       * @return {Date} The clean date object.
        */
-      _cleanDate: function(d) {
-        if (typeof d === 'string') {
-          // If is numeric
-          if (!isNaN(Number(d))) {
-            return this._cleanDate(parseInt(d, 10));
-          }
+      _cleanDate: function(date) {
+        var utils = TimelyUi.utils;
 
-          // This is a human readable date
-          return Date.parse(d) || new Date(d);
+        // If is a numeric timestamp written as String
+        if (!isNaN(Number(date))) {
+          date = Number(date);
         }
 
-        if (typeof d === 'number') {
-          return new Date(d);
-        }
-
-        return d;
+        return utils.toDate(date);
       },
 
       /* USER MANAGEMENT FUNCTIONS */

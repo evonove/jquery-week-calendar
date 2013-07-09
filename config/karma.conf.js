@@ -15,7 +15,6 @@ files = [
   'src/utils.js',
   'src/jquery.weekcalendar.js',
   'src/assets/jquery.slimscroll/jquery.slimscroll.js',
-  'src/assets/datejs/build/date.js',
   'test/tests.js'
 ];
 
