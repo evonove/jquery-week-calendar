@@ -14,6 +14,7 @@
 		eventId = 1; // TODO: remove this because it should be known by AngularJS
 
 	/* Set all date and time widgets */
+	$('.modal-body .datepicker').pickadate();
 	$('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
 
 	/* Attach inputs and functions to bootstrap modal object */
@@ -21,7 +22,7 @@
 		userSelect: $('.modal #user'),
 		title: $('.modal-header #title'),
 		userId: $('.modal-body #user'),
-		eventDate: $('.modal-body #eventDate'),
+		eventDate: $('.modal-body #eventDate').pickadate('picker'),
 		startTime:$('.modal-body #startTime').pickatime('picker'),
 		endTime:$('.modal-body #endTime').pickatime('picker'),
 		body: $('.modal-body #description'),
@@ -48,7 +49,7 @@
 			// Set all inputs with chosen event
 			this.title.val(chosenEvent.title);
 			this.userId.val(chosenEvent.userId);
-			this.eventDate.html(utils.formatDate(chosenEvent.start, calendar.options.dateFormat));
+			this.eventDate.set('select', utils.toDate(chosenEvent.start));
 			this.startTime.set('select', utils.timeToArray(chosenEvent.start));
 			this.endTime.set('select', utils.timeToArray(chosenEvent.end));
 			this.body.val(chosenEvent.body);
@@ -56,7 +57,7 @@
 		},
 
 		save: function() {
-			var eventDate = utils.formatDate(this.options.calEvent.start, 'MM-DD-YYYY');
+			var eventDate = utils.formatDate(this.eventDate.get('select').obj, 'MM-DD-YYYY');
 
 			this.options.calEvent = {
 				id: this.options.calEvent.id || eventId,
