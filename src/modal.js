@@ -81,7 +81,7 @@
 
 	/* Load users dynamically */
 	$.each(calendar.options.users, function(index, user) {
-		self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.name));
+		self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
 	});
 
 	/* Buttons listeners */
