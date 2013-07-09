@@ -41,7 +41,7 @@ TimelyUi.boundIScrolls  = function() {
 			});
 		}, false);
 	});
-	TimelyUi.utils.redimColumnsWidth();
+	TimelyUi.utils._redimColumnsWidth();
 };
 
 /* TODO: Remove 'magic' behaviour */
@@ -72,35 +72,4 @@ TimelyUi.init = function(id, conf) {
 	TimelyUi.calendar.options.eventMouseupNewEvent = function(calEvent, element) {
 		TimelyUi.utils.enableIScrolls();
 	};
-
-	// TimelyUi.calendar.options.eventMouseover = function(calEvent, $event) {
-	// 	console.log('over');
-	// };
-	// TimelyUi.calendar.options.eventMouseout = function(calEvent, $event) {
-	// 	console.log('out');
-	// };
-	// TimelyUi.calendar.options.eventClick = function(calEvent, $event) {
-	// 	console.log('eventClick');
-	// };
-	// TimelyUi.calendar.options.eventNew = function(calEvent, $event) {
-	// 	console.log('eventNew');
-	// };
-	// TimelyUi.calendar.options.eventResize = function(calEvent, $event) {
-	// 	console.log('eventResize');
-	// };
-	// TimelyUi.calendar.options.eventHeader = function(calEvent, $event) {
-	// 	console.log('eventHeader');
-	// };
-	// TimelyUi.calendar.options.eventBody = function(calEvent, $event) {
-	// 	console.log('eventBody');
-	// };
-	// TimelyUi.calendar.options.showModalForm = function(calEvent) {
-	// 	console.log('showModalForm');
-	// };
-	// TimelyUi.calendar.options.eventAfterRender = function(calEvent, $event) {
-	// 	console.log('eventAfterRender');
-	// };
-	// TimelyUi.calendar.options.eventRefresh = function(calEvent, $event) {
-	// 	console.log('eventRefresh');
-	// };
 };

@@ -177,7 +177,17 @@
          */
         getUserName: function(user, index, calendar) {
           //return user;
-          return user.name;
+          return user.username;
+        },
+        /**
+         * Callback used to read organization name from a organization object.
+         * @param {Object} organization the organization to retrieve the name from.
+         * @param {number} index the user index from user list.
+         * @param {jQuery} calendar the calendar object.
+         * @return {String} the user name.
+         */
+        getOrganizationName: function(organization, index, calendar) {
+          return organization.name;
         },
         /**
          * Reads the id(s) of user(s) for who the event should be displayed.
@@ -739,6 +749,7 @@
       _renderCalendarButtons: function($calendarContainer) {
         var self = this, options = this.options,
           calendarNavHtml = '',
+          $calendarNavContainer,
           $container;
 
         if (options.showHeader) {
@@ -760,7 +771,7 @@
             // Rendering users filter if they are more than 1
             if (options.users && options.users.length > 1) {
               var userNavHtml = '';
-              var $calendarNavContainer = $calendarContainer.find('.wc-nav');
+              $calendarNavContainer = $calendarContainer.find('.wc-nav');
 
               userNavHtml += '<div class="btn-group pull-right">';
               userNavHtml += '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">';
@@ -774,22 +785,37 @@
 
               $container = $calendarContainer.find('#dropdown-user');
               $.each(options.users, function(index, user) {
-                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn" data-toggle="button" data-propagation="false" data-user-id="'+user.id+'">' + user.name + '</button></a></li>');
+                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn active" data-toggle="button" data-propagation="false" data-user-id="'+user.id+'">' + options.getUserName(user) + '</button></a></li>');
                 $container.append(_input);
               });
               $container.find('[data-propagation=\"false\"]').click(function(event) {
-                var userId = $(this).data('user-id');
-                var $wcUser = $('.wc-user-' + userId);
+                event.stopPropagation(); //Needed
+                utils.toggleUserByButton(event, $(this));
+              });
+            }
 
-                $wcUser.toggle();
+            // Rendering organizations filter if they are more than 1 and have extended profile
+            if (options.organizations && options.organizations.length > 1) {
+              var orgNavHtml = '';
+              
+              orgNavHtml += '<div class="btn-group pull-right">';
+              orgNavHtml += '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">';
+              orgNavHtml += 'Organizations ';
+              orgNavHtml += '<span class="caret"></span>';
+              orgNavHtml += '</a>';
+              orgNavHtml += '<ul id="dropdown-organization" class="dropdown-menu">';
+              orgNavHtml += '</ul>';
+              orgNavHtml += '</div>';
+              $(orgNavHtml).appendTo($calendarNavContainer);
 
-                if ($wcUser.is(':visible')) {
-                  utils.hideUserColumn(userId);
-                } else {
-                  utils.showUserColumn(userId);
-                }
-                
-                $(this).button('toggle');
+              $container = $calendarContainer.find('#dropdown-organization');
+              $.each(options.organizations, function(index, organization) {
+                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn" data-organization-id="'+organization.id+'">' + options.getOrganizationName(organization) + '</button></a></li>');
+                $container.append(_input);
+              });
+              $container.find('button').click(function(event) {
+                var organizationId = $(this).data('organization-id');
+                utils.showUsers(organizationId);
               });
             }
 
@@ -955,7 +981,7 @@
         if (showAsSeparatedUser) {
           for (var i = 0, uLength = options.users.length; i < uLength; i++) {
             $calendarContainer.find('.wc-user-' + self._getUserIdFromIndex(i))
-              .data('wcUser', options.users[i].name)
+              .data('wcUser', options.getUserName(options.users[i]))
               .data('wcUserIndex', i)
               .data('wcUserId', self._getUserIdFromIndex(i));
           }

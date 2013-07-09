@@ -43,15 +43,16 @@
   <script type="text/javascript" src="jquery.weekcalendar.js"></script>
 
   <!-- Widget initialization -->
-  <script type="text/javascript">
+  <script type='text/javascript'>
     (function($) {
+      var ajaxLoadedUsers = [{'id': 1, 'username': 'syn', 'first_name': '', 'last_name': '', 'email': '1@1.it', 'last_login': '2013-07-08T09:52:48.619Z', 'date_joined': '2013-05-09T10:17:27.875Z', 'organizations': [1, 2]}, {'id': 2, 'username': 'pippo', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1]}, {'id': 3, 'username': 'pluto', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1]}, {'id': 4, 'username': 'topolino', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1]}, {'id': 5, 'username': 'paperino', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1,2]}, {'id': 22, 'username': 'paperone', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [2]}];
       var conf = {
-        users: [{'id':22, 'name':'User 1'}, {'id':1, 'name':'User 2'}, {'id':2, 'name':'User 3'}, {'id':3, 'name':'User 4'}, {'id':25, 'name':'User 5'}, {'id':26, 'name':'User 6'}],
-        loadedUsers: [{'id':22, 'name':'User 1'}, {'id':1, 'name':'User 2'}, {'id':2, 'name':'User 3'}, {'id':3, 'name':'User 4'}, {'id':25, 'name':'User 5'}, {'id':26, 'name':'User 6'}],
+        users: ajaxLoadedUsers,
+        loadedUsers: ajaxLoadedUsers,
         removedUserIds: [],
-        showAsSeparateUsers: true
+        showAsSeparateUsers: true,
+        organizations : [{'id': 1, 'name': 'Evonove', 'users': [1, 2, 3, 4, 5]}, {'id': 2, 'name': 'AmatoriNuoto', 'users': [1, 5, 22]}]
       };
-
       TimelyUi.init('calendar', conf);
     })(jQuery);
   </script>
