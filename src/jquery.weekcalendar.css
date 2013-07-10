@@ -35,12 +35,16 @@ html, body, .fill {
 }
 
 .wc-header {
-  border-width:1px 0;
-  border-style:solid;
+  overflow: hidden;
 }
+
 .wc-header table{
   width: 100%;
   table-layout:fixed;
+}
+
+.wc-header table th{
+  height: 22px;
 }
 
 .wc-grid-timeslot-header,
@@ -54,13 +58,13 @@ html, body, .fill {
 
 .wc-header .wc-day-column-header {
   text-align: center;
-  padding: 0.4em;
+  padding: 4px;
 }
 
 .wc-header .wc-user-header{
   text-align: center;
-  padding: 0.4em 0;
-  overflow:hidden;
+  padding: 4px 0;
+  overflow: hidden;
 }
 
 .wc-scrollable-grid {
@@ -364,37 +368,54 @@ body {
   background-color: white;
 }
 
-/*css hack*/
-#hiding-block{
-  background-color:white; 
-  width: 80px; 
-  height: 25px; 
-  position: relative; 
-  float:left; 
-  top: -28px;
-  right: 30px;
-  z-index: 1000;
-}
 .wc-grid-timeslot-header .wc-hour-end, .wc-grid-timeslot-header .wc-hour-header{
   color: white;
 }
 
 .wc-header{
-  height: 55px;
+  height: 60px;
 }
 
-/*.wc-grid-row-events{
-  background-color: red;
-}*/
+#calendar-header-wrapper{
+  overflow: hidden;
+}
+.go-left, .go-right{
+  height: 60px;
+  width: 45px;
+  position: relative;
+  display: inline-block;
+  top: -58px;
+  background-color: white;
+  z-index: 1000;
+  overflow: visible;
 
-/*.wc-time-slots .wc-day-column.ui-state-default{
-  display:none;
-}*/
+}
 
-/*.wc-time-slots .wc-grid-row-events .wc-day-column.ui-state-default{
-  border: 1px solid black;
-}*/
+.go-left button, .go-right button{
+  height: 56px;
+  width: 100%;
+  position: relative;
 
+  }
+
+.go-left {
+  float: left;
+}
+
+.go-right {
+  float: right;
+}
+
+.calendar-header {
+  /*border-width:1px 0;
+  border-style:solid;*/
+  padding: 1px 0;
+  background-color: black;
+}
+
+.calendar-header table{
+  background-color: white;
+}
 
 /*-----------------------------------------------------------------------------------------*/
 

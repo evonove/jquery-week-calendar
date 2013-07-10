@@ -100,6 +100,66 @@
 		utils._redimColumnsWidth();
 	};
 
+	TimelyUi.utils._offset = function (el) {
+		var left = -el.offsetLeft,
+			top = -el.offsetTop;
+
+		// jshint -W084
+		while (el = el.offsetParent) {
+			left -= el.offsetLeft;
+			top -= el.offsetTop;
+		}
+		// jshint +W084
+
+		return {
+			left: left,
+			top: top
+		};
+	};
+
+	TimelyUi.utils._scrollToIfNeeded = function(iscroll, pos, time, easing){
+		time = time === undefined || null || time == 'auto' ? Math.max(Math.abs(pos.left)*2, Math.abs(pos.top)*2) : time;
+
+		if (iscroll.lastPos === undefined || iscroll.lastPos.left !== pos.left){
+			iscroll.lastPos = pos;
+			iscroll.lastIndexPointer = iscroll.pointerIndex;
+			iscroll.scrollTo(pos.left, pos.top, time);
+		} else {
+			iscroll.pointerIndex = iscroll.lastIndexPointer;
+		}
+	}
+
+	TimelyUi.utils._posByEl = function(iscroll, el, offsetX, offsetY, pxOffsetX, pxOffsetY){
+		el = el.nodeType ? el : iscroll.scroller.querySelector(el);
+		
+		if ( !el ) {
+			return;
+		}
+		var pos = TimelyUi.utils._offset(el);
+
+		pos.left -= iscroll.wrapperOffset.left;
+		pos.top  -= iscroll.wrapperOffset.top;
+
+		// if offsetX/Y are true we center the element to the screen
+		if ( offsetX === true ) {
+			offsetX = Math.round(el.offsetWidth / 2 - iscroll.wrapper.offsetWidth / 2);
+		}
+		if ( offsetY === true ) {
+			offsetY = Math.round(el.offsetHeight / 2 - iscroll.wrapper.offsetHeight / 2);
+		}
+
+		pos.left -= offsetX || 0;
+		pos.top  -= offsetY || 0;
+
+		pos.left -= pxOffsetX || 0;
+		pos.top  -= pxOffsetY || 0;
+
+		pos.left = pos.left > 0 ? 0 : pos.left < iscroll.maxScrollX ? iscroll.maxScrollX : pos.left;
+		pos.top  = pos.top  > 0 ? 0 : pos.top  < iscroll.maxScrollY ? iscroll.maxScrollY : pos.top;
+
+		return pos;
+	};
+
 	/**
 	 * Refresh the value of attr width in some DOM elements to render calendar widget correctly when users are added o removed.
 	 * @param {Number} maxColumnNumber_ is the number of displayed user in same page by the widget. Default is 5.

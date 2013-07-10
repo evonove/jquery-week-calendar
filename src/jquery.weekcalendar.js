@@ -881,7 +881,7 @@
         // Header containers
         calendarHeaderHtml = '<div class=\"row-fluid calendar-header\">';
         calendarHeaderHtml += '<div class=\"wc-header span12\">';
-
+        
         // Days row
         calendarHeaderHtml += '<table ><thead><tr><th class=\"wc-time-column-header\"></th>';
         for (var i = 1; i <= options.daysToShow; i++) {
@@ -918,7 +918,8 @@
           calendarHeaderHtml += '</tr>';
         }
         calendarHeaderHtml += '</thead></table>';
-        calendarHeaderHtml += '<div id="hiding-block"></div>';
+        calendarHeaderHtml += '<div class=\"go-left\"><button type="button" class="btn btn-large btn-primary"><i class="icon-chevron-left"></i></button></div>';
+        calendarHeaderHtml += '<div class=\"go-right\"><button type="button" class="btn btn-large btn-primary"><i class="icon-chevron-right"></i></button></div>';
         calendarHeaderHtml += '</div></div>';
 
         $(calendarHeaderHtml).appendTo($calendarContainer);
