@@ -379,40 +379,37 @@ body {
 #calendar-header-wrapper{
   overflow: hidden;
 }
+#calendar-header-wrapper *, #day-hours *{
+  cursor: move;
+}
 .go-left, .go-right{
   height: 60px;
   width: 45px;
+  top: -58px;
+  z-index: 1000;
   position: relative;
   display: inline-block;
-  top: -58px;
   background-color: white;
-  z-index: 1000;
   overflow: visible;
-
 }
-
 .go-left button, .go-right button{
   height: 56px;
   width: 100%;
   position: relative;
 
-  }
-
+}
 .go-left {
   float: left;
 }
-
 .go-right {
   float: right;
 }
-
 .calendar-header {
   /*border-width:1px 0;
   border-style:solid;*/
   padding: 1px 0;
   background-color: black;
 }
-
 .calendar-header table{
   background-color: white;
 }

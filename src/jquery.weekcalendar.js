@@ -1754,6 +1754,7 @@
        * Find the weekday in the current calendar that the calEvent falls within
        */
       _findWeekDayForEvent: function(calEvent, $weekDayColumns) {
+        //console.log('_findWeekDayForEvent');
         var $weekDay;
         var options = this.options;
         var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
@@ -1783,6 +1784,7 @@
        * Update the events rendering in the calendar. Add if does not yet exist.
        */
       _updateEventInCalendar: function(calEvent) {
+        //console.log('_updateEventInCalendar');
         var self = this;
         self._cleanEvent(calEvent);
 
@@ -1813,6 +1815,7 @@
        * Position the event element within the weekday based on it's start / end dates.
        */
       _positionEvent: function($weekDay, $calEvent) {
+        //console.log('_positionEvent');
         var options = this.options;
         var calEvent = $calEvent.data('calEvent');
         var pxPerMillis = $weekDay.height() / options.millisToDisplay;
@@ -1900,8 +1903,9 @@
        * Add draggable capabilities to an event
        */
       _addDraggableToCalEvent: function(calEvent, $calEvent) {
-        //console.log('_addDraggableToCalEvent');
+        
         var options = this.options;
+        options.dragTicTime = undefined;
         $calEvent.draggable({
           handle: '.wc-time',
           containment: 'div.wc-time-slots',
@@ -1912,9 +1916,27 @@
           opacity: 0.5,
           grid: [$calEvent.outerWidth() + 1, options.timeslotHeight],
           start: function(event, ui) {
+            options.tic = 0;
+            options.dragTicTime = new Date().getTime();
+            //console.log('_addDraggableToCalEvent start');
             var $calEvent = ui.draggable || ui.helper;
             options.eventDrag(calEvent, $calEvent);
-          }
+          },
+          drag: function(event, ui) {
+            var width = $calEvent.outerWidth();
+            if (event.clientX + ui.position.left - width > window.screen.availWidth - width/2 && new Date().getTime() > options.dragTicTime + 400){
+              options.dragTicTime = new Date().getTime();
+              $(".go-right").click();
+              $('html').mouseup();
+              return false;
+            }
+            if (ui.offset.left < 50 && event.clientX + ui.position.left - width < width/2 + 50 && new Date().getTime() > options.dragTicTime + 400){
+              options.dragTicTime = new Date().getTime();
+              $(".go-left").click();
+              $('html').mouseup();
+              return false;
+            }
+          },
         });
       },
 
@@ -1927,6 +1949,7 @@
         $weekDay.droppable({
           accept: '.wc-cal-event',
           drop: function(event, ui) {
+            //console.log('_addDroppableToWeekDay drop');
             var $calEvent = ui.draggable;
             var top = Math.round(parseInt(ui.position.top, 10));
             var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $calEvent, top);
@@ -2073,6 +2096,7 @@
           }
 
           /* Enhanced scrollbar */
+          TimelyUi.slimScrollEl = $scrollable;
           $scrollable.slimScroll({
             height: 'auto',
             wheelStep: '5',
@@ -2993,9 +3017,13 @@
     enquire.register('screen and (max-width: 767px)', {
       match : function() {
         $('.wc-timeslot-placeholder').attr('colspan', 1);
+        TimelyUi.maxColumnNumber = 1;
+        TimelyUi.utils._redimColumnsWidth();
       },
       unmatch : function() {
         $('.wc-timeslot-placeholder').attr('colspan', 4);
+        TimelyUi.maxColumnNumber = 5;
+        TimelyUi.utils._redimColumnsWidth();
       }
     });
   });

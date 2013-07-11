@@ -116,11 +116,11 @@
 			top: top
 		};
 	};
-
-	TimelyUi.utils._scrollToIfNeeded = function(iscroll, pos, time, easing){
+	/* Used by .go-right click/.go-left click event */
+	TimelyUi.utils._scrollToIfNeeded = function(iscroll, nextEl, pos, time, easing){
 		time = time === undefined || null || time == 'auto' ? Math.max(Math.abs(pos.left)*2, Math.abs(pos.top)*2) : time;
 
-		if (iscroll.lastPos === undefined || iscroll.lastPos.left !== pos.left){
+		if (iscroll.lastPos === undefined || iscroll.lastPos.left !== pos.left || $(nextEl).css('display') == 'none'){
 			iscroll.lastPos = pos;
 			iscroll.lastIndexPointer = iscroll.pointerIndex;
 			iscroll.scrollTo(pos.left, pos.top, time);
@@ -129,6 +129,7 @@
 		}
 	}
 
+	/* Used by .go-right click/.go-left click event */
 	TimelyUi.utils._posByEl = function(iscroll, el, offsetX, offsetY, pxOffsetX, pxOffsetY){
 		el = el.nodeType ? el : iscroll.scroller.querySelector(el);
 		
@@ -159,25 +160,35 @@
 
 		return pos;
 	};
+	TimelyUi.utils.getMaxPointerIndex = function() {
+		var round = (TimelyUi.actualNumberColumnToShow > 1) ? Math.ceil(TimelyUi.actualNumberColumnToShow / 2) : 0;
+		var maxPointerIndex = TimelyUi.calendar.options.users.length + 1 - round;
+		return maxPointerIndex;
+	};
 
+	
 	/**
 	 * Refresh the value of attr width in some DOM elements to render calendar widget correctly when users are added o removed.
 	 * @param {Number} maxColumnNumber_ is the number of displayed user in same page by the widget. Default is 5.
 	 */
-	TimelyUi.utils._redimColumnsWidth = function(maxColumnNumber_) {
+	TimelyUi.utils._redimColumnsWidth = function() {
 		var options = TimelyUi.calendar.options,
 			width = $('#calendar-body-wrapper').width()-45,
-			maxColumnNumber = (maxColumnNumber_) ? maxColumnNumber_ : TimelyUi.columnsToShow,
-			divindend = (options.users.length > maxColumnNumber) ? maxColumnNumber : options.users.length,
+			maxColumnNumber = TimelyUi.maxColumnNumber;
+		
+		TimelyUi.actualNumberColumnToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;
+
+		var divindend = (options.users.length > TimelyUi.actualNumberColumnToShow) ? TimelyUi.actualNumberColumnToShow : options.users.length,
 			rightSingleWidth = width/divindend,
 			rightWidth = rightSingleWidth*options.users.length+45;
+		
 
 		TimelyUi.dispelVodooMagic();
 		$('.scroller, .wc-time-slots').width(rightWidth);
 		$('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
 			$(this).width(rightSingleWidth);
 		});
-		$.each(TimelyUi.elIScrolls, function(key, val){
+		$.each(TimelyUi.iScrollEls, function(key, val){
 			val.refresh();
 		});
 		TimelyUi.vodooMagic();
@@ -199,14 +210,14 @@
 
 
 	TimelyUi.utils.disableIScrolls = function() {
-		$.each(TimelyUi.elIScrolls, function(key, iscroll){
+		$.each(TimelyUi.iScrollEls, function(key, iscroll){
 			iscroll.disable();
 		});
 	};
 
 	TimelyUi.utils.enableIScrolls = function() {
 		var event = jQuery.Event('mouseup');
-		$.each(TimelyUi.elIScrolls, function(key, iscroll){
+		$.each(TimelyUi.iScrollEls, function(key, iscroll){
 			iscroll.enable();
 			iscroll.handleEvent(event);
 		});
