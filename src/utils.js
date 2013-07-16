@@ -49,73 +49,10 @@
 		}
 	};
 
-	/**
-	 * Refresh the value of attr colspan in two DOM elements to render calendar widget correctly when users are added o removed.
-	 * Add a colspan means less users.
-	 * @param {boolean} isAdd must be true when an user is added
-	 */
-	TimelyUi.utils._addColSpan = function(isAdd) {
-		var options = TimelyUi.calendar.options,
-			utils = TimelyUi.utils,
-			$placeholder,
-			$header,
-			colspan;
+	/***************************
+	* Sliding users by buttons *
+	****************************/
 
-		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
-		$placeholder = $('.wc-timeslot-placeholder');
-		$header = $('.wc-day-column-header');
-		colspan = parseInt($placeholder.attr('colspan'), 10);
-		if (isAdd) {
-			colspan++;
-		} else {
-			colspan--;
-		}
-		$placeholder.attr('colspan', colspan);
-		$header.attr('colspan', colspan);
-	};
-
-		/** 
-	 * Hide a single user in all widget, toggling the bounded button
-	 * @param {int} userId is the id of user to hide.
-	 */
-	TimelyUi.utils._hideUserColumn = function(userId) {
-		var options = TimelyUi.calendar.options,
-			utils = TimelyUi.utils;
-			
-		options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
-		utils._addColSpan(true);
-		utils._redimColumnsWidth();
-	};
-
-	/** 
-	 * Show a single user in all widget, toggling the bounded button
-	 * @param {int} userId is the id of user to show.
-	 */
-	TimelyUi.utils._showUserColumn = function(userId) {
-		var options = TimelyUi.calendar.options,
-			utils = TimelyUi.utils;
-
-		options.removedUserIds.push(userId);
-		utils._addColSpan(false);
-		utils._redimColumnsWidth();
-	};
-
-	TimelyUi.utils._offset = function (el) {
-		var left = -el.offsetLeft,
-			top = -el.offsetTop;
-
-		// jshint -W084
-		while (el = el.offsetParent) {
-			left -= el.offsetLeft;
-			top -= el.offsetTop;
-		}
-		// jshint +W084
-
-		return {
-			left: left,
-			top: top
-		};
-	};
 	/* Used by .go-right click/.go-left click event */
 	TimelyUi.utils._scrollToIfNeeded = function(iscroll, nextEl, pos, time, easing){
 		time = time === undefined || null || time == 'auto' ? Math.max(Math.abs(pos.left)*2, Math.abs(pos.top)*2) : time;
@@ -160,12 +97,265 @@
 
 		return pos;
 	};
-	TimelyUi.utils.getMaxPointerIndex = function() {
-		var round = (TimelyUi.actualNumberColumnToShow > 1) ? Math.ceil(TimelyUi.actualNumberColumnToShow / 2) : 0;
-		var maxPointerIndex = TimelyUi.calendar.options.users.length + 1 - round;
-		return maxPointerIndex;
+
+	TimelyUi.utils._scrollBySelector = function(iscroll, selector){
+		var utils = TimelyUi.utils;
+		var el0 = document.querySelector(selector);
+		var pos0 = utils._posByEl(iscroll, el0, false, false, -45, 0);
+		utils._scrollToIfNeeded(iscroll, el0, pos0, 1000);
 	};
 
+
+	/* Slide user and column user-event clicking button on sides.
+	 * The controller refresh indexPointer in some cases:
+	 * - user hide one or more columns then slide right/left;
+	 * - user show one or more columns then slide.
+	 *
+	 * TODO: Write a better code
+	 */
+	TimelyUi.utils._shiftIfNeeded = function(onRight){
+		var conf = TimelyUi.calendar.conf,
+			utils = TimelyUi.utils,
+			loadedUsers = conf.loadedUsers,
+			removedUserIds = conf.removedUserIds,
+			current = TimelyUi.current,
+			currentUser = utils._filter(loadedUsers, 'id', TimelyUi.currentUserId, true)[0],
+			next = 0,
+			removedUserId = undefined;
+
+		for ( ; (onRight) ? current < loadedUsers.length : current > 0 ; (onRight) ? ++current : --current){
+			if (currentUser.id == loadedUsers[current].id){
+				for (var j = 0; j < removedUserIds.length ; ++j){
+					removedUserId = removedUserIds[j];
+					if (removedUserId == currentUser.id){
+						next = (onRight) ? current + 1 : current - 1;
+						TimelyUi.currentUserId = loadedUsers[next].id;
+						console.log('... and it is hidden go next, ' + next);
+						current = utils._shiftIfNeeded(onRight);
+						return current;
+					}
+				}
+			break;
+			}
+		}
+		return current;
+	};
+
+	TimelyUi.utils._slidingUserStrategy = function(strategy) {
+	  	return { 
+	  		refreshIfNoSufficientColumns : function(current) {
+  				return strategy.refreshIfNoSufficientColumns(current);
+			} , 
+			increment : function(current) {
+				return strategy.increment(current);
+			},
+			checkForHidden : function(next) {
+	  			return strategy.checkForHidden(next);
+			}
+		}
+	};
+
+	TimelyUi.utils.slidingUserRight = {
+		refreshIfNoSufficientColumns : function(current, pointerIndexLimit) {
+  			if(current > pointerIndexLimit){
+				TimelyUi.current = pointerIndexLimit;
+				TimelyUi.currentUserId = loadedUsers[pointerIndexLimit].id;
+				return true;
+			}
+			return false;
+		}, 
+		increment : function(current) {
+  			return current + 1;
+		},
+		checkForHidden : function(next, pointerIndexLimit) {
+  			return (next <= pointerIndexLimit);
+		}
+	};
+
+	TimelyUi.utils.slidingUserLeft = {
+		refreshIfNoSufficientColumns : function(current, pointerIndexLimit) {
+  			if(current < pointerIndexLimit){
+				TimelyUi.current = pointerIndexLimit;
+				TimelyUi.currentUserId = loadedUsers[pointerIndexLimit].id;
+				return true;
+			}
+			return false;
+		}, 
+		increment : function(current) {
+  			return current - 1;
+		},
+		checkForHidden : function(next, pointerIndexLimit) {
+  			return (next >= pointerIndexLimit);
+		}
+	};
+
+	TimelyUi.utils.slidingUser = function(iScrolls, strategy, pointerIndexLimit){
+		var conf = TimelyUi.calendar.conf,
+			utils = TimelyUi.utils,
+			loadedUsers = conf.loadedUsers,
+			removedUserIds = conf.removedUserIds,
+			current = TimelyUi.current,
+			next = 0,
+			nextUser = undefined, 
+			removedUserId = undefined;
+			
+		var controller = utils._slidingUserStrategy(strategy);
+		var currentUser = utils._filter(loadedUsers, 'id', TimelyUi.currentUserId, true)[0];
+		current = utils._shiftIfNeeded(true);
+		if(current != TimelyUi.current){
+			var currentUser = utils._filter(loadedUsers, 'id', TimelyUi.currentUserId, true)[0];
+		}
+		if(controller.refreshIfNoSufficientColumns(current, pointerIndexLimit)){
+			return false;
+		}
+		
+		next = controller.increment(current);
+		nextUser = loadedUsers[next];
+		if(controller.checkForHidden(next, pointerIndexLimit)){
+			for (var j = 0; j< removedUserIds.length ; ++j){
+				removedUserId = removedUserIds[j];
+				if (removedUserId == nextUser.id){
+					next = controller.increment(current);
+					TimelyUi.currentUserId = loadedUsers[next].id;
+					next = utils._shiftIfNeeded(true);
+					nextUser = loadedUsers[next];
+					break;
+				}
+			}
+		}
+		if (nextUser === undefined){
+			return false;
+		}
+
+		TimelyUi.current = next;
+		TimelyUi.currentUserId = loadedUsers[next].id;
+
+		controller.refreshIfNoSufficientColumns(next);
+
+		utils._scrollBySelector(iScrolls[0], '#calendar-header-wrapper th.wc-user-'+TimelyUi.currentUserId);
+		utils._scrollBySelector(iScrolls[1], '.wc-time-slots td.wc-user-'+TimelyUi.currentUserId);
+	};
+
+	TimelyUi.utils.getMaxPointerIndex = function() {
+		var conf = TimelyUi.calendar.conf,
+			loadedUsers = conf.loadedUsers,
+			lastElement = undefined,
+			userId = undefined,
+			arrayTds = $('td.wc-day-column:visible');
+
+		arrayTds.pop = Array.prototype.pop;
+		if (arrayTds.length < TimelyUi.actualNumberColumnToShow && arrayTds.length == 0){
+			return arrayTds.length
+		}
+		for (var i = 0; i < TimelyUi.actualNumberColumnToShow-1; ++i){
+			arrayTds.pop();
+		}
+		try {
+			lastElement = arrayTds[arrayTds.length-1];
+			userId = parseInt(lastElement.className.split('wc-user-')[1].split(' ')[0])
+			for (var index = 0; index < loadedUsers.length; ++index){
+				if (userId == loadedUsers[index].id){
+					return index
+				}
+			}
+		} catch(err) {};
+		return 0;
+	};
+
+	TimelyUi.utils.getMinPointerIndex = function() {
+		var conf = TimelyUi.calendar.conf,
+			loadedUsers = conf.loadedUsers,
+			lastElement = undefined,
+			userId = undefined,
+			arrayTds = $('td.wc-day-column:visible');
+
+		arrayTds.shift = Array.prototype.shift;
+		if (arrayTds.length < TimelyUi.actualNumberColumnToShow && arrayTds.length == 0){
+			return arrayTds.length
+		}
+		try {
+			lastElement = arrayTds.shift();
+			userId = parseInt(lastElement.className.split('wc-user-')[1].split(' ')[0])
+			for (var index = 0; index < loadedUsers.length; ++index){
+				if (userId == loadedUsers[index].id){
+					return index
+				}
+			}
+		} catch(err) {};
+		return 0;
+	};
+
+	/************************************
+	* Show hide user columns by buttons *
+	*************************************/
+
+	/**
+	 * Refresh the value of attr colspan in two DOM elements to render calendar widget correctly when users are added o removed.
+	 * Add a colspan means less users.
+	 * @param {boolean} isAdd must be true when an user is added
+	 */
+	TimelyUi.utils._addColSpan = function(isAdd) {
+		var options = TimelyUi.calendar.options,
+			utils = TimelyUi.utils,
+			$placeholder,
+			$header,
+			colspan;
+
+		options.users = utils.refreshUsers(options.loadedUsers, options.removedUserIds);
+		$placeholder = $('.wc-timeslot-placeholder');
+		$header = $('.wc-day-column-header');
+		colspan = parseInt($placeholder.attr('colspan'), 10);
+		if (isAdd) {
+			colspan++;
+		} else {
+			colspan--;
+		}
+		$placeholder.attr('colspan', colspan);
+		$header.attr('colspan', colspan);
+	};
+
+	/** 
+	 * Hide a single user in all widget, toggling the bounded button
+	 * @param {int} userId is the id of user to hide.
+	 */
+	TimelyUi.utils._hideUserColumn = function(userId) {
+		var options = TimelyUi.calendar.options,
+			utils = TimelyUi.utils;
+			
+		options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
+		utils._addColSpan(true);
+		utils._redimColumnsWidth();
+	};
+
+	/** 
+	 * Show a single user in all widget, toggling the bounded button
+	 * @param {int} userId is the id of user to show.
+	 */
+	TimelyUi.utils._showUserColumn = function(userId) {
+		var options = TimelyUi.calendar.options,
+			utils = TimelyUi.utils;
+
+		options.removedUserIds.push(userId);
+		utils._addColSpan(false);
+		utils._redimColumnsWidth();
+	};
+
+	TimelyUi.utils._offset = function (el) {
+		var left = -el.offsetLeft,
+			top = -el.offsetTop;
+
+		// jshint -W084
+		while (el = el.offsetParent) {
+			left -= el.offsetLeft;
+			top -= el.offsetTop;
+		}
+		// jshint +W084
+
+		return {
+			left: left,
+			top: top
+		};
+	};
 	
 	/**
 	 * Refresh the value of attr width in some DOM elements to render calendar widget correctly when users are added o removed.
@@ -173,7 +363,7 @@
 	 */
 	TimelyUi.utils._redimColumnsWidth = function() {
 		var options = TimelyUi.calendar.options,
-			width = $('#calendar-body-wrapper').width()-45,
+			width = $('#calendar-body-wrapper').width()-45, //the width of hiurday column
 			maxColumnNumber = TimelyUi.maxColumnNumber;
 		
 		TimelyUi.actualNumberColumnToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;
