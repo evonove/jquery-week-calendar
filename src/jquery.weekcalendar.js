@@ -1926,17 +1926,17 @@
             var width = $calEvent.outerWidth();
             if (event.clientX + ui.position.left - width > window.screen.availWidth - width/2 && new Date().getTime() > options.dragTicTime + 400){
               options.dragTicTime = new Date().getTime();
-              $(".go-right").click();
+              $('.go-right').click();
               $('html').mouseup();
               return false;
             }
             if (ui.offset.left < 50 && event.clientX + ui.position.left - width < width/2 + 50 && new Date().getTime() > options.dragTicTime + 400){
               options.dragTicTime = new Date().getTime();
-              $(".go-left").click();
+              $('.go-left').click();
               $('html').mouseup();
               return false;
             }
-          },
+          }
         });
       },
 
@@ -3009,22 +3009,6 @@
       return this;
     }
   });
-
-  $(document).ready(function() {
-    /* TODO: value of colspan must be dynamic according to day or user length
-     * Register a callback for mobile view 
-     */
-    enquire.register('screen and (max-width: 767px)', {
-      match : function() {
-        $('.wc-timeslot-placeholder').attr('colspan', 1);
-        TimelyUi.maxColumnNumber = 1;
-        TimelyUi.utils._redimColumnsWidth();
-      },
-      unmatch : function() {
-        $('.wc-timeslot-placeholder').attr('colspan', 4);
-        TimelyUi.maxColumnNumber = 5;
-        TimelyUi.utils._redimColumnsWidth();
-      }
-    });
-  });
+  
+  
 })(jQuery);
