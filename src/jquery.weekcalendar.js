@@ -294,7 +294,7 @@
           * the event on which to bind calendar resize
           * @type {string}
           */
-        resizeEvent: 'resize.weekcalendar'
+        resizeEvent: 'weekcalendar.resize'
       },
 
       /***************************
@@ -1924,16 +1924,20 @@
           },
           drag: function(event, ui) {
             var width = $calEvent.outerWidth();
-            if (event.clientX + ui.position.left - width > window.screen.availWidth - width/2 && new Date().getTime() > options.dragTicTime + 400){
+            if (event.clientX + ui.position.left - width > window.screen.availWidth - width/2 && new Date().getTime() > options.dragTicTime + 100){
               options.dragTicTime = new Date().getTime();
-              $('.go-right').click();
-              $('html').mouseup();
+              if (TimelyUi.columnsToShow !== 1){
+                $('.go-right').click();
+                $('html').mouseup();
+              }
               return false;
             }
-            if (ui.offset.left < 50 && event.clientX + ui.position.left - width < width/2 + 50 && new Date().getTime() > options.dragTicTime + 400){
+            if (ui.offset.left < 50 && event.clientX + ui.position.left - width < width/2 + 50 && new Date().getTime() > options.dragTicTime + 100){
               options.dragTicTime = new Date().getTime();
-              $('.go-left').click();
-              $('html').mouseup();
+              if (TimelyUi.columnsToShow !== 1){
+                $('.go-left').click();
+                $('html').mouseup();
+              }
               return false;
             }
           }

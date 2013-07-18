@@ -137,12 +137,13 @@ TimelyUi.init = function(id, conf) {
 	TimelyUi.calendar.options.eventMouseupNewEvent = function(calEvent, element) {
 		TimelyUi.utils.enableIScrolls();
 	};
+	
 	//http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
-	$(window).resize(function(e){
-		if(e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
+	window.onresize = function(e){
+		if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
 			TimelyUi.utils._resize();
 		}
-	});
+	};
 
 	/* TODO: value of colspan must be dynamic according to day or user length
 	* Register a callback for mobile view 
