@@ -57,7 +57,7 @@
           lastWeek: 'Previous',
           nextWeek: 'Next'
         },
-        switchDisplay: { 'Day': 1, '3 days': 3, '7 days': 7 },
+        switchDisplay: {},
         scrollToHourMillis: 0,
         allowEventDelete: false,
         allowCalEventOverlap: false,

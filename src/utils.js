@@ -20,8 +20,10 @@
 	 * Generic utils *
 	 ****************/
 
-	/* Array.filter method is implemented in JavaScript 1.6, supported by most modern browsers.
-	   If for supporting the old browser, I wrote my one. */
+	/**
+	 * Array.filter method is implemented in JavaScript 1.6, supported by most modern browsers.
+	 * If for supporting the old browser, I wrote my one. 
+	 */
 	TimelyUi.utils._filter = function(array, attrName, attrValue, likeQuery) {
 		if (!likeQuery){
 			likeQuery = false;
@@ -49,7 +51,7 @@
 		}
 	};
 
-	TimelyUi.utils._resize = function(){
+	TimelyUi.utils._resetIScrolls = function(){
 		$.each(TimelyUi.iScrollEls, function(key, val){
 			val.destroy();
 		});
@@ -69,14 +71,30 @@
 		//Max number of column showable in widest resolutions
 		//and actual columns to show
 		TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = TimelyUi.maxColumnNumber || TimelyUi.calendar.conf.maxColumnNumber || 5;
-		console.log('#_resetHelperValues: TimelyUi.columnsToShow, '+TimelyUi.columnsToShow);
 	};
 
 	/***************************
 	* Sliding users by buttons *
 	****************************/
+	TimelyUi.utils._goRight = function(e){
+		var utils = TimelyUi.utils,
+			maxPointerIndex = utils.getMaxPointerIndex();
+		utils.slidingUser(TimelyUi.iScrollEls, utils.slidingUserRight, maxPointerIndex);
+		e.preventDefault();
+		return false;
+	};
 
-	/* Used by .go-right click/.go-left click event */
+	TimelyUi.utils._goLeft = function(e){
+		var utils = TimelyUi.utils,
+			minPointerIndex = utils.getMinPointerIndex();
+		utils.slidingUser(TimelyUi.iScrollEls, utils.slidingUserLeft, minPointerIndex);
+		e.preventDefault();
+		return false;
+	};
+	
+	/**
+	 * Used by .go-right click/.go-left click event.
+	 */ 
 	TimelyUi.utils._scrollToIfNeeded = function(iscroll, nextEl, pos, time, easing){
 		time = time === undefined || null || time === 'auto' ? Math.max(Math.abs(pos.left)*2, Math.abs(pos.top)*2) : time;
 
@@ -89,7 +107,9 @@
 		}
 	};
 
-	/* Used by .go-right click/.go-left click event */
+	/**
+	 * Used by .go-right click/.go-left click event.
+	 */
 	TimelyUi.utils._posByEl = function(iscroll, el, offsetX, offsetY, pxOffsetX, pxOffsetY){
 		el = el.nodeType ? el : iscroll.scroller.querySelector(el);
 		
@@ -128,7 +148,8 @@
 		utils._scrollToIfNeeded(iscroll, el0, pos0, 1000);
 	};
 
-	/* Slide user and column user-event clicking button on sides.
+	/**
+	 * Slide user and column user-event clicking button on sides.
 	 * The controller refresh indexPointer in some cases:
 	 * - user hide one or more columns then slide right/left;
 	 * - user show one or more columns then slide.
@@ -139,20 +160,22 @@
 		var conf = TimelyUi.calendar.conf,
 			utils = TimelyUi.utils,
 			loadedUsers = conf.loadedUsers,
+			removedUserId,
 			removedUserIds = conf.removedUserIds,
+			removedUserIdsLength = removedUserIds.length,
 			current = TimelyUi.current,
 			currentUser = utils._filter(loadedUsers, 'id', TimelyUi.currentUserId, true)[0],
 			next = 0;
 
 		for ( ; controller.checkForShifting(current) ; current = controller.increment(current)){
 			if (currentUser.id === loadedUsers[current].id){
-				for (var j = 0; j < removedUserIds.length ; ++j){
-					var removedUserId = removedUserIds[j];
+				for (var j = 0; j < removedUserIdsLength ; ++j){
+					removedUserId = removedUserIds[j];
 					if (removedUserId === currentUser.id){
 						next = controller.increment(current);
 						if (controller.checkForHidden(next, pointerIndexLimit)){
 							TimelyUi.currentUserId = loadedUsers[next].id;
-							// console.log('it is hidden go next, ' + next);
+							console.log('it is hidden go next, ' + next);
 							current = utils._shiftIfNeeded(controller, pointerIndexLimit);
 						}
 						return current;
@@ -188,7 +211,7 @@
 			if(current >= pointerIndexLimit){
 				TimelyUi.current = pointerIndexLimit;
 				TimelyUi.currentUserId = loadedUsers[pointerIndexLimit].id;
-				// console.log('out of bound set to '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
+				console.log('out of bound set to '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
 				return true;
 			}
 			return false;
@@ -213,7 +236,7 @@
 			if(current <= pointerIndexLimit){
 				TimelyUi.current = pointerIndexLimit;
 				TimelyUi.currentUserId = loadedUsers[pointerIndexLimit].id;
-				// console.log('out of bound set to '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
+				console.log('out of bound set to '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
 				return true;
 			}
 			return false;
@@ -233,11 +256,13 @@
 		var conf = TimelyUi.calendar.conf,
 			utils = TimelyUi.utils,
 			loadedUsers = conf.loadedUsers,
+			removedUserId,
 			removedUserIds = conf.removedUserIds,
+			removedUserIdsLength = removedUserIds.length,
 			controller = utils._slidingUserStrategy(strategy);
 
-		// console.log('---seek current---');
-		// console.log('starting is, '+current+' '+loadedUsers[current].username);
+		console.log('---seek current---');
+		console.log('starting is, '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
 		var currentUser = utils._filter(loadedUsers, 'id', TimelyUi.currentUserId, true)[0];
 		var current = utils._shiftIfNeeded(controller, pointerIndexLimit);
 		if(current !== TimelyUi.current){
@@ -248,13 +273,14 @@
 			utils._scrollBySelector(iScrolls[1], '.wc-time-slots td.wc-user-'+TimelyUi.currentUserId);
 			return false;
 		}
-		// console.log('current is, '+current+' '+loadedUsers[current].username);
-		// console.log('---seek next---');
+
+		console.log('current is, '+current+' '+loadedUsers[current].username);
+		console.log('---seek next---');
 		var next = controller.increment(current);
 		var nextUser = loadedUsers[next];
 		if(controller.checkForHidden(next, pointerIndexLimit)){
-			for (var j = 0; j< removedUserIds.length ; ++j){
-				var removedUserId = removedUserIds[j];
+			for (var j = 0; j< removedUserIdsLength ; ++j){
+				removedUserId = removedUserIds[j];
 				if (removedUserId === nextUser.id){
 					next = controller.increment(current);
 					TimelyUi.currentUserId = loadedUsers[next].id;
@@ -268,12 +294,7 @@
 		TimelyUi.currentUserId = loadedUsers[next].id;
 
 		controller.refreshIfNoSufficientColumns(current, pointerIndexLimit);
-
-		// if(nextUser === undefined || controller.refreshIfNoSufficientColumns(current, pointerIndexLimit)){
-		// 	console.log('no next');
-		// } else {
-		// 	console.log('next is, '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
-		// }
+		console.log('next is, '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
 
 		utils._scrollBySelector(iScrolls[0], '#calendar-header-wrapper th.wc-user-'+TimelyUi.currentUserId);
 		utils._scrollBySelector(iScrolls[1], '.wc-time-slots td.wc-user-'+TimelyUi.currentUserId);
@@ -406,13 +427,11 @@
 			maxColumnNumber = TimelyUi.maxColumnNumber;
 		
 		TimelyUi.columnsToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;
-		console.log('#_redimColumnsWidth: TimelyUi.columnsToShow, '+TimelyUi.columnsToShow);
 
 		var dividend = (options.users.length > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : options.users.length,
 			rightSingleWidth = width/dividend,
 			rightWidth = rightSingleWidth*options.users.length+45;
 		
-
 		TimelyUi.dispelVodooMagic();
 		$('.scroller, .wc-time-slots').width(rightWidth);
 		$('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
