@@ -7,10 +7,10 @@
     "jquery": "2.0.2",
     "jquery-ui": "1.10.3",
     "enquire": "2.0.2",
-    "jquery.slimscroll": "1.2.0",
     "pickadate": "3.0.5",
     "moment": "2.0.0",
-    "iscroll": "5.0.1"
+    "iscroll": "5.0.1",
+    "hammerjs": "1.0.5"
   },
   "devDependencies" : {
   } 
