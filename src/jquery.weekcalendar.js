@@ -639,10 +639,10 @@
         var self = this;
         var options = this.options;
         var events = TimelyUi.compat.events;
+        var on = TimelyUi.compat.on;
+        var off = TimelyUi.compat.off;
 
-        this.element.on(events['click'], function(event) {
-         
-          this.clicked = false;
+        var clickEvent = function(event) {
           var $target = $(event.target);
           var freeBusyManager;
 
@@ -665,7 +665,8 @@
           } else {
             options.eventClick($calEvent.data('calEvent'), $calEvent, freeBusyManager, self.element, event);
           }
-        }).mouseover(function(event) {
+        };
+        var mouseoverEvent = function(event) {
           var $target = $(event.target);
           var $calEvent = $target.hasClass('wc-cal-event') ?
             $target :
@@ -680,7 +681,8 @@
           }
 
           options.eventMouseover($calEvent.data('calEvent'), $calEvent, event);
-        }).mouseout(function(event) {
+        };
+        var mouseoutEvent = function(event) {
           var $target = $(event.target);
           var $calEvent = $target.hasClass('wc-cal-event') ?
             $target :
@@ -695,7 +697,11 @@
           }
 
           options.eventMouseout($calEvent.data('calEvent'), $calEvent, event);
-        });
+        }
+        var $element = $(this.element);
+        on($element, events['click'], clickEvent);
+        on($element, events['over'] , mouseoverEvent);
+        on($element, events['out'] , mouseoutEvent);
       },
 
       /*
@@ -1234,7 +1240,7 @@
 
         self.lastValidTagert = {};
         self.upEventCreation = function(event) {
-          
+          // console.log('upEventCreation');
           off($('html'), events['up'], self.upEventCreation);
 
           var $target = self.lastValidTagert;
@@ -1294,6 +1300,7 @@
         };
         
         self.downEventCreation = function(event) {
+          // console.log('downEventCreation');
           var $target = $(event.target);
           if ($target.hasClass('wc-day-column-inner')) {
             var $newEvent = $('<div class=\"wc-cal-event wc-new-cal-event wc-new-cal-event-creating\"></div>');
@@ -1318,9 +1325,20 @@
 
             if (!options.preventDragOnEventCreation) {
               var move = function(event) {
+                //console.log('move, '+$(this)[0].className);
                 $newEvent.show();
                 $newEvent.addClass('ui-resizable-resizing');
-                var height = Math.round(event.pageY - columnOffset - topPosition);
+                var pageY = 0;
+                if (event.touches !== undefined){
+                  var touch = event.touches[0];
+                  pageY = touch.pageY;
+                } else if (event.originalEvent !== undefined && vent.originalEvent.targetTouches !== undefined){
+                  var touch = event.originalEvent.targetTouches[0];
+                  pageY = touch.pageY;
+                } else {
+                  pageY = event.pageY;
+                }
+                var height = Math.round(pageY - columnOffset - topPosition);
                 var remainder = height % options.timeslotHeight;
                 
                 // Snap to closest timeslot
@@ -1332,16 +1350,14 @@
                 }
               };
               var removeEventAddClass = function() {
+                // console.log('removeEventAddClass');
+                //console.log('off move, '+$target[0].className);
                 off($target, events['move'], move);
+                
                 off($target, events['up'], removeEventAddClass);
                 $newEvent.addClass('ui-corner-all');
-                // work-around to block unecessary scroll to 0
-                // var iscroll = TimelyUi.iScrollEls[0],
-                //   pos = utils._posByEl(iscroll, $newEvent[0], false, false, 0, -150);
-                // if(pos.top !== 0) {
-                //   iscroll.scrollTo(0, pos.top, 1000);
-                // }
               };
+              //console.log('on move, '+$target[0].className);
               on($target, events['move'], move);
               on($target, events['up'], removeEventAddClass);
             }

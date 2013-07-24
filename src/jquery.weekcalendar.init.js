@@ -8,9 +8,7 @@ TimelyUi.iScrollEls = TimelyUi.iScrollEls || {};
 TimelyUi.initIScrolls  = function() {
 	var iScrolls = TimelyUi.iScrollEls,
 		utils = TimelyUi.utils;
-	
-	utils._resetHelperValues();
-	
+
 	var iScroll = new IScroll('#scrollbar-wrapper', {
 		scrollX: false,
 		scrollY: true,
@@ -91,7 +89,7 @@ TimelyUi.boundIScrolls  = function() {
 		on($el, events['cancel'], boundEvent);
 
 	});
-	TimelyUi.utils._redimColumnsWidth();
+	
 };
 
 TimelyUi.destroyIScrollEls = function(){
@@ -139,9 +137,11 @@ TimelyUi.init = function(id, conf) {
 	
 	//http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
 	window.onresize = function(e){
-		if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500 && TimelyUi.calendar.lastWidth !== window.innerWidth){
+		if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
+			var withRedim = TimelyUi.calendar.lastWidth !== window.innerWidth;
 			TimelyUi.calendar.lastWidth = window.innerWidth;
-			TimelyUi.utils._resetIScrolls();
+			TimelyUi.utils._resetIScrolls(withRedim);
+			return false;
 		}
 	};
 	// var newHeight = $('.scrollerHeight').height()-($(window).height()-100);

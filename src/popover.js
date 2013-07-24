@@ -62,20 +62,20 @@
 		},
 		initListeners: function() {
 			/* Attach listener to popover buttons */
-			$('.popover #popoverSave').on(events['click'],function() {
+			$('.popover #popoverSave').on(events['down'],function() {
 				self.save().clear();
 			});
 
-			$('.popover #popoverCancel').on(events['click'], function() {
+			$('.popover #popoverCancel').on(events['down'], function() {
 				self.clear();
 			});
 
-			$('.popover #popoverDetails').on(events['click'],function() {
+			$('.popover #popoverDetails').on(events['down'],function() {
 				self.edit().hide();
 			});
 
 			if(isMobile){
-				$('.popover #title').on(events['click'],function() {
+				$('.popover #title').on(events['down'],function() {
 					self.title.focus();
 				});
 			}

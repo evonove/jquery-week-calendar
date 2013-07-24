@@ -51,16 +51,28 @@
 		}
 	};
 
-	TimelyUi.utils._resetIScrolls = function(){
+	TimelyUi.utils._resetIScrolls = function(redim){
 		var calendar = TimelyUi.calendar;
-		$.each(TimelyUi.iScrollEls, function(key, val){
-			val.destroy();
-		});
-		TimelyUi.iScrollEls = {};
-		TimelyUi.initIScrolls();
+		// var redim = (redim === undefined) ? true : redim;
+		redim = true;
+		//TimelyUi.dispelVodooMagic();
+		if( redim ){
+			$.each(TimelyUi.iScrollEls, function(key, val){
+				val.destroy();
+			});
+			TimelyUi.iScrollEls = {};
+			TimelyUi.utils._resetHelperValues();
+			TimelyUi.initIScrolls();
+		}
+
 		TimelyUi.boundIScrolls();
+		if( redim ){
+			TimelyUi.utils._redimColumnsWidth();
+		}
 		TimelyUi.vodooMagic();
-		TimelyUi.calendar._scrollToHour(TimelyUi.calendar.options.date.getHours(), true);
+		if( redim ){
+			TimelyUi.calendar._scrollToHour(TimelyUi.calendar.options.date.getHours(), true);
+		}
 		
 	};
 

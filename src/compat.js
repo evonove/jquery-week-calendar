@@ -8,21 +8,28 @@
 		down: 'mousedown',
 		move : 'mousemove',
 		cancel : 'mousecancel',
-		up : 'mouseup'
+		up : 'mouseup',
+		over: 'mouseover',
+		out: 'mouseout',
+		drag: ''
 	};
 	TimelyUi.compat.pointer = {
-		click: 'touch',
+		click: 'tap',
 		down: 'MSPointerDown',
 		move : 'MSPointerMove',
 		cancel : 'MSPointerCancel',
-		up : 'MSPointerUp'
+		up : 'MSPointerUp',
+		drag: ''
 	};
 	TimelyUi.compat.touch = {
-		click: 'touchend',
+		click: 'tap',
 		down: 'touchstart',
 		move : 'touchmove',
 		cancel : 'touchcancel',
-		up : 'touchend'
+		up : 'touchend',
+		over: 'drag',
+		out: 'realese',
+		drag: 'drag'
 	};
 
 	TimelyUi.compat.initTypeEvents = function () {
@@ -38,6 +45,9 @@
 		var isMobile = TimelyUi.compat.isMobile,
 			events = TimelyUi.compat.events;
 		var $el = el.nodeType ? $(el) : el.jquery ? el : $(document.querySelector(el));
+		if (isMobile && name.length == 0){
+			return;
+		}
 		if (isMobile && name.indexOf('touch') === -1){
 			$el = $el.hammer();
 			return $el.on(name,callback);
@@ -54,10 +64,10 @@
 		var $el = el.nodeType ? $(el) : el.jquery ? el : $(document.querySelector(el));
 		if (isMobile && name.indexOf('touch') === -1){
 			$el = $el.hammer();
-			return $el.on(name,callback);
+			return $el.off(name,callback);
 		}
 		$el.each(function(index, element) {
-			element.removeEventListener(events[name], callback, false);
+			element.removeEventListener(name, callback, false);
 		});
 		return $el;
 	}
