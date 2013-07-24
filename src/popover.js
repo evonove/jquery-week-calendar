@@ -4,6 +4,8 @@
 	/* Popover initial configuration */
 	TimelyUi.popover = TimelyUi.popover || {};
 	var self = TimelyUi.popover,
+		events = TimelyUi.compat.events,
+		isMobile = TimelyUi.compat.isMobile,
 		eventId = 1; // TODO: remove this because it should be known by AngularJS
 
 	self.options = {
@@ -22,7 +24,9 @@
 			element.popover(this.options);
 			self.instance = element.popover('show').data('popover');
 			self.title = $('.popover #title');
-			self.title.focus();
+			if(!isMobile) {
+				self.title.focus();
+			}
 			self.initListeners();
 		},
 		clear: function() {
@@ -58,17 +62,23 @@
 		},
 		initListeners: function() {
 			/* Attach listener to popover buttons */
-			$('.popover #popoverSave').click(function() {
+			$('.popover #popoverSave').on(events['click'],function() {
 				self.save().clear();
 			});
 
-			$('.popover #popoverCancel').click(function() {
+			$('.popover #popoverCancel').on(events['click'], function() {
 				self.clear();
 			});
 
-			$('.popover #popoverDetails').click(function() {
+			$('.popover #popoverDetails').on(events['click'],function() {
 				self.edit().hide();
 			});
+
+			if(isMobile){
+				$('.popover #title').on(events['click'],function() {
+					self.title.focus();
+				});
+			}
 		}
 	});
 })(jQuery);

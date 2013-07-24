@@ -52,6 +52,7 @@
 	};
 
 	TimelyUi.utils._resetIScrolls = function(){
+		var calendar = TimelyUi.calendar;
 		$.each(TimelyUi.iScrollEls, function(key, val){
 			val.destroy();
 		});
@@ -59,6 +60,8 @@
 		TimelyUi.initIScrolls();
 		TimelyUi.boundIScrolls();
 		TimelyUi.vodooMagic();
+		TimelyUi.calendar._scrollToHour(TimelyUi.calendar.options.date.getHours(), true);
+		
 	};
 
 	TimelyUi.utils._resetHelperValues = function(){
@@ -269,8 +272,8 @@
 			currentUser = utils._filter(loadedUsers, 'id', TimelyUi.currentUserId, true)[0];
 		}
 		if(controller.refreshIfNoSufficientColumns(current, pointerIndexLimit)){
-			utils._scrollBySelector(iScrolls[0], '#calendar-header-wrapper th.wc-user-'+TimelyUi.currentUserId);
 			utils._scrollBySelector(iScrolls[1], '.wc-time-slots td.wc-user-'+TimelyUi.currentUserId);
+			utils._scrollBySelector(iScrolls[2], '#calendar-header-wrapper th.wc-user-'+TimelyUi.currentUserId);
 			return false;
 		}
 
@@ -296,8 +299,8 @@
 		controller.refreshIfNoSufficientColumns(current, pointerIndexLimit);
 		console.log('next is, '+TimelyUi.current+' '+loadedUsers[TimelyUi.current].username);
 
-		utils._scrollBySelector(iScrolls[0], '#calendar-header-wrapper th.wc-user-'+TimelyUi.currentUserId);
 		utils._scrollBySelector(iScrolls[1], '.wc-time-slots td.wc-user-'+TimelyUi.currentUserId);
+		utils._scrollBySelector(iScrolls[2], '#calendar-header-wrapper th.wc-user-'+TimelyUi.currentUserId);
 	};
 
 	TimelyUi.utils.getMaxPointerIndex = function() {
@@ -433,14 +436,17 @@
 			rightWidth = rightSingleWidth*options.users.length+45;
 		
 		TimelyUi.dispelVodooMagic();
-		$('.scroller, .wc-time-slots').width(rightWidth);
+		$('.scrollerWidth, .wc-time-slots').width(rightWidth);
+		$('#scrollbar-wrapper').height($(window).height()-$('#first-row').height()-$('.calendar-header').height());
 		$('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
 			$(this).width(rightSingleWidth);
 		});
 		$.each(TimelyUi.iScrollEls, function(key, val){
 			val.refresh();
 		});
+
 		TimelyUi.vodooMagic();
+		
 	};
 
 	TimelyUi.utils.toggleUserByButton = function(event, $button) {

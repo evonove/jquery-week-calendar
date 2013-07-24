@@ -85,12 +85,14 @@
 	});
 
 	/* Buttons listeners */
-	$('.modal-footer #modalSave').click(function() {
+	$('.modal-footer #modalSave').click(function(e) {
 		self.save().hide();
+		e.preventDefault();
 	});
 
-	$('.modal-footer #modalDelete').click(function() {
+	$('.modal-footer #modalDelete').click(function(e) {
 		self.delete().hide();
+		e.preventDefault();
 	});
 
 	/* Twitter bootstrap events handler */

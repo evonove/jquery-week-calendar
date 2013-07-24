@@ -98,7 +98,7 @@
         },
         eventResize: function(calEvent, element) {
         },
-        eventNew: function(calEvent, element, dayFreeBusyManager, calendar, mouseupEvent) {
+        eventNew: function(calEvent, element, dayFreeBusyManager, calendar, upEvent) {
           TimelyUi.calendar.showPopoverForm(calEvent, element);
           return true;
         },
@@ -310,7 +310,7 @@
         self._renderCalendar();
         self._loadCalEvents();
         self._resizeCalendar();
-        self._scrollToHour(self.options.date.getHours(), true);
+        //self._scrollToHour(self.options.date.getHours(), true);
 
         if (this.options.resizeEvent) {
           $(window).unbind(this.options.resizeEvent);
@@ -426,9 +426,26 @@
        */
       showModalForm: function(calEvent) {
         var modal = TimelyUi.modal;
-
+        var isMobile = TimelyUi.compat.isMobile;
+        /*
+         * Scale bootstrap modal form
+         * http://stackoverflow.com/questions/14009178/correct-way-to-increase-bootstrap-modals-height
+         */
+        var rescale = function($element){
+          var size = {width: $(window).width() , height: $(window).height()}
+          /*CALCULATE SIZE*/
+          var offset = 20;
+          var offsetBody = 150;
+          $element.css('height', size.height - offset );
+          $('.modal-body').css('height', size.height - (offset + offsetBody));
+          $element.css('top', 0);
+        };
         modal.options.calEvent = calEvent;
         modal.$element.modal('show');
+
+        if(isMobile){
+          rescale(modal.$element);
+        };
       },
 
       /*
@@ -615,14 +632,17 @@
       /*
        * Configure calendar interaction events that are able to use event
        * delegation for greater efficiency
+       * TODO: in mobile enviroment there are not mouseover or mouse out...
        */
       _setupEventDelegation: function() {
         //console.log('_setupEventDelegation');
         var self = this;
         var options = this.options;
+        var events = TimelyUi.compat.events;
 
-
-        this.element.click(function(event) {
+        this.element.on(events['click'], function(event) {
+         
+          this.clicked = false;
           var $target = $(event.target);
           var freeBusyManager;
 
@@ -756,7 +776,7 @@
           if (options.buttons) {
 
             // Rendering header without switchDisplay
-            calendarNavHtml += '<div class="row-fluid calendar-buttons">';
+            calendarNavHtml += '<div id="first-row" class="row-fluid calendar-buttons">';
             calendarNavHtml += '<div class="wc-nav span12">';
             calendarNavHtml += '<button class="btn wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
             calendarNavHtml += '<div class="btn-group">';
@@ -765,7 +785,7 @@
             calendarNavHtml += '</div>';
             calendarNavHtml += '<div class="wc-display btn-group pull-right" data-toggle="buttons-radio"></div>';
             calendarNavHtml += '</div>';
-            calendarNavHtml += '</div><br/>';
+            calendarNavHtml += '</div>';
             $(calendarNavHtml).appendTo($calendarContainer);
 
             // Rendering users filter if they are more than 1
@@ -800,7 +820,7 @@
               
               orgNavHtml += '<div class="btn-group pull-right">';
               orgNavHtml += '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">';
-              orgNavHtml += 'Organizations ';
+              orgNavHtml += 'Teams';
               orgNavHtml += '<span class="caret"></span>';
               orgNavHtml += '</a>';
               orgNavHtml += '<ul id="dropdown-organization" class="dropdown-menu">';
@@ -891,7 +911,7 @@
 
         // Users row
         if (showAsSeparatedUser) {
-          calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper"><thead class="scroller">';
+          calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper"><thead class="scrollerWidth">';
           calendarHeaderHtml += '<tr><th class=\"wc-time-column-header\"></th>';
           var uLength = options.users.length, _headerClass = '';
 
@@ -940,16 +960,21 @@
         $calendarBody = '';
         
         $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid fill \">';
-        $calendarBody += '<div id="calendar-body-wrapper" class=\"wc-scrollable-grid wrapper\">';
-        $calendarBody += '<div class=\"scroller\">';
-        $calendarBody += '<table class=\"wc-time-slots\" >';
-        $calendarBody += '<tbody>';
-        $calendarBody += '</tbody>';
-        $calendarBody += '</table>';
-        $calendarBody += '</div>';
-        $calendarBody += '<div id="day-hours">'+self._renderDayHours()+'</div>';
-        $calendarBody += '</div>';
+        $calendarBody += '  <div class=\"scrollerHeight\">';
 
+        $calendarBody += '    <div id="calendar-body-wrapper" class=\"wc-scrollable-grid\">';
+        $calendarBody += '      <div class=\"scrollerWidth\">';
+        
+        $calendarBody += '        <table class=\"wc-time-slots\" >';
+        $calendarBody += '          <tbody>';
+        $calendarBody += '          </tbody>';
+        $calendarBody += '      </table>';
+        
+        $calendarBody += '    </div>';
+        $calendarBody += '    <div id="day-hours">'+self._renderDayHours()+'</div>';
+        $calendarBody += '    </div>';
+
+        $calendarBody += '  </div>';
         $calendarBody += '</div>';
         $calendarBody = $($calendarBody);
         $calendarTableTbody = $calendarBody.find('tbody');
@@ -1196,21 +1221,28 @@
       },
 
       /*
-       * Setup mouse events for capturing new events
+       * Setup events for capturing new events
        */
       _setupEventCreationForWeekDay: function($weekDay) {
-
-        var self = this;
-        var options = this.options;
+      
+        var events = TimelyUi.compat.events,
+            utils = TimelyUi.utils,
+            on = TimelyUi.compat.on,
+            off = TimelyUi.compat.off,
+            self = this,
+            options = this.options;
 
         self.lastValidTagert = {};
-        self.mouseupEventCreation = function(event) {
-          //console.log('mouseupEventCreation');
-          $('html').unbind('mouseup');
+        self.upEventCreation = function(event) {
+          
+          off($('html'), events['up'], self.upEventCreation);
+
           var $target = self.lastValidTagert;
           if ($target.closest) {
             var $weekDay = $target.closest('.wc-day-column-inner');
             var $newEvent = $weekDay.find('.wc-new-cal-event-creating');
+
+            off($weekDay, events['down'], self.downEventCreation);
             
             if ($newEvent.length) {
               var createdFromSingleClick = !$newEvent.hasClass('ui-resizable-resizing');
@@ -1260,8 +1292,8 @@
             options.eventMouseupNewEvent();
           }
         };
-        $weekDay.mousedown('mousedown.newevent',function(event) {
-          //console.log('mousedown.newevent');
+        
+        self.downEventCreation = function(event) {
           var $target = $(event.target);
           if ($target.hasClass('wc-day-column-inner')) {
             var $newEvent = $('<div class=\"wc-cal-event wc-new-cal-event wc-new-cal-event-creating\"></div>');
@@ -1269,13 +1301,23 @@
             $target.append($newEvent);
 
             var columnOffset = $target.offset().top;
-            var clickY = event.pageY - columnOffset;
+            var clickY = 0;
+            if (event.touches !== undefined){
+              var touch = event.touches[0];
+              clickY = touch.pageY - columnOffset;
+            } else if (event.originalEvent !== undefined && vent.originalEvent.targetTouches !== undefined){
+              var touch = event.originalEvent.targetTouches[0];
+              clickY = touch.pageY - columnOffset;
+            } else {
+              clickY = event.pageY - columnOffset;
+            }
+            
             var clickYRounded = (clickY - (clickY % options.timeslotHeight)) / options.timeslotHeight;
             var topPosition = clickYRounded * options.timeslotHeight;
             $newEvent.css({top: topPosition});
 
             if (!options.preventDragOnEventCreation) {
-              $target.bind('mousemove.newevent', function(event) {
+              var move = function(event) {
                 $newEvent.show();
                 $newEvent.addClass('ui-resizable-resizing');
                 var height = Math.round(event.pageY - columnOffset - topPosition);
@@ -1288,18 +1330,29 @@
                 } else {
                   $newEvent.css('height', height + (options.timeslotHeight - remainder));
                 }
-              }).mouseup(function() {
-                $target.unbind('mousemove.newevent');
+              };
+              var removeEventAddClass = function() {
+                off($target, events['move'], move);
+                off($target, events['up'], removeEventAddClass);
                 $newEvent.addClass('ui-corner-all');
-              });
+                // work-around to block unecessary scroll to 0
+                // var iscroll = TimelyUi.iScrollEls[0],
+                //   pos = utils._posByEl(iscroll, $newEvent[0], false, false, 0, -150);
+                // if(pos.top !== 0) {
+                //   iscroll.scrollTo(0, pos.top, 1000);
+                // }
+              };
+              on($target, events['move'], move);
+              on($target, events['up'], removeEventAddClass);
             }
-
             self.lastValidTagert = $target;
             options.eventMousedownNewEvent();
-            $('html').mouseup('mouseup.newevent', self.mouseupEventCreation);
+            on($('html'), events['up'], self.upEventCreation);
           }
-        });
+        };
+        on($weekDay, events['down'], self.downEventCreation);
       },
+
       /*
        * Load calendar events for the week based on the date provided
        */
@@ -1922,6 +1975,7 @@
             var $calEvent = ui.draggable || ui.helper;
             options.eventDrag(calEvent, $calEvent);
           },
+          /* only in desktop enviroment */
           drag: function(event, ui) {
             var width = $calEvent.outerWidth();
             if (event.clientX + ui.position.left - width > window.screen.availWidth - width/2 && new Date().getTime() > options.dragTicTime + 100){
@@ -2019,7 +2073,11 @@
           containment: $weekDay,
           handles: 's',
           minHeight: options.timeslotHeight,
+          start: function(event, ui) {
+            TimelyUi.utils.disableIScrolls();
+          },
           stop: function(event, ui) {
+            TimelyUi.utils.enableIScrolls();
             var $calEvent = ui.element;
             var newEnd = new Date($calEvent.data('calEvent').start.getTime() + Math.max(1, Math.round(ui.size.height / options.timeslotHeight)) * options.millisPerTimeslot);
             if (self._needDSTdayShift($calEvent.data('calEvent').start, newEnd)) {
@@ -2074,8 +2132,9 @@
       _scrollToHour: function(hour, animate) {
         var self = this;
         var options = this.options;
-        var $scrollable = this.element.find('.wc-scrollable-grid');
-
+        var iscroll = TimelyUi.iScrollEls[0];
+        var $scrollable = this.element.find('.scrollerHeight');
+        if (iscroll !== undefined){
         var slot = hour;
         if (self.options.businessHours.limitDisplay) {
           if (hour <= self.options.businessHours.start) {
@@ -2086,27 +2145,11 @@
             slot = hour - self.options.businessHours.start;
           }
         }
-
         var $target = this.element.find('.wc-grid-timeslot-header .wc-hour-header:eq(' + slot + ')');
-
-        $scrollable.animate({scrollTop: 0}, 0, function() {
-          var targetOffset = $target.offset().top;
-          var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
-          if (animate) {
-            $scrollable.animate({scrollTop: scroll}, options.scrollToHourMillis);
-          }
-          else {
-            $scrollable.animate({scrollTop: scroll}, 0);
-          }
-
-          /* Enhanced scrollbar */
-          TimelyUi.slimScrollEl = $scrollable;
-          $scrollable.slimScroll({
-            height: 'auto',
-            wheelStep: '5',
-            start: $target
-          });
-        });
+        var targetOffset = $target.offset().top;
+        var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
+        iscroll.scrollTo(0, -scroll, 0);
+        }
       },
 
       _24HourForIndex: function(index) {

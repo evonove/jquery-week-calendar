@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <title>jQuery Week Calendar</title>
 
@@ -18,27 +18,27 @@
 <body>
   <div class="container-fluid fill">
     <div id="header" class="row-fluid">
-      <h1>jQuery Week Calendar</h1>
+      <!-- <h1>jQuery Week Calendar</h1>
       <p class="description">
         This calendar demonstrates the differents new options that allow user
         management and freebusy display / computation.
       </p>
-    </div>
+    </div> -->
     <div id="calendar" />
   </div>
 
   <script type="text/javascript" src="assets/enquire/dist/enquire.js"></script>
   <script type="text/javascript" src="assets/jquery/jquery.js"></script>
   <script type="text/javascript" src="assets/jquery-ui/ui/jquery-ui.js"></script>
-  <script type="text/javascript" src="assets/jquery.slimscroll/jquery.slimscroll.js"></script>
   <script type="text/javascript" src="assets/components-bootstrap/js/bootstrap.js"></script>
   <script type="text/javascript" src="assets/pickadate/lib/picker.js"></script>
   <script type="text/javascript" src="assets/pickadate/lib/picker.date.js"></script>
   <script type="text/javascript" src="assets/pickadate/lib/picker.time.js"></script>
   <script type="text/javascript" src="assets/moment/moment.js"></script>
   <script type="text/javascript" src="assets/iscroll/build/iscroll.js"></script>
-  <script type="text/javascript" src="assets/hammerjs/dist/hammer.js"></script>
+  <script type="text/javascript" src="assets/hammerjs/dist/jquery.hammer.js"></script>
   <script type="text/javascript" src="jquery.weekcalendar.init.js"></script>
+  <script type="text/javascript" src="compat.js"></script>
   <script type="text/javascript" src="utils.js"></script>
   <script type="text/javascript" src="popover.js"></script>
   <script type="text/javascript" src="jquery.weekcalendar.js"></script>
@@ -47,6 +47,8 @@
   <script type='text/javascript'>
     (function($) {
       var ajaxLoadedUsers = [{'id': 1, 'username': 'syn', 'first_name': '', 'last_name': '', 'email': '1@1.it', 'last_login': '2013-07-08T09:52:48.619Z', 'date_joined': '2013-05-09T10:17:27.875Z', 'organizations': [1, 2]}, {'id': 2, 'username': 'pippo', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1]}, {'id': 3, 'username': 'pluto', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1]}, {'id': 4, 'username': 'topolino', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1]}, {'id': 5, 'username': 'paperino', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [1,2]}, {'id': 22, 'username': 'paperone', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [2]}, {'id': 23, 'username': 'bassotto1', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [2]}, {'id': 24, 'username': 'bassotto2', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [2]}, {'id': 25, 'username': 'bassotto3', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [2]}, {'id': 26, 'username': 'bassotto4', 'first_name': '', 'last_name': '', 'email': '', 'last_login': '2013-07-08T10:13:30.215Z', 'date_joined': '2013-07-08T10:13:30.215Z', 'organizations': [2]}];
+
+      // var ajaxLoadedUsers = [{'id': 1, 'username': 'syn', 'first_name': '', 'last_name': '', 'email': '1@1.it', 'last_login': '2013-07-08T09:52:48.619Z', 'date_joined': '2013-05-09T10:17:27.875Z', 'organizations': [1, 2]}];
       var conf = {
         users: ajaxLoadedUsers,
         loadedUsers: ajaxLoadedUsers,

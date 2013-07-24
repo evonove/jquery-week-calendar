@@ -4,41 +4,74 @@ var TimelyUi = TimelyUi || {};
 
 TimelyUi.calendar = TimelyUi.calendar || {};
 TimelyUi.iScrollEls = TimelyUi.iScrollEls || {};
-TimelyUi.slimScrollEl = TimelyUi.slimScrollEl || {};
 
 TimelyUi.initIScrolls  = function() {
 	var iScrolls = TimelyUi.iScrollEls,
 		utils = TimelyUi.utils;
 	
 	utils._resetHelperValues();
-
-	$('.wrapper').each(function(index, el){
-		var iScroll = new IScroll(el, {
-			scrollX: true,
-			scrollY: false,
-			momentum: true,
-			bounceEasing: 'elastic',
-			bounceTime: 1200
-		});
-		TimelyUi.iScrollEls[index] = iScroll;
+	
+	var iScroll = new IScroll('#scrollbar-wrapper', {
+		scrollX: false,
+		scrollY: true,
+		momentum: true,
+		// scrollbars: true, 
+		mouseWheel: true, 
+		// interactiveScrollbars: true,
+		bounceEasing: 'elastic',
+		bounceTime: 1200
 	});
+	TimelyUi.iScrollEls[0] = iScroll;
+
+	var iScroll = new IScroll('#calendar-body-wrapper', {
+		scrollX: true,
+		scrollY: false,
+		momentum: true,
+		// scrollbars: true, 
+		// mouseWheel: true, 
+		// interactiveScrollbars: true,
+		bounceEasing: 'elastic',
+		bounceTime: 1200
+	});
+	TimelyUi.iScrollEls[1] = iScroll;
+
+	var iScroll = new IScroll('#calendar-header-wrapper', {
+		scrollX: true,
+		scrollY: false,
+		momentum: true,
+		// scrollbars: true, 
+		// mouseWheel: true, 
+		// interactiveScrollbars: true,
+		bounceEasing: 'elastic',
+		bounceTime: 1200
+	});
+	TimelyUi.iScrollEls[2] = iScroll;
+
+
+
 };
 
 TimelyUi.boundIScrolls  = function() {
 	var iScrolls = TimelyUi.iScrollEls,
 		utils = TimelyUi.utils,
 		goRight = utils._goRight,
-		goLeft = utils._goLeft;
+		goLeft = utils._goLeft,
+		events = TimelyUi.compat.events,
+        on = TimelyUi.compat.on,
+        off = TimelyUi.compat.off;
 	
+
 	$('.go-right').each(function(index, el){
-		el.removeEventListener('click', goRight, false);
-		el.addEventListener('click', goRight, false);
+		off($(el), events['click'], goRight);
+		on($(el), events['click'], goRight);
 	});
+
 	$('.go-left').each(function(index, el){
-		el.removeEventListener('click', goLeft, false);
-		el.addEventListener('click', goLeft, false);
+		off($(el), events['click'], goLeft);
+		on($(el), events['click'], goLeft);
 	});
-	$('.scroller').each(function(index, el){
+
+	$('[class^="scroller"]').each(function(index, el){
 		var boundEvent = function(e) {
 			$.each(TimelyUi.iScrollEls, function(key, val){
 				if(key !== index){
@@ -47,12 +80,16 @@ TimelyUi.boundIScrolls  = function() {
 			});
 			e.preventDefault();
 		};
-		el.removeEventListener('mousemove', boundEvent, false);
-		el.removeEventListener('mousedown', boundEvent, false);
-		el.removeEventListener('mousedown', boundEvent, false);
-		el.addEventListener('mousemove', boundEvent, false);
-		el.addEventListener('mousedown', boundEvent, false);
-		el.addEventListener('mousecancel', boundEvent, false);
+
+		var $el = $(el);
+		off($el, events['move'], boundEvent);
+		off($el, events['down'], boundEvent);
+		off($el, events['cancel'], boundEvent);
+
+		on($el, events['move'], boundEvent);
+		on($el, events['down'], boundEvent);
+		on($el, events['cancel'], boundEvent);
+
 	});
 	TimelyUi.utils._redimColumnsWidth();
 };
@@ -61,48 +98,19 @@ TimelyUi.destroyIScrollEls = function(){
 	TimelyUi.iScrollEls = {};
 };
 
-TimelyUi.boundHourAndSlimScroll  = function() {
-	var el = TimelyUi.slimScrollEl;
-	el.mousePosition = {clientX:0,clientY:0};
-	var dragging = false;
-	$('.td-wrapper').mousedown(function(e){
-		dragging = true;
-		el.mousePosition = {
-			clientX: e.clientX,
-			clientY: e.clientY
-		};
-	});
-	$('#day-hours').mousemove(function(e){
-		if (dragging){
-			var delta = el.mousePosition.clientY - e.clientY;
-			el.slimScroll({ scrollBy: delta+'px' });
-			el.mousePosition = {
-				clientX: e.clientX,
-				clientY: e.clientY
-			};
-		}
-	});
-	$('#day-hours').mouseup(function(e){
-		dragging = false;
-	});
-	$('#day-hours').mouseout(function(e){
-		dragging = false;
-	});
-};
-
 /**
  * TODO: Remove 'magic' behaviour
  */ 
 TimelyUi.vodooMagic  = function() {
 	//Needed (like "postion:absolute;" in scroller DOM element css) after initialization of IScroll to refresh correctly the layout of the page. MAH
-	$('.scroller').css('position', 'relative');
+	$('[class^="scroller"]').css('position', 'relative');
 };
 
 /**
  * TODO: Remove 'magic' behaviour
  */ 
 TimelyUi.dispelVodooMagic  = function() {
-	$('.scroller').css('position', 'absolute');
+	$('[class^="scroller"]').css('position', 'absolute');
 };
 
 TimelyUi.init = function(id, conf) {
@@ -110,11 +118,11 @@ TimelyUi.init = function(id, conf) {
 	TimelyUi.calendar.conf = conf;
 	TimelyUi.calendar.id = id;
 	TimelyUi.calendar.lastRefresh = new Date().getTime();
+	TimelyUi.calendar.lastWidth = window.innerWidth;
 
-	TimelyUi.initIScrolls();
-	TimelyUi.boundIScrolls();
-	TimelyUi.vodooMagic();
-	TimelyUi.boundHourAndSlimScroll();
+	TimelyUi.utils._resetIScrolls();
+	
+	//TimelyUi.boundHourAndSlimScroll();
 
 	TimelyUi.calendar.options.eventDrag = function(calEvent, element) {
 		TimelyUi.utils.disableIScrolls();
@@ -131,10 +139,15 @@ TimelyUi.init = function(id, conf) {
 	
 	//http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
 	window.onresize = function(e){
-		if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
+		if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500 && TimelyUi.calendar.lastWidth !== window.innerWidth){
+			TimelyUi.calendar.lastWidth = window.innerWidth;
 			TimelyUi.utils._resetIScrolls();
 		}
 	};
+	// var newHeight = $('.scrollerHeight').height()-($(window).height()-100);
+	// $('#scrollbar-wrapper').height(newHeight);
+
+	// $('#calendar-body-wrapper, .scrollerWidth').width(TimelyUi.rightWidth);
 
 	/**
 	 * Register a callback for mobile view 
@@ -154,5 +167,7 @@ TimelyUi.init = function(id, conf) {
 			setTimeout(TimelyUi.utils._resetIScrolls, 500);
 		}
 	});
+
+
 
 };
