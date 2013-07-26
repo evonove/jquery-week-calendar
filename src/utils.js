@@ -490,6 +490,7 @@
 			iscroll.handleEvent(event);
 		});
 	};
+	TimelyUi.utils.isDraggingEvent = false;
 
 	/**
 	 * Refresh the TimelyUi.conf.users dictonary subtracting removedUserIds from loadedUsers.

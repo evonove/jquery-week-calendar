@@ -1240,7 +1240,7 @@
 
         self.lastValidTagert = {};
         self.upEventCreation = function(event) {
-          // console.log('upEventCreation');
+          console.log('upEventCreation');
           off($('html'), events['up'], self.upEventCreation);
 
           var $target = self.lastValidTagert;
@@ -1298,19 +1298,61 @@
             options.eventMouseupNewEvent();
           }
         };
-        
-        self.downEventCreation = function(event) {
-          // console.log('downEventCreation');
-          var $target = $(event.target);
-          if ($target.hasClass('wc-day-column-inner')) {
-            var $newEvent = $('<div class=\"wc-cal-event wc-new-cal-event wc-new-cal-event-creating\"></div>');
-            $newEvent.css({lineHeight: (options.timeslotHeight - 2) + 'px', fontSize: (options.timeslotHeight / 2) + 'px'});
-            $target.append($newEvent);
 
-            var columnOffset = $target.offset().top;
-            var clickY = 0;
+        self.move = function(event) {
+          var $newEvent = self.move.$newEvent;
+          var columnOffset = self.move.columnOffset;
+          var topPosition = self.move.topPosition;
+
+          console.log('columnOffset, '+columnOffset+' topPosition, '+topPosition);
+          $newEvent.show();
+          $newEvent.addClass('ui-resizable-resizing');
+          var pageY = 0;
+          if (event.touches !== undefined){
+            var touch = event.touches[0];
+            pageY = touch.pageY;
+          } else if (event.gesture !== undefined && event.gesture.touches !== undefined){
+            var touch = event.gesture.touches[0];
+            pageY = touch.pageY;
+          } else if (event.originalEvent !== undefined && vent.originalEvent.targetTouches !== undefined){
+            var touch = event.originalEvent.targetTouches[0];
+            pageY = touch.pageY;
+          } else {
+            pageY = event.pageY;
+          }
+          var height = Math.round(pageY - columnOffset - topPosition);
+          var remainder = height % options.timeslotHeight;
+          console.log('pageY '+pageY+ ' height, '+height+' remainder, '+remainder);
+          // Snap to closest timeslot
+          if (remainder < 0) {
+            var useHeight = height - remainder;
+            $newEvent.css('height', useHeight < options.timeslotHeight ? options.timeslotHeight : useHeight);
+          } else {
+            $newEvent.css('height', height + (options.timeslotHeight - remainder));
+          }
+          console.log('css(height), '+$newEvent.css('height'));
+        };
+
+         self.removeEventAddClass = function($event) {
+            // console.log('removeEventAddClass');
+            // console.log('off move, '+$target[0].className);
+
+            var $newEvent = self.removeEventAddClass.$newEvent;
+            var $target = self.removeEventAddClass.$target;
+
+            off($target, events['move'], self.move);
+            off($target, events['up'], self.removeEventAddClass);
+            $newEvent.addClass('ui-corner-all');
+          };
+
+        self.getTopPosition = function(event){
+          var columnOffset = $(event.target).offset().top;
+          var clickY = 0;
             if (event.touches !== undefined){
               var touch = event.touches[0];
+              clickY = touch.pageY - columnOffset;
+            } else if (event.gesture !== undefined && event.gesture.touches !== undefined){
+              var touch = event.gesture.touches[0];
               clickY = touch.pageY - columnOffset;
             } else if (event.originalEvent !== undefined && vent.originalEvent.targetTouches !== undefined){
               var touch = event.originalEvent.targetTouches[0];
@@ -1321,52 +1363,43 @@
             
             var clickYRounded = (clickY - (clickY % options.timeslotHeight)) / options.timeslotHeight;
             var topPosition = clickYRounded * options.timeslotHeight;
+            return topPosition
+        };
+        self.downEventCreation = function(event) {
+          // if (TimelyUi.utils.isDraggingEvent)
+          //   return;
+          console.log('downEventCreation');
+
+          var $target = $(event.target);
+          if ($target.hasClass('wc-day-column-inner')) {
+            var $newEvent = $('<div class=\"wc-cal-event wc-new-cal-event wc-new-cal-event-creating\"></div>');
+            $newEvent.css({lineHeight: (options.timeslotHeight - 2) + 'px', fontSize: (options.timeslotHeight / 2) + 'px'});
+            $target.append($newEvent);
+
+            var columnOffset = $target.offset().top;
+            var topPosition = self.getTopPosition(event);
+
+            //TODO: this is a Monkey Patch
+            self.move.columnOffset = columnOffset;
+            self.move.topPosition = topPosition;
+            self.move.$newEvent = $newEvent;
+            self.removeEventAddClass.$target = $target;
+            self.removeEventAddClass.$newEvent = $newEvent;
+
             $newEvent.css({top: topPosition});
 
             if (!options.preventDragOnEventCreation) {
-              var move = function(event) {
-                //console.log('move, '+$(this)[0].className);
-                $newEvent.show();
-                $newEvent.addClass('ui-resizable-resizing');
-                var pageY = 0;
-                if (event.touches !== undefined){
-                  var touch = event.touches[0];
-                  pageY = touch.pageY;
-                } else if (event.originalEvent !== undefined && vent.originalEvent.targetTouches !== undefined){
-                  var touch = event.originalEvent.targetTouches[0];
-                  pageY = touch.pageY;
-                } else {
-                  pageY = event.pageY;
-                }
-                var height = Math.round(pageY - columnOffset - topPosition);
-                var remainder = height % options.timeslotHeight;
-                
-                // Snap to closest timeslot
-                if (remainder < 0) {
-                  var useHeight = height - remainder;
-                  $newEvent.css('height', useHeight < options.timeslotHeight ? options.timeslotHeight : useHeight);
-                } else {
-                  $newEvent.css('height', height + (options.timeslotHeight - remainder));
-                }
-              };
-              var removeEventAddClass = function() {
-                // console.log('removeEventAddClass');
-                //console.log('off move, '+$target[0].className);
-                off($target, events['move'], move);
-                
-                off($target, events['up'], removeEventAddClass);
-                $newEvent.addClass('ui-corner-all');
-              };
-              //console.log('on move, '+$target[0].className);
-              on($target, events['move'], move);
-              on($target, events['up'], removeEventAddClass);
+             
+              console.log('on move, '+$target[0].className);
+              on($target, events['move'], self.move);
+              on($target, events['up'], self.removeEventAddClass);
             }
             self.lastValidTagert = $target;
             options.eventMousedownNewEvent();
             on($('html'), events['up'], self.upEventCreation);
           }
         };
-        on($weekDay, events['down'], self.downEventCreation);
+        on($weekDay, events['hold'], self.downEventCreation);
       },
 
       /*
@@ -1972,11 +2005,20 @@
        * Add draggable capabilities to an event
        */
       _addDraggableToCalEvent: function(calEvent, $calEvent) {
-        
+        var isMobile = TimelyUi.compat.isMobile;
         var options = this.options;
+        var functionStart = function(event, ui) {
+
+            options.tic = 0;
+            options.dragTicTime = new Date().getTime();
+            console.log('_addDraggableToCalEvent start');
+            var $calEvent = ui.draggable || ui.helper;
+            //console.log('executing start event, '+event.type+' $calEvent, '+$calEvent);
+            options.eventDrag(calEvent, $calEvent);
+          };
         options.dragTicTime = undefined;
         $calEvent.draggable({
-          handle: '.wc-time',
+          handle: (isMobile)? '' : '.wc-time',
           containment: 'div.wc-time-slots',
           snap: '.wc-day-column-inner',
           snapMode: 'inner',
@@ -1984,15 +2026,34 @@
           revert: 'invalid',
           opacity: 0.5,
           grid: [$calEvent.outerWidth() + 1, options.timeslotHeight],
-          start: function(event, ui) {
-            options.tic = 0;
-            options.dragTicTime = new Date().getTime();
-            //console.log('_addDraggableToCalEvent start');
-            var $calEvent = ui.draggable || ui.helper;
-            options.eventDrag(calEvent, $calEvent);
-          },
+          // create: function (event, ui){
+          //   var isMobile = TimelyUi.compat.isMobile;
+          //   var on = TimelyUi.compat.on;
+          //   var events = TimelyUi.compat.events;
+          //   if (isMobile){
+          //     on($(this.querySelector('.wc-time')), events['hold'], function(ui){
+          //       console.log('try to cast start event, '+event.type);
+
+          //       return function(event) {
+          //         //var $calEvent = ui.draggable || ui.helper;
+          //         var myEvent = jQuery.Event('dragstart');
+
+          //         functionStart(myEvent, ui);
+          //       }
+          //     }(ui));
+          //     console.log('ui');
+          //   }
+
+          // },
+
+          start: functionStart,
           /* only in desktop enviroment */
           drag: function(event, ui) {
+            var isMobile = TimelyUi.compat.isMobile;
+            if(isMobile){
+              return;
+            }
+            console.log('sliding drag logic');
             var width = $calEvent.outerWidth();
             if (event.clientX + ui.position.left - width > window.screen.availWidth - width/2 && new Date().getTime() > options.dragTicTime + 100){
               options.dragTicTime = new Date().getTime();
@@ -2084,10 +2145,11 @@
       _addResizableToCalEvent: function(calEvent, $calEvent, $weekDay) {
         var self = this;
         var options = this.options;
+        var isMobile = TimelyUi.compat.isMobile;
         $calEvent.resizable({
+          containment: (isMobile)? 'parent' : $weekDay,
           grid: options.timeslotHeight,
-          containment: $weekDay,
-          handles: 's',
+          handles: (isMobile)? '' : 's',
           minHeight: options.timeslotHeight,
           start: function(event, ui) {
             TimelyUi.utils.disableIScrolls();

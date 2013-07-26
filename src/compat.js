@@ -11,7 +11,8 @@
 		up : 'mouseup',
 		over: 'mouseover',
 		out: 'mouseout',
-		drag: ''
+		drag: 'mousemove',
+		hold: 'mousedown'
 	};
 	TimelyUi.compat.pointer = {
 		click: 'tap',
@@ -19,7 +20,7 @@
 		move : 'MSPointerMove',
 		cancel : 'MSPointerCancel',
 		up : 'MSPointerUp',
-		drag: ''
+		drag: 'MSPointerMove'
 	};
 	TimelyUi.compat.touch = {
 		click: 'tap',
@@ -29,7 +30,8 @@
 		up : 'touchend',
 		over: 'drag',
 		out: 'realese',
-		drag: 'drag'
+		drag: 'drag',
+		hold: 'hold'
 	};
 
 	TimelyUi.compat.initTypeEvents = function () {
