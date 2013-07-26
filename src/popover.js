@@ -24,9 +24,9 @@
 			element.popover(this.options);
 			self.instance = element.popover('show').data('popover');
 			self.title = $('.popover #title');
-			if(!isMobile) {
-				self.title.focus();
-			}
+			//if(!isMobile) {
+			self.title.focus();
+			//}
 			self.initListeners();
 		},
 		clear: function() {
@@ -62,23 +62,21 @@
 		},
 		initListeners: function() {
 			/* Attach listener to popover buttons */
-			$('.popover #popoverSave').on(events['down'],function() {
+			$('.popover #popoverSave').on(events.down,function() {
 				self.save().clear();
 			});
 
-			$('.popover #popoverCancel').on(events['down'], function() {
+			$('.popover #popoverCancel').on(events.down, function() {
 				self.clear();
 			});
 
-			$('.popover #popoverDetails').on(events['down'],function() {
+			$('.popover #popoverDetails').on(events.down,function() {
 				self.edit().hide();
 			});
 
-			if(isMobile){
-				$('.popover #title').on(events['down'],function() {
-					self.title.focus();
-				});
-			}
+			$('.popover #title').on(events.down,function() {
+				self.title.focus();
+			});
 		}
 	});
 })(jQuery);

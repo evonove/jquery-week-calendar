@@ -51,11 +51,11 @@
 		}
 	};
 
-	TimelyUi.utils._resetIScrolls = function(redim){
-		var calendar = TimelyUi.calendar;
-		// var redim = (redim === undefined) ? true : redim;
-		redim = true;
-		//TimelyUi.dispelVodooMagic();
+	TimelyUi.utils._resetIScrolls = function(redim_, justHeader_){
+		var calendar = TimelyUi.calendar,
+			redim = (redim_ === undefined) ? true : redim_,
+			justHeader = (justHeader_ === undefined) ? false : justHeader_;
+		TimelyUi.dispelVodooMagic();
 		if( redim ){
 			$.each(TimelyUi.iScrollEls, function(key, val){
 				val.destroy();
@@ -63,6 +63,15 @@
 			TimelyUi.iScrollEls = {};
 			TimelyUi.utils._resetHelperValues();
 			TimelyUi.initIScrolls();
+		}
+		if (!redim && justHeader){
+			TimelyUi.iScrollEls[2].destroy();
+			TimelyUi.iScrollEls[2] = {};
+			TimelyUi.initIScrolls(justHeader);
+			var iscroll = TimelyUi.iScrollEls[2];
+			var pos = TimelyUi.utils.lastPos;
+			console.log(pos.left+', '+pos.top);
+			iscroll.scrollTo((pos.left+45), 0, 0);
 		}
 
 		TimelyUi.boundIScrolls();
@@ -109,7 +118,7 @@
 	
 	/**
 	 * Used by .go-right click/.go-left click event.
-	 */ 
+	 */
 	TimelyUi.utils._scrollToIfNeeded = function(iscroll, nextEl, pos, time, easing){
 		time = time === undefined || null || time === 'auto' ? Math.max(Math.abs(pos.left)*2, Math.abs(pos.top)*2) : time;
 
@@ -472,7 +481,7 @@
 			utils._showUserColumn(userId);
 		}
 
-        $wcUser.toggle();
+		$wcUser.toggle();
 		$button.button('toggle');
 	};
 

@@ -100,6 +100,8 @@
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, upEvent) {
           TimelyUi.calendar.showPopoverForm(calEvent, element);
+          var iscroll = TimelyUi.iScrollEls[1];
+          TimelyUi.utils.lastPos = TimelyUi.utils._posByEl(iscroll,  element[0]);
           return true;
         },
         eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
@@ -432,7 +434,7 @@
          * http://stackoverflow.com/questions/14009178/correct-way-to-increase-bootstrap-modals-height
          */
         var rescale = function($element){
-          var size = {width: $(window).width() , height: $(window).height()}
+          var size = {width: $(window).width() , height: $(window).height()};
           /*CALCULATE SIZE*/
           var offset = 20;
           var offsetBody = 150;
@@ -445,7 +447,7 @@
 
         if(isMobile){
           rescale(modal.$element);
-        };
+        }
       },
 
       /*
@@ -697,11 +699,11 @@
           }
 
           options.eventMouseout($calEvent.data('calEvent'), $calEvent, event);
-        }
+        };
         var $element = $(this.element);
-        on($element, events['click'], clickEvent);
-        on($element, events['over'] , mouseoverEvent);
-        on($element, events['out'] , mouseoutEvent);
+        on($element, events.click, clickEvent);
+        on($element, events.over, mouseoverEvent);
+        on($element, events.out, mouseoutEvent);
       },
 
       /*
@@ -1241,14 +1243,14 @@
         self.lastValidTagert = {};
         self.upEventCreation = function(event) {
           console.log('upEventCreation');
-          off($('html'), events['up'], self.upEventCreation);
+          off($('html'), events.up, self.upEventCreation);
 
           var $target = self.lastValidTagert;
           if ($target.closest) {
             var $weekDay = $target.closest('.wc-day-column-inner');
             var $newEvent = $weekDay.find('.wc-new-cal-event-creating');
 
-            off($weekDay, events['down'], self.downEventCreation);
+            off($weekDay, events.down, self.downEventCreation);
             
             if ($newEvent.length) {
               var createdFromSingleClick = !$newEvent.hasClass('ui-resizable-resizing');
@@ -1260,7 +1262,7 @@
               var top = parseInt($newEvent.css('top'), 10);
               var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $newEvent, top);
 
-              $newEvent.remove();
+              
               var newCalEvent = {start: eventDuration.start, end: eventDuration.end, title: options.newEventText};
               var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
 
@@ -1273,6 +1275,7 @@
 
               var freeBusyManager = self.getFreeBusyManagerForEvent(newCalEvent);
               var $renderedCalEvent = self._renderEvent(newCalEvent, $weekDay);
+              $newEvent.remove();
 
               if (!options.allowCalEventOverlap) {
                 self._adjustForEventCollisions($weekDay, $renderedCalEvent, newCalEvent, newCalEvent);
@@ -1300,22 +1303,23 @@
         };
 
         self.move = function(event) {
-          var $newEvent = self.move.$newEvent;
-          var columnOffset = self.move.columnOffset;
-          var topPosition = self.move.topPosition;
+          var $newEvent = self.move.$newEvent,
+              columnOffset = self.move.columnOffset,
+              topPosition = self.move.topPosition,
+              pageY = 0,
+              touch;
 
           console.log('columnOffset, '+columnOffset+' topPosition, '+topPosition);
           $newEvent.show();
           $newEvent.addClass('ui-resizable-resizing');
-          var pageY = 0;
           if (event.touches !== undefined){
-            var touch = event.touches[0];
+            touch = event.touches[0];
             pageY = touch.pageY;
           } else if (event.gesture !== undefined && event.gesture.touches !== undefined){
-            var touch = event.gesture.touches[0];
+            touch = event.gesture.touches[0];
             pageY = touch.pageY;
-          } else if (event.originalEvent !== undefined && vent.originalEvent.targetTouches !== undefined){
-            var touch = event.originalEvent.targetTouches[0];
+          } else if (event.originalEvent !== undefined && event.originalEvent.targetTouches !== undefined){
+            touch = event.originalEvent.targetTouches[0];
             pageY = touch.pageY;
           } else {
             pageY = event.pageY;
@@ -1330,44 +1334,46 @@
           } else {
             $newEvent.css('height', height + (options.timeslotHeight - remainder));
           }
+         
           console.log('css(height), '+$newEvent.css('height'));
         };
 
-         self.removeEventAddClass = function($event) {
-            // console.log('removeEventAddClass');
-            // console.log('off move, '+$target[0].className);
+        self.removeEventAddClass = function($event) {
+          console.log('removeEventAddClass');
+          
+          var $newEvent = self.removeEventAddClass.$newEvent,
+           $target = self.removeEventAddClass.$target;
 
-            var $newEvent = self.removeEventAddClass.$newEvent;
-            var $target = self.removeEventAddClass.$target;
+          console.log('off move, '+$target[0].className);
 
-            off($target, events['move'], self.move);
-            off($target, events['up'], self.removeEventAddClass);
-            $newEvent.addClass('ui-corner-all');
-          };
+          off($target, events.move, self.move);
+          off($target, events.up, self.removeEventAddClass);
+          $newEvent.addClass('ui-corner-all');
+        };
 
         self.getTopPosition = function(event){
-          var columnOffset = $(event.target).offset().top;
-          var clickY = 0;
-            if (event.touches !== undefined){
-              var touch = event.touches[0];
-              clickY = touch.pageY - columnOffset;
-            } else if (event.gesture !== undefined && event.gesture.touches !== undefined){
-              var touch = event.gesture.touches[0];
-              clickY = touch.pageY - columnOffset;
-            } else if (event.originalEvent !== undefined && vent.originalEvent.targetTouches !== undefined){
-              var touch = event.originalEvent.targetTouches[0];
-              clickY = touch.pageY - columnOffset;
-            } else {
-              clickY = event.pageY - columnOffset;
-            }
-            
-            var clickYRounded = (clickY - (clickY % options.timeslotHeight)) / options.timeslotHeight;
-            var topPosition = clickYRounded * options.timeslotHeight;
-            return topPosition
+          var columnOffset = $(event.target).offset().top,
+            clickY = 0,
+            touch;
+          if (event.touches !== undefined){
+            touch = event.touches[0];
+            clickY = touch.pageY - columnOffset;
+          } else if (event.gesture !== undefined && event.gesture.touches !== undefined){
+            touch = event.gesture.touches[0];
+            clickY = touch.pageY - columnOffset;
+          } else if (event.originalEvent !== undefined && event.originalEvent.targetTouches !== undefined){
+            touch = event.originalEvent.targetTouches[0];
+            clickY = touch.pageY - columnOffset;
+          } else {
+            clickY = event.pageY - columnOffset;
+          }
+          
+          var clickYRounded = (clickY - (clickY % options.timeslotHeight)) / options.timeslotHeight;
+          var topPosition = clickYRounded * options.timeslotHeight;
+          return topPosition;
         };
+
         self.downEventCreation = function(event) {
-          // if (TimelyUi.utils.isDraggingEvent)
-          //   return;
           console.log('downEventCreation');
 
           var $target = $(event.target);
@@ -1391,15 +1397,16 @@
             if (!options.preventDragOnEventCreation) {
              
               console.log('on move, '+$target[0].className);
-              on($target, events['move'], self.move);
-              on($target, events['up'], self.removeEventAddClass);
+
+              on($target, events.move, self.move);
+              on($target, events.up, self.removeEventAddClass);
             }
             self.lastValidTagert = $target;
             options.eventMousedownNewEvent();
-            on($('html'), events['up'], self.upEventCreation);
+            on($('html'), events.up, self.upEventCreation);
           }
         };
-        on($weekDay, events['hold'], self.downEventCreation);
+        on($weekDay, events.hold, self.downEventCreation);
       },
 
       /*
@@ -2213,20 +2220,20 @@
         var iscroll = TimelyUi.iScrollEls[0];
         var $scrollable = this.element.find('.scrollerHeight');
         if (iscroll !== undefined){
-        var slot = hour;
-        if (self.options.businessHours.limitDisplay) {
-          if (hour <= self.options.businessHours.start) {
-            slot = 0;
-          } else if (hour >= self.options.businessHours.end) {
-            slot = self.options.businessHours.end - self.options.businessHours.start - 1;
-          } else {
-            slot = hour - self.options.businessHours.start;
+          var slot = hour;
+          if (self.options.businessHours.limitDisplay) {
+            if (hour <= self.options.businessHours.start) {
+              slot = 0;
+            } else if (hour >= self.options.businessHours.end) {
+              slot = self.options.businessHours.end - self.options.businessHours.start - 1;
+            } else {
+              slot = hour - self.options.businessHours.start;
+            }
           }
-        }
-        var $target = this.element.find('.wc-grid-timeslot-header .wc-hour-header:eq(' + slot + ')');
-        var targetOffset = $target.offset().top;
-        var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
-        iscroll.scrollTo(0, -scroll, 0);
+          var $target = this.element.find('.wc-grid-timeslot-header .wc-hour-header:eq(' + slot + ')');
+          var targetOffset = $target.offset().top;
+          var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
+          iscroll.scrollTo(0, -scroll, 0);
         }
       },
 

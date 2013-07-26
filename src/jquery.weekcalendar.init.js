@@ -5,23 +5,37 @@ var TimelyUi = TimelyUi || {};
 TimelyUi.calendar = TimelyUi.calendar || {};
 TimelyUi.iScrollEls = TimelyUi.iScrollEls || {};
 
-TimelyUi.initIScrolls  = function() {
+TimelyUi.initIScrolls  = function(justHeader_) {
 	var iScrolls = TimelyUi.iScrollEls,
-		utils = TimelyUi.utils;
+		utils = TimelyUi.utils,
+		justHeader = (justHeader_ === undefined) ? false : justHeader_;
 
-	var iScroll = new IScroll('#scrollbar-wrapper', {
-		scrollX: false,
-		scrollY: true,
-		momentum: true,
-		// scrollbars: true, 
-		mouseWheel: true, 
-		// interactiveScrollbars: true,
-		bounceEasing: 'elastic',
-		bounceTime: 1200
-	});
-	TimelyUi.iScrollEls[0] = iScroll;
+	if (!justHeader){
+		var iScroll0 = new IScroll('#scrollbar-wrapper', {
+			scrollX: false,
+			scrollY: true,
+			momentum: true,
+			// scrollbars: true, 
+			mouseWheel: true,
+			// interactiveScrollbars: true,
+			bounceEasing: 'elastic',
+			bounceTime: 1200
+		});
+		TimelyUi.iScrollEls[0] = iScroll0;
 
-	var iScroll = new IScroll('#calendar-body-wrapper', {
+		var iScroll1 = new IScroll('#calendar-body-wrapper', {
+			scrollX: true,
+			scrollY: false,
+			momentum: true,
+			// scrollbars: true, 
+			// mouseWheel: true, 
+			// interactiveScrollbars: true,
+			bounceEasing: 'elastic',
+			bounceTime: 1200
+		});
+		TimelyUi.iScrollEls[1] = iScroll1;
+	}
+	var iScroll2 = new IScroll('#calendar-header-wrapper', {
 		scrollX: true,
 		scrollY: false,
 		momentum: true,
@@ -31,19 +45,7 @@ TimelyUi.initIScrolls  = function() {
 		bounceEasing: 'elastic',
 		bounceTime: 1200
 	});
-	TimelyUi.iScrollEls[1] = iScroll;
-
-	var iScroll = new IScroll('#calendar-header-wrapper', {
-		scrollX: true,
-		scrollY: false,
-		momentum: true,
-		// scrollbars: true, 
-		// mouseWheel: true, 
-		// interactiveScrollbars: true,
-		bounceEasing: 'elastic',
-		bounceTime: 1200
-	});
-	TimelyUi.iScrollEls[2] = iScroll;
+	TimelyUi.iScrollEls[2] = iScroll2;
 
 
 
@@ -60,13 +62,13 @@ TimelyUi.boundIScrolls  = function() {
 	
 
 	$('.go-right').each(function(index, el){
-		off($(el), events['click'], goRight);
-		on($(el), events['click'], goRight);
+		off($(el), events.click, goRight);
+		on($(el), events.click, goRight);
 	});
 
 	$('.go-left').each(function(index, el){
-		off($(el), events['click'], goLeft);
-		on($(el), events['click'], goLeft);
+		off($(el), events.click, goLeft);
+		on($(el), events.click, goLeft);
 	});
 
 	$('[class^="scroller"]').each(function(index, el){
@@ -80,13 +82,13 @@ TimelyUi.boundIScrolls  = function() {
 		};
 
 		var $el = $(el);
-		off($el, events['move'], boundEvent);
-		off($el, events['down'], boundEvent);
-		off($el, events['cancel'], boundEvent);
+		off($el, events.move, boundEvent);
+		off($el, events.down, boundEvent);
+		off($el, events.cancel, boundEvent);
 
-		on($el, events['move'], boundEvent);
-		on($el, events['down'], boundEvent);
-		on($el, events['cancel'], boundEvent);
+		on($el, events.move, boundEvent);
+		on($el, events.down, boundEvent);
+		on($el, events.cancel, boundEvent);
 
 	});
 	
@@ -98,7 +100,7 @@ TimelyUi.destroyIScrollEls = function(){
 
 /**
  * TODO: Remove 'magic' behaviour
- */ 
+ */
 TimelyUi.vodooMagic  = function() {
 	//Needed (like "postion:absolute;" in scroller DOM element css) after initialization of IScroll to refresh correctly the layout of the page. MAH
 	$('[class^="scroller"]').css('position', 'relative');
@@ -106,7 +108,7 @@ TimelyUi.vodooMagic  = function() {
 
 /**
  * TODO: Remove 'magic' behaviour
- */ 
+ */
 TimelyUi.dispelVodooMagic  = function() {
 	$('[class^="scroller"]').css('position', 'absolute');
 };
@@ -140,14 +142,11 @@ TimelyUi.init = function(id, conf) {
 		if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
 			var withRedim = TimelyUi.calendar.lastWidth !== window.innerWidth;
 			TimelyUi.calendar.lastWidth = window.innerWidth;
-			TimelyUi.utils._resetIScrolls(withRedim);
+			//TimelyUi.utils._resetIScrolls(withRedim);
+			TimelyUi.utils._resetIScrolls(withRedim, true);
 			return false;
 		}
 	};
-	// var newHeight = $('.scrollerHeight').height()-($(window).height()-100);
-	// $('#scrollbar-wrapper').height(newHeight);
-
-	// $('#calendar-body-wrapper, .scrollerWidth').width(TimelyUi.rightWidth);
 
 	/**
 	 * Register a callback for mobile view 
