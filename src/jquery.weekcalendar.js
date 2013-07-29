@@ -815,8 +815,8 @@
                 $container.append(_input);
               });
               $container.find('[data-propagation=\"false\"]').click(function(event) {
-                event.stopPropagation(); //Needed
                 utils.toggleUserByButton(event, $(this));
+                return false;
               });
             }
 
