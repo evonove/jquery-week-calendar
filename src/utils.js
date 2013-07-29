@@ -396,9 +396,9 @@
 	TimelyUi.utils._hideUserColumn = function(userId) {
 		var options = TimelyUi.calendar.options,
 			utils = TimelyUi.utils;
-			
-		options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
-		utils._addColSpan(true);
+
+		options.removedUserIds.push(userId);
+		utils._addColSpan(false);
 		utils._redimColumnsWidth();
 	};
 
@@ -410,8 +410,8 @@
 		var options = TimelyUi.calendar.options,
 			utils = TimelyUi.utils;
 
-		options.removedUserIds.push(userId);
-		utils._addColSpan(false);
+		options.removedUserIds.splice(options.removedUserIds.indexOf(userId),1);
+		utils._addColSpan(true);
 		utils._redimColumnsWidth();
 	};
 
@@ -466,12 +466,13 @@
 			utils = TimelyUi.utils,
 			$wcUser = $('.wc-user-' + userId);
 
-		$wcUser.toggle();
 		if ($wcUser.is(':visible')) {
 			utils._hideUserColumn(userId);
 		} else {
 			utils._showUserColumn(userId);
 		}
+
+        $wcUser.toggle();
 		$button.button('toggle');
 	};
 
