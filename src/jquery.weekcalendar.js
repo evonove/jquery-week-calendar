@@ -784,10 +784,10 @@
             // Rendering header without switchDisplay
             calendarNavHtml += '<div id="first-row" class="row-fluid calendar-buttons">';
             calendarNavHtml += '<div class="wc-nav span12">';
-            calendarNavHtml += '<button class="btn wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
+            calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
             calendarNavHtml += '<div class="btn-group">';
-            calendarNavHtml += '<button class="btn wc-prev"><i class="icon-chevron-left"></i></button>';
-            calendarNavHtml += '<button class="btn wc-next"><i class="icon-chevron-right"></i></button>';
+            calendarNavHtml += '<button class="btn btn-inverse wc-prev"><i class="icon-chevron-left"></i></button>';
+            calendarNavHtml += '<button class="btn btn-inverse wc-next"><i class="icon-chevron-right"></i></button>';
             calendarNavHtml += '</div>';
             calendarNavHtml += '<div class="wc-display btn-group pull-right" data-toggle="buttons-radio"></div>';
             calendarNavHtml += '</div>';
@@ -800,7 +800,7 @@
               $calendarNavContainer = $calendarContainer.find('.wc-nav');
 
               userNavHtml += '<div class="btn-group pull-right">';
-              userNavHtml += '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">';
+              userNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
               userNavHtml += 'Users ';
               userNavHtml += '<span class="caret"></span>';
               userNavHtml += '</a>';
@@ -825,8 +825,8 @@
               var orgNavHtml = '';
               
               orgNavHtml += '<div class="btn-group pull-right">';
-              orgNavHtml += '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">';
-              orgNavHtml += 'Teams';
+              orgNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
+              orgNavHtml += 'Teams ';
               orgNavHtml += '<span class="caret"></span>';
               orgNavHtml += '</a>';
               orgNavHtml += '<ul id="dropdown-organization" class="dropdown-menu">';
@@ -944,8 +944,8 @@
           calendarHeaderHtml += '</tr>';
         }
         calendarHeaderHtml += '</thead></table>';
-        calendarHeaderHtml += '<div class=\"go-left\"><button type="button" class="btn btn-large btn-primary"><i class="icon-chevron-left"></i></button></div>';
-        calendarHeaderHtml += '<div class=\"go-right\"><button type="button" class="btn btn-large btn-primary"><i class="icon-chevron-right"></i></button></div>';
+        calendarHeaderHtml += '<div class=\"go-left\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-left"></i></button></div>';
+        calendarHeaderHtml += '<div class=\"go-right\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-right"></i></button></div>';
         calendarHeaderHtml += '</div></div>';
 
         $(calendarHeaderHtml).appendTo($calendarContainer);
