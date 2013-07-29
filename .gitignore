@@ -1,6 +1,13 @@
+# Libraries and dependecies
 node_modules/
 coverages/
 dist/
-src/assets/
-*.tmp
+assets/
+
+# Temporary files
 *.log
+.tmp
+.sass-cache
+
+# IDE
+.idea/
