@@ -69,9 +69,11 @@
 			TimelyUi.iScrollEls[2] = {};
 			TimelyUi.initIScrolls(justHeader);
 			var iscroll = TimelyUi.iScrollEls[2];
-			var pos = TimelyUi.utils.lastPos;
-			console.log(pos.left+', '+pos.top);
-			iscroll.scrollTo((pos.left+45), 0, 0);
+			if (TimelyUi.utils.lastPos !== undefined){
+				var pos = TimelyUi.utils.lastPos;
+				console.log(pos.left+', '+pos.top);
+				iscroll.scrollTo((pos.left+45), 0, 0);
+			}
 		}
 
 		TimelyUi.boundIScrolls();

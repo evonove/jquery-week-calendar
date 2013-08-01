@@ -102,6 +102,10 @@
           TimelyUi.calendar.showPopoverForm(calEvent, element);
           var iscroll = TimelyUi.iScrollEls[1];
           TimelyUi.utils.lastPos = TimelyUi.utils._posByEl(iscroll,  element[0]);
+
+          var iscroll0 = TimelyUi.iScrollEls[0];
+          var pos = TimelyUi.utils._posByEl(iscroll0, element[0]);
+          iscroll0.scrollTo(pos.left+40, pos.top+150, 0);
           return true;
         },
         eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
