@@ -121,8 +121,6 @@ TimelyUi.init = function(id, conf) {
 	TimelyUi.calendar.lastWidth = window.innerWidth;
 
 	TimelyUi.utils._resetIScrolls();
-	
-	//TimelyUi.boundHourAndSlimScroll();
 
 	TimelyUi.calendar.options.eventDrag = function(calEvent, element) {
 		TimelyUi.utils.disableIScrolls();
