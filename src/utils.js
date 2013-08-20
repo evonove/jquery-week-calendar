@@ -56,6 +56,7 @@
 			redim = (redim_ === undefined) ? true : redim_,
 			justHeader = (justHeader_ === undefined) ? false : justHeader_;
 		TimelyUi.dispelVodooMagic();
+		console.log('_resetIScrolls: redim '+redim+', justHeader '+justHeader);
 		if( redim ){
 			$.each(TimelyUi.iScrollEls, function(key, val){
 				val.destroy();
@@ -71,11 +72,10 @@
 			var iscroll = TimelyUi.iScrollEls[2];
 			if (TimelyUi.utils.lastPos !== undefined){
 				var pos = TimelyUi.utils.lastPos;
-				console.log(pos.left+', '+pos.top);
+				console.log('_resetIScrolls: '+pos.left+', '+pos.top);
 				iscroll.scrollTo((pos.left+45), 0, 0);
 			}
 		}
-
 		TimelyUi.boundIScrolls();
 		if( redim ){
 			TimelyUi.utils._redimColumnsWidth();
@@ -452,8 +452,16 @@
 			width = $('#calendar-body-wrapper').width()-45, //the width of hiurday column
 			maxColumnNumber = TimelyUi.maxColumnNumber;
 		
-		TimelyUi.columnsToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;
 
+		TimelyUi.columnsToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;
+		//added like a workaround on sliding header when user are less then maxColumnNumber
+		if (maxColumnNumber > options.users.length){
+			TimelyUi.utils.disableIScroll(1);
+			TimelyUi.utils.disableIScroll(2);
+		} else {
+			TimelyUi.utils.enableIScroll(1);
+			TimelyUi.utils.enableIScroll(2);
+		}
 		var dividend = (options.users.length > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : options.users.length,
 			rightSingleWidth = width/dividend,
 			rightWidth = rightSingleWidth*options.users.length+45;
@@ -486,8 +494,14 @@
 		$wcUser.toggle();
 		$button.button('toggle');
 	};
-
-
+	TimelyUi.utils.disableIScroll = function(index) {
+		TimelyUi.iScrollEls[index].disable();
+	};
+	TimelyUi.utils.enableIScroll = function(index) {
+		var event = jQuery.Event('mouseup');
+		TimelyUi.iScrollEls[index].enable();
+		TimelyUi.iScrollEls[index].handleEvent(event);
+	};
 	TimelyUi.utils.disableIScrolls = function() {
 		$.each(TimelyUi.iScrollEls, function(key, iscroll){
 			iscroll.disable();

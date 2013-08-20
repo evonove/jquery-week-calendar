@@ -1245,6 +1245,7 @@
             options = this.options;
 
         self.lastValidTagert = {};
+        console.log('_setupEventCreationForWeekDay');
         self.upEventCreation = function(event) {
           console.log('upEventCreation');
           off($('html'), events.up, self.upEventCreation);
@@ -1254,7 +1255,10 @@
             var $weekDay = $target.closest('.wc-day-column-inner');
             var $newEvent = $weekDay.find('.wc-new-cal-event-creating');
 
-            off($weekDay, events.down, self.downEventCreation);
+            //i don't know its utility
+            // console.log('removed downEventCreation on');
+            // console.log($weekDay);
+            //off($weekDay, events.down, self.downEventCreation);
             
             if ($newEvent.length) {
               var createdFromSingleClick = !$newEvent.hasClass('ui-resizable-resizing');
