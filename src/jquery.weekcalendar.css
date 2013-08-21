@@ -256,6 +256,11 @@ table.wc-time-slots {
   font-weight: bold;
 }
 
+.wc-cal-event div.ui-corner-top{
+    border: 1px solid #0080aa;
+    background-color: #0d89aa;
+}
+
 .wc-container .ui-draggable .wc-time {
   cursor: move;
 }

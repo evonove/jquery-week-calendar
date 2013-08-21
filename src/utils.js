@@ -449,7 +449,7 @@
 	 */
 	TimelyUi.utils._redimColumnsWidth = function() {
 		var options = TimelyUi.calendar.options,
-			width = $('#calendar-body-wrapper').width()-45, //the width of hiurday column
+			width = $('#calendar-body-wrapper').width()-45, //the width of hourday column
 			maxColumnNumber = TimelyUi.maxColumnNumber;
 		
 

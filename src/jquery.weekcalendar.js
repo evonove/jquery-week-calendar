@@ -105,7 +105,7 @@
 
           var iscroll0 = TimelyUi.iScrollEls[0];
           var pos = TimelyUi.utils._posByEl(iscroll0, element[0]);
-          iscroll0.scrollTo(pos.left+40, pos.top+150, 0);
+          iscroll0.scrollTo(pos.left, pos.top+150, 0); //in old widget pos.left+40
           return true;
         },
         eventClick: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
@@ -434,7 +434,7 @@
       _scaleModal: function($element) {
         var size = { width: $(window).width(), height: $(window).height() },
             offset = 20,
-            offsetBody = 150;
+            offsetBody = 200;
 
         $element.css('height', size.height - offset );
         $('.modal-body').css('height', size.height - (offset + offsetBody));
@@ -454,7 +454,7 @@
         modal.instance.$element.modal('show');
 
         if(isMobile){
-          self._scaleModal(modal.$element);
+          self._scaleModal(modal.instance.$element);
         }
       },
 
@@ -1252,6 +1252,7 @@
         console.log('_setupEventCreationForWeekDay');
         self.upEventCreation = function(event) {
           console.log('upEventCreation');
+
           off($('html'), events.up, self.upEventCreation);
 
           var $target = self.lastValidTagert;
@@ -1769,6 +1770,7 @@
         }
 
         if (!options.readonly && options.draggable(calEvent, $calEventList)) {
+          console.log('added _addDraggableToCalEvent');
           self._addDraggableToCalEvent(calEvent, $calEventList);
         }
 
@@ -2032,7 +2034,7 @@
             options.dragTicTime = new Date().getTime();
             console.log('_addDraggableToCalEvent start');
             var $calEvent = ui.draggable || ui.helper;
-            //console.log('executing start event, '+event.type+' $calEvent, '+$calEvent);
+            console.log('executing start event, '+event.type+' $calEvent, '+$calEvent);
             options.eventDrag(calEvent, $calEvent);
           };
         options.dragTicTime = undefined;
@@ -2045,25 +2047,25 @@
           revert: 'invalid',
           opacity: 0.5,
           grid: [$calEvent.outerWidth() + 1, options.timeslotHeight],
-          // create: function (event, ui){
-          //   var isMobile = TimelyUi.compat.isMobile;
-          //   var on = TimelyUi.compat.on;
-          //   var events = TimelyUi.compat.events;
-          //   if (isMobile){
-          //     on($(this.querySelector('.wc-time')), events['hold'], function(ui){
-          //       console.log('try to cast start event, '+event.type);
+          /*create: function (event, ui){
+             var isMobile = TimelyUi.compat.isMobile;
+             var on = TimelyUi.compat.on;
+             var events = TimelyUi.compat.events;
+             if (isMobile){
+               on($(this.querySelector('.wc-time')), events['hold'], function(ui){
+                 console.log('try to cast start event, '+event.type);
 
-          //       return function(event) {
-          //         //var $calEvent = ui.draggable || ui.helper;
-          //         var myEvent = jQuery.Event('dragstart');
+                 return function(event) {
+                   //var $calEvent = ui.draggable || ui.helper;
+                   var myEvent = jQuery.Event('dragstart');
 
-          //         functionStart(myEvent, ui);
-          //       }
-          //     }(ui));
-          //     console.log('ui');
-          //   }
+                   functionStart(myEvent, ui);
+                 }
+               }(ui));
+               console.log('ui');
+             }
 
-          // },
+          },*/
 
           start: functionStart,
           /* only in desktop enviroment */
@@ -2072,9 +2074,12 @@
             if(isMobile){
               return;
             }
+            var options = TimelyUi.calendar.options,
+			    maxColumnNumber = TimelyUi.maxColumnNumber;
+
             console.log('sliding drag logic');
             var width = $calEvent.outerWidth();
-            if (event.clientX + ui.position.left - width > window.screen.availWidth - width/2 && new Date().getTime() > options.dragTicTime + 100){
+            if (event.clientX + ui.position.left > window.screen.availWidth - 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.users.length){
               options.dragTicTime = new Date().getTime();
               if (TimelyUi.columnsToShow !== 1){
                 $('.go-right').click();
@@ -2082,7 +2087,7 @@
               }
               return false;
             }
-            if (ui.offset.left < 50 && event.clientX + ui.position.left - width < width/2 + 50 && new Date().getTime() > options.dragTicTime + 100){
+            if (ui.offset.left < 50 && event.clientX + ui.position.left < 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.users.length){
               options.dragTicTime = new Date().getTime();
               if (TimelyUi.columnsToShow !== 1){
                 $('.go-left').click();
