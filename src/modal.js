@@ -1,42 +1,70 @@
-'use strict';
-
-/**
- * Modal manager which creates, updates and deletes selected event
- */
 (function($) {
-	/* Create and register modal object */
-	TimelyUi.modal = $('#ajax-modal').modal({ show: false }).data('modal');
+    'use strict';
 
-	var calendar = TimelyUi.calendar,
+    /* Modal initial configuration */
+	TimelyUi.modal = TimelyUi.modal || {};
+
+	var self = TimelyUi.modal,
 		utils = TimelyUi.utils,
-		self = TimelyUi.modal,
-		timeInterval = 60 / calendar.options.timeslotsPerHour,
-		eventId = 1; // TODO: remove this because it should be known by AngularJS
+		timeInterval = 60 / 4,
+		eventId = 1;
 
-	/* Set all date and time widgets */
-	$('.modal-body .datepicker').pickadate();
-	$('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
-
-	/* Attach inputs and functions to bootstrap modal object */
 	$.extend(self, {
-		userSelect: $('.modal #user'),
-		title: $('.modal-header #title'),
-		userId: $('.modal-body #user'),
-		eventDate: $('.modal-body #eventDate').pickadate('picker'),
-		startTime:$('.modal-body #startTime').pickatime('picker'),
-		endTime:$('.modal-body #endTime').pickatime('picker'),
-		body: $('.modal-body #description'),
+        init: function(selector, users) {
+            if (typeof self.instance === 'undefined') {
+                /* Create and register modal object */
+                self.instance = selector.modal({ show: false }).data('modal');
+
+                /* Load users dynamically */
+                self.userSelect = $('.modal #user');
+                $.each(users, function(index, user) {
+                    self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
+                });
+
+                /* Set all date and time widgets */
+                $('.modal-body .datepicker').pickadate();
+                $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
+
+                /* Buttons listeners */
+                $('.modal-footer #modalSave').click(function(e) {
+                    self.save();
+                    self.instance.hide();
+                    e.preventDefault();
+                });
+
+                $('.modal-footer #modalDelete').click(function(e) {
+                    self.delete();
+                    self.instance.hide();
+                    e.preventDefault();
+                });
+
+                /* Twitter bootstrap events handler */
+                self.instance.$element.on('show', function() {
+                    self.load();
+                });
+
+                self.instance.$element.on('shown', function() {
+                    self.title.focus();
+                });
+
+                self.instance.$element.on('hide', function() {
+                    self.clear();
+                });
+            }
+        },
 
 		clear: function() {
-			this.title.val('');
-			this.body.val('');
-			calendar.removeUnsavedEvents();
-			delete this.options.calEvent;
-			return this;
+            var self = this;
+
+			self.title.val('');
+			self.body.val('');
+			TimelyUi.calendar.removeUnsavedEvents();
+			delete self.instance.options.calEvent;
+			return self;
 		},
 
 		load: function() {
-			var chosenEvent = this.options.calEvent,
+			var chosenEvent = this.instance.options.calEvent,
 				deleteButton = $('.modal-footer #modalDelete');
 
 			// Disable/Enable delete button if chosen event is already persisted
@@ -46,65 +74,46 @@
 				deleteButton.hide();
 			}
 
+            /* Assign all selector to local variables */
+            self.userSelect = $('.modal #user');
+            self.title = $('.modal-header #title');
+            self.userId = $('.modal-body #user');
+            self.eventDate = $('.modal-body #eventDate').pickadate('picker');
+            self.startTime = $('.modal-body #startTime').pickatime('picker');
+            self.endTime = $('.modal-body #endTime').pickatime('picker');
+            self.body = $('.modal-body #description');
+
 			// Set all inputs with chosen event
-			this.title.val(chosenEvent.title);
-			this.userId.val(chosenEvent.userId);
-			this.eventDate.set('select', utils.toDate(chosenEvent.start));
-			this.startTime.set('select', utils.timeToArray(chosenEvent.start));
-			this.endTime.set('select', utils.timeToArray(chosenEvent.end));
-			this.body.val(chosenEvent.body);
-			return this;
+			self.title.val(chosenEvent.title);
+			self.userId.val(chosenEvent.userId);
+			self.eventDate.set('select', utils.toDate(chosenEvent.start));
+			self.startTime.set('select', utils.timeToArray(chosenEvent.start));
+			self.endTime.set('select', utils.timeToArray(chosenEvent.end));
+			self.body.val(chosenEvent.body);
+			return self;
 		},
 
 		save: function() {
-			var eventDate = utils.formatDate(this.eventDate.get('select').obj, 'MM-DD-YYYY');
+			var self = this,
+                eventDate = utils.formatDate(this.eventDate.get('select').obj, 'MM-DD-YYYY');
 
-			this.options.calEvent = {
-				id: this.options.calEvent.id || eventId,
-				title: this.title.val(),
-				userId: parseInt(this.userId.val(), 10),
-				start: utils.datetimeISOFormat(eventDate, this.startTime.get('select', 'HH:i')),
-				end: utils.datetimeISOFormat(eventDate, this.endTime.get('select', 'HH:i')),
-				body: this.body.val()
+			self.instance.options.calEvent = {
+				id: self.instance.options.calEvent.id || eventId,
+				title: self.title.val(),
+				userId: parseInt(self.userId.val(), 10),
+				start: utils.datetimeISOFormat(eventDate, self.startTime.get('select', 'HH:i')),
+				end: utils.datetimeISOFormat(eventDate, self.endTime.get('select', 'HH:i')),
+				body: self.body.val()
 			};
 
-			calendar.updateEvent(this.options.calEvent);
-			eventId += 1; // TODO: remove this because it should be known by AngularJS
-			return this;
+			TimelyUi.calendar.updateEvent(self.instance.options.calEvent);
+			eventId += 1;
+			return self;
 		},
 
 		delete: function() {
-			calendar.removeEvent(this.options.calEvent.id);
+			TimelyUi.calendar.removeEvent(self.instance.options.calEvent.id);
 			return this;
 		}
-	});
-
-	/* Load users dynamically */
-	$.each(calendar.options.users, function(index, user) {
-		self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
-	});
-
-	/* Buttons listeners */
-	$('.modal-footer #modalSave').click(function(e) {
-		self.save().hide();
-		e.preventDefault();
-	});
-
-	$('.modal-footer #modalDelete').click(function(e) {
-		self.delete().hide();
-		e.preventDefault();
-	});
-
-	/* Twitter bootstrap events handler */
-	self.$element.on('show', function() {
-		self.load();
-	});
-
-	self.$element.on('shown', function() {
-		self.title.focus();
-	});
-
-	self.$element.on('hide', function() {
-		self.clear();
 	});
 })(jQuery);

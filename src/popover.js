@@ -5,8 +5,7 @@
 	TimelyUi.popover = TimelyUi.popover || {};
 	var self = TimelyUi.popover,
 		events = TimelyUi.compat.events,
-		isMobile = TimelyUi.compat.isMobile,
-		eventId = 1; // TODO: remove this because it should be known by AngularJS
+		eventId = 1;
 
 	self.options = {
 		html: true,
@@ -24,17 +23,13 @@
 			element.popover(this.options);
 			self.instance = element.popover('show').data('popover');
 			self.title = $('.popover #title');
-			//if(!isMobile) {
 			self.title.focus();
-			//}
 			self.initListeners();
 		},
 		clear: function() {
 			// Destroy enabled popover and cancel event creation
-			var calendar = TimelyUi.calendar;
-
+            TimelyUi.calendar.removeLastUnsavedEvent();
 			self.hide();
-			calendar.removeLastUnsavedEvent();
 			return self;
 		},
 		hide: function() {
@@ -51,7 +46,7 @@
 			self.options.calEvent.title = self.title.val();
 
 			calendar.updateEvent(self.options.calEvent);
-			eventId += 1; // TODO: remove this because it should be known by AngularJS
+			eventId += 1;
 			return this;
 		},
 		edit: function() {
