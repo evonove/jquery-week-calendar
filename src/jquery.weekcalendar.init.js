@@ -121,13 +121,26 @@ TimelyUi.init = function(id, conf) {
 		TimelyUi.utils.disableIScrolls();
 	};
 	TimelyUi.calendar.options.eventDrop = function(calEvent, element) {
-		TimelyUi.utils.enableIScrolls();
+		var options = TimelyUi.calendar.options,
+			maxColumnNumber = TimelyUi.maxColumnNumber;
+		TimelyUi.utils.enableIScroll(0);
+		if (maxColumnNumber <= options.users.length){
+			TimelyUi.utils.enableIScroll(1);
+			TimelyUi.utils.enableIScroll(2);
+		}
+		
 	};
 	TimelyUi.calendar.options.eventMousedownNewEvent = function(calEvent, element) {
 		TimelyUi.utils.disableIScrolls();
 	};
 	TimelyUi.calendar.options.eventMouseupNewEvent = function(calEvent, element) {
-		TimelyUi.utils.enableIScrolls();
+		var options = TimelyUi.calendar.options,
+			maxColumnNumber = TimelyUi.maxColumnNumber;
+		TimelyUi.utils.enableIScroll(0);
+		if (TimelyUi.maxColumnNumber <= options.users.length){
+			TimelyUi.utils.enableIScroll(1);
+			TimelyUi.utils.enableIScroll(2);
+		}
 	};
 	
 	//http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
