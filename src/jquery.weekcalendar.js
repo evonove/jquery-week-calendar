@@ -428,29 +428,33 @@
       },
 
       /*
+       * Scale bootstrap modal form
+       * http://stackoverflow.com/questions/14009178/correct-way-to-increase-bootstrap-modals-height
+       */
+      _scaleModal: function($element) {
+        var size = { width: $(window).width(), height: $(window).height() },
+            offset = 20,
+            offsetBody = 150;
+
+        $element.css('height', size.height - offset );
+        $('.modal-body').css('height', size.height - (offset + offsetBody));
+        $element.css('top', 0);
+      },
+
+      /*
        * Show modal form to create/edit event details
        */
       showModalForm: function(calEvent) {
-        var modal = TimelyUi.modal;
-        var isMobile = TimelyUi.compat.isMobile;
-        /*
-         * Scale bootstrap modal form
-         * http://stackoverflow.com/questions/14009178/correct-way-to-increase-bootstrap-modals-height
-         */
-        var rescale = function($element){
-          var size = {width: $(window).width() , height: $(window).height()};
-          /*CALCULATE SIZE*/
-          var offset = 20;
-          var offsetBody = 150;
-          $element.css('height', size.height - offset );
-          $('.modal-body').css('height', size.height - (offset + offsetBody));
-          $element.css('top', 0);
-        };
-        modal.options.calEvent = calEvent;
-        modal.$element.modal('show');
+        var self = this,
+            modal = TimelyUi.modal,
+            isMobile = TimelyUi.compat.isMobile;
+
+        modal.init($('#ajax-modal'), self.options.users);
+        modal.instance.options.calEvent = calEvent;
+        modal.instance.$element.modal('show');
 
         if(isMobile){
-          rescale(modal.$element);
+          self._scaleModal(modal.$element);
         }
       },
 
