@@ -1,6 +1,3 @@
-html, body, .fill {
-  height: 94%;
-}
 
 .wc-toolbar {
   padding: 1em;
@@ -341,10 +338,6 @@ body {
 /*}*/
 
 
-div.wc-body{
-    margin-left: -20px;
-    margin-right: -20px;
-}
 .wc-scrollbar-wrapper, .wc-calendar-body-wrapper{
   overflow: hidden;
 }
@@ -442,9 +435,14 @@ div.wc-body{
 .calendar-header table{
   background-color: white;
 }
+
+/*TODO: needed to remove, here lay bug of 23° hour*/
+body {
+    overflow: hidden;
+}
 /*-----------------------------------------------------------------------------------------*/
 
-wc-dropdown-user > li > a:hover, wc-dropdown-user > li > a:focus, wc-dropdown-user .dropdown-submenu:hover > a, wc-dropdown-user .dropdown-submenu:focus > a {
+.wc-dropdown-user > li > a:hover, .wc-dropdown-user > li > a:focus, .wc-dropdown-user .dropdown-submenu:hover > a, .wc-dropdown-user .dropdown-submenu:focus > a {
   background-color: white;
   background-image: none;
   filter: none;
@@ -481,4 +479,8 @@ span.visible-desktop {
   span.visible-phone {
     display: inline !important;
   }
+  div.wc-body{
+        margin-left: -20px;
+        margin-right: -20px;
+    }
 }

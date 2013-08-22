@@ -814,7 +814,7 @@
               userNavHtml += 'Users ';
               userNavHtml += '<span class="caret"></span>';
               userNavHtml += '</a>';
-              userNavHtml += '<ul id="dropdown-user" class="wc-dropdown-menu">';
+              userNavHtml += '<ul id="dropdown-user" class="dropdown-menu">';
               userNavHtml += '</ul>';
               userNavHtml += '</div>';
               $(userNavHtml).appendTo($calendarNavContainer);
@@ -975,7 +975,7 @@
         // Create the structure
         $calendarBody = '';
         
-        $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid fill wc-scrollbar-wrapper\">';
+        $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid wc-scrollbar-wrapper\">';
         $calendarBody += '  <div class=\"wc-scroller-height\">';
 
         $calendarBody += '    <div id="calendar-body-wrapper" class=\"wc-scrollable-grid wc-calendar-body-wrapper\">';
