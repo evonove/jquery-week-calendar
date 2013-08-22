@@ -434,10 +434,10 @@
       _scaleModal: function($element) {
         var size = { width: $(window).width(), height: $(window).height() },
             offset = 20,
-            offsetBody = 200;
+            offsetBody = 150;
 
-        $element.css('height', size.height - offset );
-        $('.modal-body').css('height', size.height - (offset + offsetBody));
+        $element.css('height', size.height - offset);
+        $('.modal-body').css('height', size.height - (offset + offsetBody + 50));
         $element.css('top', 0);
       },
 

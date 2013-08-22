@@ -15,7 +15,9 @@
   }
 
   var mouseProto = $.ui.mouse.prototype,
-      touchHandled;
+      touchHandled,
+      myTimeout;
+
   /**
    * Simulate a mouse event based on a corresponding touch event
    * @param {Object} event A touch event
@@ -62,7 +64,6 @@
    */
   mouseProto._touchStart = function (event) {
     var self = this;
-
     // Ignore the event if another widget is already being handled
     if (touchHandled || !self._mouseCapture(event.originalEvent.changedTouches[0])) {
       return;
@@ -86,12 +87,14 @@
     cachedY = event.pageY;
 
     //start move of drag after an hold touch
-    setTimeout(function (){
+    myTimeout = setTimeout(function (){
         currX = event.pageX;
         currY = event.pageY;
+        console.log(cachedX+' === '+currX+' self._touchMoved '+self._touchMoved+'; '+cachedY+' === ' +currY);
         if ((cachedX === currX) && !self._touchMoved && (cachedY === currY)) {
             // Here you get the hold event, cast mousedown
             // Simulate the mousedown event
+            console.log('simulateMouseEvent mousedown');
             simulateMouseEvent(event, 'mousedown');
         }
     },200);
@@ -101,7 +104,6 @@
    * @param {Object} event The document's touchmove event
    */
   mouseProto._touchMove = function (event) {
-
     // Ignore event if not handled
     if (!touchHandled) {
       return;
@@ -119,12 +121,14 @@
    * @param {Object} event The document's touchend event
    */
   mouseProto._touchEnd = function (event) {
-
+    var self = this;
     // Ignore event if not handled
     if (!touchHandled) {
       return;
     }
-
+    if (myTimeout) {
+        window.clearTimeout(myTimeout);
+    }
     // Simulate the mouseup event
     simulateMouseEvent(event, 'mouseup');
 

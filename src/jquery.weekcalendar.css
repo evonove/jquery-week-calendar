@@ -421,8 +421,16 @@ body {
 .go-left {
   float: left;
 }
+.go-left {
+  margin-left: 0 !important;
+  padding-left: 5px;
+}
 .go-right {
   float: right;
+}
+.go-right {
+  margin-right: 0 !important;
+  padding-right: 5px;
 }
 .calendar-header {
   /*border-width:1px 0;
@@ -434,6 +442,14 @@ body {
   background-color: white;
 }
 
+@media (max-width: 767px) {
+    .wc-nav {
+        padding-top: 0px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 15px;
+    }
+}
 /*-----------------------------------------------------------------------------------------*/
 
 #dropdown-user > li > a:hover, #dropdown-user > li > a:focus, #dropdown-user .dropdown-submenu:hover > a, #dropdown-user .dropdown-submenu:focus > a {
