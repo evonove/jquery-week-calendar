@@ -458,6 +458,12 @@
         }
       },
 
+      /*** Persistence provider ***/
+
+      onSave: function() { console.log('Not implemented'); },
+      onDelete: function() { console.log('Not implemented'); },
+      onPolling: function() { console.log('Not implemented'); },
+
       /*
        * Remove an event based on it's id
        */

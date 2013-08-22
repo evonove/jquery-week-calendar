@@ -102,6 +102,7 @@
 
 		save: function() {
 			var self = this,
+                calendar = TimelyUi.calendar,
                 eventDate = this.getDate(this.eventDate);
 
 			self.instance.options.calEvent = {
@@ -112,13 +113,17 @@
 				end: this.getTime(eventDate, self.endTime),
 				body: self.body.val()
 			};
-			TimelyUi.calendar.updateEvent(self.instance.options.calEvent);
+            calendar.onSave(self.instance.options.calEvent);
+			calendar.updateEvent(self.instance.options.calEvent);
 			eventId += 1;
 			return self;
 		},
 
 		delete: function() {
-			TimelyUi.calendar.removeEvent(self.instance.options.calEvent.id);
+            var calendar = TimelyUi.calendar;
+
+            calendar.onDelete(self.instance.options.calEvent.id);
+			calendar.removeEvent(self.instance.options.calEvent.id);
 			return this;
 		},
 
