@@ -63,12 +63,12 @@ TimelyUi.boundIScrolls = function() {
         on = TimelyUi.compat.on,
         off = TimelyUi.compat.off;
 	
-	$('.go-right').each(function(index, el){
+	$('.wc-go-right').each(function(index, el){
 		off($(el), events.click, goRight);
 		on($(el), events.click, goRight);
 	});
 
-	$('.go-left').each(function(index, el){
+	$('.wc-go-left').each(function(index, el){
 		off($(el), events.click, goLeft);
 		on($(el), events.click, goLeft);
 	});
@@ -100,14 +100,14 @@ TimelyUi.boundIScrolls = function() {
  */
 TimelyUi.vodooMagic  = function() {
 	//Needed (like "postion:absolute;" in scroller DOM element css) after initialization of IScroll to refresh correctly the layout of the page. MAH
-	$('[class^="scroller"]').css('position', 'relative');
+	$('[class^="wc-scroller-"]').css('position', 'relative');
 };
 
 /**
  * TODO: Remove 'magic' behaviour
  */
 TimelyUi.dispelVodooMagic  = function() {
-	$('[class^="scroller"]').css('position', 'absolute');
+	$('[class^="wc-scroller-"]').css('position', 'absolute');
 };
 
 TimelyUi.init = function(id, conf) {

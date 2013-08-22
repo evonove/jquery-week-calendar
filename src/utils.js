@@ -119,7 +119,7 @@
 	};
 	
 	/**
-	 * Used by .go-right click/.go-left click event.
+	 * Used by .wc-go-right click/.wc-go-left click event.
 	 */
 	TimelyUi.utils._scrollToIfNeeded = function(iscroll, nextEl, pos, time, easing){
 		time = time === undefined || null || time === 'auto' ? Math.max(Math.abs(pos.left)*2, Math.abs(pos.top)*2) : time;
@@ -134,7 +134,7 @@
 	};
 
 	/**
-	 * Used by .go-right click/.go-left click event.
+	 * Used by .wc-go-right click/.wc-go-left click event.
 	 */
 	TimelyUi.utils._posByEl = function(iscroll, el, offsetX, offsetY, pxOffsetX, pxOffsetY){
 		el = el.nodeType ? el : iscroll.scroller.querySelector(el);
@@ -467,7 +467,7 @@
 			rightWidth = rightSingleWidth*options.users.length+45;
 		
 		TimelyUi.dispelVodooMagic();
-		$('.scrollerWidth, .wc-time-slots').width(rightWidth);
+		$('.wc-scroller-width, .wc-time-slots').width(rightWidth);
 		$('#scrollbar-wrapper').height($(window).height()-$('#first-row').height()-$('.calendar-header').height());
 		$('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
 			$(this).width(rightSingleWidth);

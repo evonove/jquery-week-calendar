@@ -814,7 +814,7 @@
               userNavHtml += 'Users ';
               userNavHtml += '<span class="caret"></span>';
               userNavHtml += '</a>';
-              userNavHtml += '<ul id="dropdown-user" class="dropdown-menu">';
+              userNavHtml += '<ul id="dropdown-user" class="wc-dropdown-menu">';
               userNavHtml += '</ul>';
               userNavHtml += '</div>';
               $(userNavHtml).appendTo($calendarNavContainer);
@@ -927,7 +927,7 @@
 
         // Users row
         if (showAsSeparatedUser) {
-          calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper"><thead class="scrollerWidth">';
+          calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper wc-calendar-header-wrapper"><thead class="wc-scroller-width">';
           calendarHeaderHtml += '<tr><th class=\"wc-time-column-header\"></th>';
           var uLength = options.users.length, _headerClass = '';
 
@@ -954,8 +954,8 @@
           calendarHeaderHtml += '</tr>';
         }
         calendarHeaderHtml += '</thead></table>';
-        calendarHeaderHtml += '<div class=\"go-left\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-left"></i></button></div>';
-        calendarHeaderHtml += '<div class=\"go-right\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-right"></i></button></div>';
+        calendarHeaderHtml += '<div class=\"wc-go-left\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-left"></i></button></div>';
+        calendarHeaderHtml += '<div class=\"wc-go-right\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-right"></i></button></div>';
         calendarHeaderHtml += '</div></div>';
 
         $(calendarHeaderHtml).appendTo($calendarContainer);
@@ -975,11 +975,11 @@
         // Create the structure
         $calendarBody = '';
         
-        $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid fill \">';
-        $calendarBody += '  <div class=\"scrollerHeight\">';
+        $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid fill wc-scrollbar-wrapper\">';
+        $calendarBody += '  <div class=\"wc-scroller-height\">';
 
-        $calendarBody += '    <div id="calendar-body-wrapper" class=\"wc-scrollable-grid\">';
-        $calendarBody += '      <div class=\"scrollerWidth\">';
+        $calendarBody += '    <div id="calendar-body-wrapper" class=\"wc-scrollable-grid wc-calendar-body-wrapper\">';
+        $calendarBody += '      <div class=\"wc-scroller-width\">';
         
         $calendarBody += '        <table class=\"wc-time-slots\" >';
         $calendarBody += '          <tbody>';
@@ -987,7 +987,7 @@
         $calendarBody += '      </table>';
         
         $calendarBody += '    </div>';
-        $calendarBody += '    <div id="day-hours">'+self._renderDayHours()+'</div>';
+        $calendarBody += '    <div id="day-hours" class="wc-day-hours">'+self._renderDayHours()+'</div>';
         $calendarBody += '    </div>';
 
         $calendarBody += '  </div>';
@@ -2082,7 +2082,7 @@
             if (event.clientX + ui.position.left > window.screen.availWidth - 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.users.length){
               options.dragTicTime = new Date().getTime();
               if (TimelyUi.columnsToShow !== 1){
-                $('.go-right').click();
+                $('.wc-go-right').click();
                 $('html').mouseup();
               }
               return false;
@@ -2090,7 +2090,7 @@
             if (ui.offset.left < 50 && event.clientX + ui.position.left < 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.users.length){
               options.dragTicTime = new Date().getTime();
               if (TimelyUi.columnsToShow !== 1){
-                $('.go-left').click();
+                $('.wc-go-left').click();
                 $('html').mouseup();
               }
               return false;
@@ -2235,7 +2235,7 @@
         var self = this;
         var options = this.options;
         var iscroll = TimelyUi.iScrollEls[0];
-        var $scrollable = this.element.find('.scrollerHeight');
+        var $scrollable = this.element.find('.wc-scroller-height');
         if (iscroll !== undefined){
           var slot = hour;
           if (self.options.businessHours.limitDisplay) {
