@@ -172,7 +172,7 @@
         currentUser: {
           "id": 1,
           "username": "evonove",
-          "organization": null
+          "defaultOrganization": null
         },
 
         /**

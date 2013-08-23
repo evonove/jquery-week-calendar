@@ -113,7 +113,7 @@
                 self.organizationSelect.val(String(null));
             } else {
                 self.userSelect.removeAttr('disabled');
-                self.organizationSelect.val(String(calendar.options.currentUser.organization));
+                self.organizationSelect.val(String(calendar.options.currentUser.defaultOrganization));
             }
 
             self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
