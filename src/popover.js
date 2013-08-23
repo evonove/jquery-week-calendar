@@ -4,8 +4,7 @@
 	/* Popover initial configuration */
 	TimelyUi.popover = TimelyUi.popover || {};
 	var self = TimelyUi.popover,
-		events = TimelyUi.compat.events,
-		eventId = 1;
+		events = TimelyUi.compat.events;
 
 	self.options = {
 		html: true,
@@ -42,12 +41,11 @@
 		save: function() {
 			var calendar = TimelyUi.calendar;
 
-			self.options.calEvent.id = eventId;
+			self.options.calEvent.id = calendar.getLastEventId();
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);
 			calendar.updateEvent(self.options.calEvent);
-			eventId += 1;
 			return this;
 		},
 		edit: function() {

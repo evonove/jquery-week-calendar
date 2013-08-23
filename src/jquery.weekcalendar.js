@@ -29,6 +29,7 @@
 
     return {
       options: {
+        lastEventId: 42,
         date: new Date(),
         timeFormat: 'HH:mm',
         dateFormat: 'dddd DD MMMM',
@@ -459,8 +460,8 @@
       },
 
       /*** Persistence provider ***/
-
-      onSave: function() { console.log('Not implemented'); },
+      getLastEventId: function() { return this.options.lastEventId },
+      onSave: function() { this.options.lastEventId += 1 },
       onDelete: function() { console.log('Not implemented'); },
       onPolling: function() { console.log('Not implemented'); },
 

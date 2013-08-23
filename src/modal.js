@@ -7,8 +7,7 @@
 	var self = TimelyUi.modal,
 		utils = TimelyUi.utils,
 		timeInterval = 60 / 4,
-        isMobile = TimelyUi.compat.isMobile,
-		eventId = 1;
+        isMobile = TimelyUi.compat.isMobile;
 
 	$.extend(self, {
         init: function(selector, users) {
@@ -106,7 +105,7 @@
                 eventDate = this.getDate(this.eventDate);
 
 			self.instance.options.calEvent = {
-				id: self.instance.options.calEvent.id || eventId,
+				id: self.instance.options.calEvent.id || calendar.getLastEventId(),
 				title: self.title.val(),
 				userId: parseInt(self.userId.val(), 10),
 				start: this.getTime(eventDate, self.startTime),
@@ -115,7 +114,6 @@
 			};
             calendar.onSave(self.instance.options.calEvent);
 			calendar.updateEvent(self.instance.options.calEvent);
-			eventId += 1;
 			return self;
 		},
 
