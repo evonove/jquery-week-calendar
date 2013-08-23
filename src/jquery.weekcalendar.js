@@ -461,8 +461,17 @@
 
       /*** Persistence provider ***/
       getLastEventId: function() { return this.options.lastEventId },
-      onSave: function() { this.options.lastEventId += 1 },
-      onDelete: function() { console.log('Not implemented'); },
+      onSave: function(calEvent) {
+          var data = this.options.data;
+
+          this.options.lastEventId += 1;
+          data.push(calEvent);
+      },
+      onDelete: function(calEventToRemove) {
+          var data = this.options.data;
+
+          data.splice($.inArray(calEventToRemove, data), 1);
+      },
       onPolling: function() { console.log('Not implemented'); },
 
       /*
