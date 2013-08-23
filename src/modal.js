@@ -35,7 +35,16 @@
                     $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
                 }
 
-                /* Buttons listeners */
+                /* Component listeners */
+                $('.modal-body #organization').change(function(e) {
+                    if ($(this).val() === String(null)) {
+                        self.userSelect.attr('disabled', 'disabled');
+                        self.userSelect.val(self.ownerSelect.val());
+                    } else {
+                        self.userSelect.removeAttr('disabled');
+                    }
+                });
+
                 $('.modal-footer #modalSave').click(function(e) {
                     self.save();
                     self.instance.hide();
@@ -99,7 +108,14 @@
 
 			// Set all inputs with chosen event
 			self.title.val(chosenEvent.title);
-            self.organizationSelect.val(String(chosenEvent.organization || calendar.options.currentUser.organization));
+            if (chosenEvent.organization === null) {
+                self.userSelect.attr('disabled', 'disabled');
+                self.organizationSelect.val(String(null));
+            } else {
+                self.userSelect.removeAttr('disabled');
+                self.organizationSelect.val(String(calendar.options.currentUser.organization));
+            }
+
             self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
 			self.userSelect.val(chosenEvent.userId);
 
