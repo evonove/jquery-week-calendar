@@ -76,7 +76,7 @@
             var self = this;
 
 			self.title.val('');
-			self.body.val('');
+			self.content.val('');
 			TimelyUi.calendar.removeUnsavedEvents();
 			delete self.instance.options.calEvent;
 			return self;
@@ -104,7 +104,7 @@
             self.startTime = self.createEventTime('.modal-body #startTime');
             self.endTime = self.createEventTime('.modal-body #endTime');
 
-            self.body = $('.modal-body #description');
+            self.content = $('.modal-body #description');
 
 			// Set all inputs with chosen event
 			self.title.val(chosenEvent.title);
@@ -123,7 +123,7 @@
             self.setTime(self.startTime, chosenEvent.start);
             self.setTime(self.endTime, chosenEvent.end);
 
-			self.body.val(chosenEvent.body);
+			self.content.val(chosenEvent.content);
 			return self;
 		},
 
@@ -140,7 +140,7 @@
                 userId: parseInt(self.userSelect.val(), 10),
 				start: this.getTime(eventDate, self.startTime),
 				end: this.getTime(eventDate, self.endTime),
-				body: self.body.val()
+				content: self.content.val()
 			};
             calendar.onSave(self.instance.options.calEvent);
 			calendar.updateEvent(self.instance.options.calEvent);
