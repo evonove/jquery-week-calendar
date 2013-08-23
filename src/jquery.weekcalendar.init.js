@@ -117,44 +117,6 @@ TimelyUi.init = function(id, conf) {
 	TimelyUi.calendar.lastRefresh = new Date().getTime();
 	TimelyUi.calendar.lastWidth = window.innerWidth;
 
-	TimelyUi.calendar.options.eventDrag = function(calEvent, element) {
-		TimelyUi.utils.disableIScrolls();
-	};
-	TimelyUi.calendar.options.eventDrop = function(calEvent, element) {
-		var options = TimelyUi.calendar.options,
-			maxColumnNumber = TimelyUi.maxColumnNumber;
-		TimelyUi.utils.enableIScroll(0);
-		if (maxColumnNumber <= options.users.length){
-			TimelyUi.utils.enableIScroll(1);
-			TimelyUi.utils.enableIScroll(2);
-		}
-		
-	};
-	TimelyUi.calendar.options.eventMousedownNewEvent = function(calEvent, element) {
-		TimelyUi.utils.disableIScrolls();
-	};
-	TimelyUi.calendar.options.eventMouseupNewEvent = function(calEvent, element) {
-		var options = TimelyUi.calendar.options,
-			maxColumnNumber = TimelyUi.maxColumnNumber;
-		TimelyUi.utils.enableIScroll(0);
-		if (TimelyUi.maxColumnNumber <= options.users.length){
-			TimelyUi.utils.enableIScroll(1);
-			TimelyUi.utils.enableIScroll(2);
-		}
-	};
-	
-	//http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
-	window.onresize = function(e){
-		if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
-			var withRedim = TimelyUi.calendar.lastWidth !== window.innerWidth;
-			TimelyUi.calendar.lastWidth = window.innerWidth;
-			// need to avoid a second pass, but commentated because without the second pass widghet sliding stop working
-			// TimelyUi.calendar.lastRefresh = new Date().getTime();
-			TimelyUi.utils._resetIScrolls(withRedim, true);
-			return false;
-		}
-	};
-
 	/**
 	 * Register a callback for mobile view 
 	 */

@@ -94,8 +94,17 @@
           return element;
         },
         eventDrag: function(calEvent, element) {
+            TimelyUi.utils.disableIScrolls();
         },
         eventDrop: function(calEvent, element) {
+            var options = TimelyUi.calendar.options,
+			    maxColumnNumber = TimelyUi.maxColumnNumber;
+
+            TimelyUi.utils.enableIScroll(0);
+            if (maxColumnNumber <= options.users.length){
+                TimelyUi.utils.enableIScroll(1);
+                TimelyUi.utils.enableIScroll(2);
+            }
         },
         eventResize: function(calEvent, element) {
         },
@@ -118,8 +127,17 @@
         eventMouseout: function(calEvent, $event) {
         },
         eventMousedownNewEvent: function(calEvent, $event) {
+            TimelyUi.utils.disableIScrolls();
         },
         eventMouseupNewEvent: function(calEvent, $event) {
+            var options = TimelyUi.calendar.options,
+			    maxColumnNumber = TimelyUi.maxColumnNumber;
+
+            TimelyUi.utils.enableIScroll(0);
+            if (TimelyUi.maxColumnNumber <= options.users.length){
+                TimelyUi.utils.enableIScroll(1);
+                TimelyUi.utils.enableIScroll(2);
+            }
         },
         eventDelete: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
         },
@@ -332,6 +350,18 @@
             self._resizeCalendar();
           });
         }
+
+        // http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
+        $(window).onresize = function(e){
+            if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
+                var withRedim = TimelyUi.calendar.lastWidth !== window.innerWidth;
+                TimelyUi.calendar.lastWidth = window.innerWidth;
+                // need to avoid a second pass, but commentated because without the second pass widghet sliding stop working
+                // TimelyUi.calendar.lastRefresh = new Date().getTime();
+                TimelyUi.utils._resetIScrolls(withRedim, true);
+                return false;
+            }
+        };
       },
 
       /********************
