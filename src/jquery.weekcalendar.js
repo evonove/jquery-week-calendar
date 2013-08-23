@@ -514,6 +514,7 @@
           var data = this.options.data;
 
           data.splice($.inArray(calEventToRemove, data), 1);
+          this.removeEvent(calEventToRemove.id);
       },
       onPolling: function() { console.log('Not implemented'); },
 

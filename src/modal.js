@@ -150,8 +150,7 @@
 		delete: function() {
             var calendar = TimelyUi.calendar;
 
-            calendar.onDelete(self.instance.options.calEvent.id);
-			calendar.removeEvent(self.instance.options.calEvent.id);
+            calendar.onDelete(self.instance.options.calEvent);
 			return this;
 		},
 
