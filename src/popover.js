@@ -41,7 +41,9 @@
 		save: function() {
 			var calendar = TimelyUi.calendar;
 
-			self.options.calEvent.id = calendar.getLastEventId();
+            if (calendar.getLastEventId !== null) {
+			    self.options.calEvent.id = calendar.getLastEventId();
+            }
             self.options.calEvent.owner = calendar.options.currentUser.id;
             self.options.calEvent.organization = calendar.options.currentUser.organization;
 			self.options.calEvent.title = self.title.val();
