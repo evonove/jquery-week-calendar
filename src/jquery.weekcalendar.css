@@ -367,10 +367,12 @@ body {
 }
 .wc-scrollbar-wrapper{
   height: 884px;
+
 }
 .wc-scroller-height {
   height: 1924px;/*reset via JAVASCRIPT*/
   width: 100%;
+  padding-bottom: 60px; /*TODO: workaround for 23th hour bug*/
 }
 .wc-calendar-body-wrapper{
   width: 100%;
@@ -436,7 +438,7 @@ body {
   background-color: white;
 }
 
-/*TODO: needed to remove, here lay bug of 23° hour*/
+/*TODO: needed to remove a scrollbar, here maybe lay the bug of 23th hour*/
 body {
     overflow: hidden;
 }

@@ -23,7 +23,6 @@ TimelyUi.initIScrolls  = function(justHeader_) {
 	TimelyUi.iScrollEls[2] = iScroll2;
 
 	if (!justHeader){
-		console.log('create iScrolls')
 		var iScroll0 = new IScroll('#scrollbar-wrapper', {
 			scrollX: false,
 			scrollY: true,
@@ -73,8 +72,8 @@ TimelyUi.boundIScrolls = function() {
 		on($(el), events.click, goLeft);
 	});
 
-	$('[class^="scroller"]').each(function(index, el){
-		var $el = $(el);
+	$('[class^="wc-scroller-"]').each(function(index, el){
+        var $el = $(el);
 		var boundEvent = function(e) {
 			$.each(TimelyUi.iScrollEls, function(key, val){
 				if(el !== val.scroller){
@@ -135,5 +134,5 @@ TimelyUi.init = function(id, conf) {
 			setTimeout(TimelyUi.utils._resetIScrolls, 500);
 		}
 	});
-	TimelyUi.utils._resetIScrolls(true, true);
+	TimelyUi.utils._resetIScrolls(true, false);
 };
