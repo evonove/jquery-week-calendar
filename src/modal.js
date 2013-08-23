@@ -10,15 +10,23 @@
         isMobile = TimelyUi.compat.isMobile;
 
 	$.extend(self, {
-        init: function(selector, users) {
+        init: function(selector, users, organizations) {
             if (typeof self.instance === 'undefined') {
                 /* Create and register modal object */
                 self.instance = selector.modal({ show: false }).data('modal');
 
-                /* Load users dynamically */
-                self.userSelect = $('.modal #user');
+                /* Load users and organizations dynamically */
+                self.organizationSelect = $('.modal-body #organization');
+                self.ownerSelect = $('.modal-body #owner');
+                self.userSelect = $('.modal-body #user');
+
                 $.each(users, function(index, user) {
+                    self.ownerSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
                     self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
+                });
+
+                $.each(organizations, function(index, organization) {
+                    self.organizationSelect.append('<option value="{0}">{1}</option>'.format(organization.id, organization.name));
                 });
 
                 if(!isMobile){
@@ -66,7 +74,8 @@
 		},
 
 		load: function() {
-			var chosenEvent = this.instance.options.calEvent,
+			var calendar = TimelyUi.calendar,
+                chosenEvent = this.instance.options.calEvent,
 				deleteButton = $('.modal-footer #modalDelete');
 
 			// Disable/Enable delete button if chosen event is already persisted
@@ -77,9 +86,10 @@
 			}
 
             /* Assign all selector to local variables */
-            self.userSelect = $('.modal #user');
+            self.organizationSelect = $('.modal-body #organization');
+            self.ownerSelect = $('.modal-body #owner');
+            self.userSelect = $('.modal-body #user');
             self.title = $('.modal-header #title');
-            self.userId = $('.modal-body #user');
 
             self.eventDate = self.createEventDate('.modal-body #eventDate');
             self.startTime = self.createEventTime('.modal-body #startTime');
@@ -89,7 +99,9 @@
 
 			// Set all inputs with chosen event
 			self.title.val(chosenEvent.title);
-			self.userId.val(chosenEvent.userId);
+            self.organizationSelect.val(String(chosenEvent.organization || calendar.options.currentUser.organization));
+            self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
+			self.userSelect.val(chosenEvent.userId);
 
             self.setDate(self.eventDate, chosenEvent.start);
             self.setTime(self.startTime, chosenEvent.start);
@@ -107,7 +119,9 @@
 			self.instance.options.calEvent = {
 				id: self.instance.options.calEvent.id || calendar.getLastEventId(),
 				title: self.title.val(),
-				userId: parseInt(self.userId.val(), 10),
+                organization: isNaN(self.organizationSelect.val()) ? self.organizationSelect.val() : parseInt(self.organizationSelect.val(), 10),
+                owner: parseInt(self.ownerSelect.val(), 10),
+                userId: parseInt(self.userSelect.val(), 10),
 				start: this.getTime(eventDate, self.startTime),
 				end: this.getTime(eventDate, self.endTime),
 				body: self.body.val()

@@ -450,7 +450,7 @@
             modal = TimelyUi.modal,
             isMobile = TimelyUi.compat.isMobile;
 
-        modal.init($('#ajax-modal'), self.options.users);
+        modal.init($('#ajax-modal'), self.options.users, self.options.organizations);
         modal.instance.options.calEvent = calEvent;
         modal.instance.$element.modal('show');
 
