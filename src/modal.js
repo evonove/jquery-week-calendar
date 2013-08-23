@@ -135,7 +135,7 @@
 			self.instance.options.calEvent = {
 				id: self.instance.options.calEvent.id || calendar.getLastEventId(),
 				title: self.title.val(),
-                organization: isNaN(self.organizationSelect.val()) ? self.organizationSelect.val() : parseInt(self.organizationSelect.val(), 10),
+                organization: isNaN(self.organizationSelect.val()) ? parseInt(self.organizationSelect.val(), 10) : self.organizationSelect.val(),
                 owner: parseInt(self.ownerSelect.val(), 10),
                 userId: parseInt(self.userSelect.val(), 10),
 				start: this.getTime(eventDate, self.startTime),
