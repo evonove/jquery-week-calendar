@@ -508,6 +508,7 @@
               this.options.lastEventId += 1;
               data.push(calEvent);
           }
+          this.updateEvent(calEvent);
       },
       onDelete: function(calEventToRemove) {
           var data = this.options.data;

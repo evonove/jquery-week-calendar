@@ -49,7 +49,6 @@
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);
-			calendar.updateEvent(self.options.calEvent);
 			return this;
 		},
 		edit: function() {
