@@ -144,7 +144,14 @@
           return calEvent.title;
         },
 
-        /*** Multi-users options ***/
+        /*** Users configuration ***/
+
+        /* Defaults for quick insert */
+        currentUser: {
+          "id": 1,
+          "username": "evonove",
+          "organization": null
+        },
 
         /**
          * The available users for calendar.
