@@ -97,16 +97,20 @@
             TimelyUi.utils.disableIScrolls();
         },
         eventDrop: function(calEvent, element) {
-            var options = TimelyUi.calendar.options,
+            var calendar = TimelyUi.calendar,
 			    maxColumnNumber = TimelyUi.maxColumnNumber;
 
             TimelyUi.utils.enableIScroll(0);
-            if (maxColumnNumber <= options.users.length){
+            if (maxColumnNumber <= calendar.options.users.length){
                 TimelyUi.utils.enableIScroll(1);
                 TimelyUi.utils.enableIScroll(2);
             }
+
+            // Persist new changes
+            calendar.onSave(calEvent);
         },
         eventResize: function(calEvent, element) {
+            TimelyUi.calendar.onSave(calEvent);
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, upEvent) {
           TimelyUi.calendar.showPopoverForm(calEvent, element);
@@ -499,10 +503,11 @@
       /*** Persistence provider ***/
       getLastEventId: function() { return this.options.lastEventId },
       onSave: function(calEvent) {
-          var data = this.options.data;
-
-          this.options.lastEventId += 1;
-          data.push(calEvent);
+          if (!calEvent.id) {
+              var data = this.options.data;
+              this.options.lastEventId += 1;
+              data.push(calEvent);
+          }
       },
       onDelete: function(calEventToRemove) {
           var data = this.options.data;
