@@ -356,7 +356,7 @@
         }
 
         // http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
-        $(window).onresize = function(e){
+        window.onresize = function(e){
             if(e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500){
                 var withRedim = TimelyUi.calendar.lastWidth !== window.innerWidth;
                 TimelyUi.calendar.lastWidth = window.innerWidth;
@@ -2088,14 +2088,13 @@
         var isMobile = TimelyUi.compat.isMobile;
         var options = this.options;
         var functionStart = function(event, ui) {
-
             options.tic = 0;
             options.dragTicTime = new Date().getTime();
             console.log('_addDraggableToCalEvent start');
             var $calEvent = ui.draggable || ui.helper;
             console.log('executing start event, '+event.type+' $calEvent, '+$calEvent);
             options.eventDrag(calEvent, $calEvent);
-          };
+        };
         options.dragTicTime = undefined;
         $calEvent.draggable({
           handle: (isMobile)? '' : '.wc-time',
