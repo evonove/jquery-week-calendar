@@ -374,8 +374,8 @@
       /*
        * Refresh the events for the currently displayed week.
        */
-      refresh: function() {
-        this._loadCalEvents(this.element.data('startDate'));
+      refresh: function(onlyPersistedItem) {
+        this._loadCalEvents(this.element.data('startDate'), onlyPersistedItem);
       },
 
       /*
@@ -516,7 +516,6 @@
           data.splice($.inArray(calEventToRemove, data), 1);
           this.removeEvent(calEventToRemove.id);
       },
-      onPolling: function() { console.log('Not implemented'); },
 
       /*
        * Remove an event based on it's id
@@ -1485,7 +1484,7 @@
       /*
        * Load calendar events for the week based on the date provided
        */
-      _loadCalEvents: function(dateWithinWeek) {
+      _loadCalEvents: function(dateWithinWeek, onlyPersistedItem) {
         var date, weekStartDate, weekEndDate, $weekDayColumns;
         var self = this;
         var options = this.options;
@@ -1533,7 +1532,7 @@
             },
 
             success: function(data) {
-              self._renderEvents(data, $weekDayColumns);
+              self._renderEvents(data, $weekDayColumns, onlyPersistedItem);
             },
 
             complete: function() {
@@ -1545,10 +1544,10 @@
           });
         } else if ($.isFunction(options.data)) {
           options.data(weekStartDate, weekEndDate, function(data) {
-            self._renderEvents(data, $weekDayColumns);
+            self._renderEvents(data, $weekDayColumns, onlyPersistedItem);
           });
         } else if (options.data) {
-          self._renderEvents(options.data, $weekDayColumns);
+          self._renderEvents(options.data, $weekDayColumns, onlyPersistedItem);
         }
       },
 
@@ -1678,7 +1677,7 @@
       /*
        * Render the events into the calendar
        */
-      _renderEvents: function(data, $weekDayColumns) {
+      _renderEvents: function(data, $weekDayColumns, onlyPersistedItem) {
         var self = this;
         var options = this.options;
         var eventsToRender, nbRenderedEvents = 0;
@@ -1706,7 +1705,7 @@
           }
         }
 
-        this._clearCalendar();
+        this._clearCalendar(onlyPersistedItem);
 
         if ($.isArray(data)) {
           eventsToRender = self._cleanEvents(data);
@@ -2281,9 +2280,16 @@
       /*
        * Clear all cal events from the calendar
        */
-      _clearCalendar: function() {
-        this.element.find('.wc-day-column-inner div').remove();
-        this._clearFreeBusys();
+      _clearCalendar: function(onlyPersistedItem) {
+        var eventsToClear = [];
+
+        if (onlyPersistedItem) {
+          eventsToClear = this.element.find('.wc-cal-event').not('.wc-new-cal-event');
+        } else {
+          eventsToClear = this.element.find('.wc-day-column-inner div')
+        }
+
+        eventsToClear.remove();
       },
 
       /*
