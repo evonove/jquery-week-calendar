@@ -2107,7 +2107,7 @@
           revert: 'invalid',
           opacity: 0.5,
           grid: [$calEvent.outerWidth() + 1, options.timeslotHeight],
-          /*create: function (event, ui){
+          create: function (event, ui){
              var isMobile = TimelyUi.compat.isMobile;
              var on = TimelyUi.compat.on;
              var events = TimelyUi.compat.events;
@@ -2125,7 +2125,7 @@
                console.log('ui');
              }
 
-          },*/
+          },
 
           start: functionStart,
           /* only in desktop enviroment */
