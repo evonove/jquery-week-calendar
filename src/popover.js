@@ -28,7 +28,7 @@
 		clear: function() {
 			// Destroy enabled popover and cancel event creation
             TimelyUi.calendar.removeLastUnsavedEvent();
-			self.hide();
+            self.hide();
 			return self;
 		},
 		hide: function() {
@@ -49,6 +49,7 @@
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);
+            self.hide();
 			return this;
 		},
 		edit: function() {
@@ -60,7 +61,7 @@
 		initListeners: function() {
 			/* Attach listener to popover buttons */
 			$('.popover #popoverSave').on(events.down,function() {
-				self.save().clear();
+				self.save();
 			});
 
 			$('.popover #popoverCancel').on(events.down, function() {
