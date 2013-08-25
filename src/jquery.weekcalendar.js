@@ -1824,12 +1824,11 @@
 
         $calEventList.show();
 
-        if (!options.readonly && options.resizable(calEvent, $calEventList)) {
+        if (calEvent.id && (!options.readonly && options.resizable(calEvent, $calEventList))) {
           self._addResizableToCalEvent(calEvent, $calEventList, $weekDay);
         }
 
-        if (!options.readonly && options.draggable(calEvent, $calEventList)) {
-          console.log('added _addDraggableToCalEvent');
+        if (calEvent.id && (!options.readonly && options.draggable(calEvent, $calEventList))) {
           self._addDraggableToCalEvent(calEvent, $calEventList);
         }
 
