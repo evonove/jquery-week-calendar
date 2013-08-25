@@ -2216,9 +2216,7 @@
             }
             self._adjustOverlappingEvents($weekDay);
 
-            setTimeout(function() {
-              $calEvent.remove();
-            }, 1000);
+            $calEvent.remove();
           }
         });
       },
