@@ -113,7 +113,7 @@
                 self.organizationSelect.val(String(null));
             } else {
                 self.userSelect.removeAttr('disabled');
-                self.organizationSelect.val(String(calendar.options.currentUser.defaultOrganization));
+                self.organizationSelect.val(chosenEvent.organization || String(calendar.options.currentUser.defaultOrganization));
             }
 
             self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
@@ -135,7 +135,7 @@
 			self.instance.options.calEvent = {
 				id: self.instance.options.calEvent.id || calendar.getLastEventId(),
 				title: self.title.val(),
-                organization: isNaN(self.organizationSelect.val()) ? parseInt(self.organizationSelect.val(), 10) : self.organizationSelect.val(),
+                organization: self.organizationSelect.val(),
                 owner: parseInt(self.ownerSelect.val(), 10),
                 userId: parseInt(self.userSelect.val(), 10),
 				start: this.getTime(eventDate, self.startTime),
@@ -143,7 +143,6 @@
 				content: self.content.val()
 			};
             calendar.onSave(self.instance.options.calEvent);
-			calendar.updateEvent(self.instance.options.calEvent);
 			return self;
 		},
 
