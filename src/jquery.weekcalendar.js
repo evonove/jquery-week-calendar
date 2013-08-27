@@ -93,24 +93,35 @@
         eventRefresh: function(calEvent, element) {
           return element;
         },
+
+        /* Javascript events callbacks */
+
+        // If true, a drag or resize events is currently happening
+        eventAction: false,
         eventDrag: function(calEvent, element) {
-            TimelyUi.utils.disableIScrolls();
+          this.eventAction = true;
+          TimelyUi.utils.disableIScrolls();
         },
         eventDrop: function(calEvent, element) {
-            var calendar = TimelyUi.calendar,
-			    maxColumnNumber = TimelyUi.maxColumnNumber;
+          var calendar = TimelyUi.calendar,
+	          maxColumnNumber = TimelyUi.maxColumnNumber;
 
-            TimelyUi.utils.enableIScroll(0);
-            if (maxColumnNumber <= calendar.options.users.length){
-                TimelyUi.utils.enableIScroll(1);
-                TimelyUi.utils.enableIScroll(2);
-            }
+          TimelyUi.utils.enableIScroll(0);
+          if (maxColumnNumber <= calendar.options.users.length){
+            TimelyUi.utils.enableIScroll(1);
+            TimelyUi.utils.enableIScroll(2);
+          }
 
-            // Persist new changes
-            calendar.onSave(calEvent);
+          // Persist new changes
+          calendar.onSave(calEvent);
+          this.eventAction = false;
         },
-        eventResize: function(calEvent, element) {
-            TimelyUi.calendar.onSave(calEvent);
+        eventResizeStart: function() {
+          this.eventAction = true;
+        },
+        eventResizeEnd: function(calEvent, element) {
+          TimelyUi.calendar.onSave(calEvent);
+          this.eventAction = false;
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, upEvent) {
           TimelyUi.calendar.showPopoverForm(calEvent, element);
@@ -145,6 +156,8 @@
         },
         eventDelete: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
         },
+
+        /* Generic callbacks */
         calendarBeforeLoad: function(calendar) {
         },
         calendarAfterLoad: function(calendar) {
@@ -2238,6 +2251,7 @@
           minHeight: options.timeslotHeight,
           start: function(event, ui) {
             TimelyUi.utils.disableIScrolls();
+            options.eventResizeStart();
           },
           stop: function(event, ui) {
             TimelyUi.utils.enableIScrolls();
@@ -2251,7 +2265,7 @@
             self._adjustForEventCollisions($weekDay, $calEvent, newCalEvent, calEvent);
 
             // Trigger resize callback
-            options.eventResize(newCalEvent, calEvent, $calEvent);
+            options.eventResizeEnd(newCalEvent, calEvent, $calEvent);
             self._refreshEventDetails(newCalEvent, $calEvent);
             self._positionEvent($weekDay, $calEvent);
             self._adjustOverlappingEvents($weekDay);
