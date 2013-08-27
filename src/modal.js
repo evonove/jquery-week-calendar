@@ -31,7 +31,7 @@
 
                 if(!isMobile){
                     /* Set all date and time widgets */
-                    $('.modal-body .datepicker').pickadate();
+                    $('.modal-body .datepicker').pickadate({ format: 'dd/mm/yyyy' });
                     $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
                 }
 

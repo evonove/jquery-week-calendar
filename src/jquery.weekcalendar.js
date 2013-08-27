@@ -717,7 +717,6 @@
        * TODO: in mobile enviroment there are not mouseover or mouse out...
        */
       _setupEventDelegation: function() {
-        //console.log('_setupEventDelegation');
         var self = this;
         var options = this.options;
         var events = TimelyUi.compat.events;
@@ -1253,8 +1252,6 @@
        * Render the calendar body for event placeholders
        */
       _renderCalendarBodyEvents: function($calendarTableTbody) {
-        //console.log('_renderCalendarBodyEvents');
-
         var self = this;
         var options = this.options;
         var renderRow;
@@ -1332,9 +1329,7 @@
             var $weekDay = $target.closest('.wc-day-column-inner');
             var $newEvent = $weekDay.find('.wc-new-cal-event-creating');
 
-            //i don't know its utility
-            // console.log('removed downEventCreation on');
-            // console.log($weekDay);
+            /* I don't know its utility */
             //off($weekDay, events.down, self.downEventCreation);
             
             if ($newEvent.length) {
@@ -1501,7 +1496,6 @@
         var date, weekStartDate, weekEndDate, $weekDayColumns;
         var self = this;
         var options = this.options;
-        //date = this._fixMinMaxDate(dateWithinWeek || options.date);
         if (dateWithinWeek && dateWithinWeek.getFullYear() === options.date.getFullYear() && dateWithinWeek.getMonth() ===  options.date.getMonth() && dateWithinWeek.getDate() === options.date.getDate()){
             date = this._fixMinMaxDate(options.date);
         } else {

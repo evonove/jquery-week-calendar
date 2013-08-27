@@ -562,7 +562,7 @@
 	/**
 	 * Moment.js wrapper
 	 * @param {Object} date with any format
-	 * @param {String} a valid Moment.js format string
+	 * @param {String} format a valid Moment.js format string
 	 * @return {String} a formatted datetime
 	 */
 	TimelyUi.utils.formatDate = function(date, format) {
