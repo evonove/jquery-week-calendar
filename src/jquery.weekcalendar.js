@@ -1488,7 +1488,13 @@
         var date, weekStartDate, weekEndDate, $weekDayColumns;
         var self = this;
         var options = this.options;
-        date = this._fixMinMaxDate(dateWithinWeek || options.date);
+        //date = this._fixMinMaxDate(dateWithinWeek || options.date);
+        if (dateWithinWeek && dateWithinWeek.getFullYear() === options.date.getFullYear() && dateWithinWeek.getMonth() ===  options.date.getMonth() && dateWithinWeek.getDate() === options.date.getDate()){
+            date = this._fixMinMaxDate(options.date);
+        } else {
+            date = this._fixMinMaxDate(dateWithinWeek || options.date);
+        }
+
 
         if ((!date || !date.getTime) || (!options.date || !options.date.getTime) || date.getTime() !== options.date.getTime()) {
           this._trigger('changedate', this.element, date);
@@ -2310,8 +2316,11 @@
             }
           }
           var $target = this.element.find('.wc-grid-timeslot-header .wc-hour-header:eq(' + slot + ')');
-          var targetOffset = $target.offset().top;
+          var targetOffset = ($target.offset().top < 1920) ? $target.offset().top : 1920;
           var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
+          if (scroll < 0){
+              scroll = 0;
+          }
           iscroll.scrollTo(0, -scroll, 0);
         }
       },

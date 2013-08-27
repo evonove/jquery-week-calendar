@@ -372,7 +372,7 @@ body {
 .wc-scroller-height {
   height: 1924px;/*reset via JAVASCRIPT*/
   width: 100%;
-  padding-bottom: 60px; /*TODO: workaround for 23th hour bug*/
+  padding-bottom: 80px; /*TODO: workaround for 23th hour bug*/
 }
 .wc-calendar-body-wrapper{
   width: 100%;
@@ -432,7 +432,10 @@ body {
 }
 .calendar-header {
   padding: 1px 0;
-  background-color: black;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  background-color: white;
+  margin-bottom: 1px; /* TODO: workaround for a glitch on a black line head border on Nexus 7*/
 }
 .calendar-header table{
   background-color: white;
