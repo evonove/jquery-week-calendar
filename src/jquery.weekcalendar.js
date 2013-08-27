@@ -572,7 +572,7 @@
        */
       removeLastUnsavedEvent: function() {
         var self = this,
-            lastUnsavedEvent = self.options.unsavedEvents.shift();
+            lastUnsavedEvent = self.options.unsavedEvents.pop();
 
         if (typeof lastUnsavedEvent !== 'undefined') {
           lastUnsavedEvent.remove();
