@@ -606,4 +606,27 @@
 	TimelyUi.utils.toTimestamp = function(date) {
 		return moment(date).format('X');
 	};
+
+    /******************
+	* Array filtering *
+	******************/
+
+    /**
+	 * Return a list of common organizations
+	 * @param {Array} firstOrganizations which contain first user
+     * @param {Array} secondOrganizations which contain second user
+	 * @return {Array} shared organizations between two users
+	 */
+    TimelyUi.utils.commonOrganizations = function(firstOrganizations, secondOrganizations) {
+        return _.intersection(firstOrganizations, secondOrganizations);
+    }
+
+    /**
+	 * Logic to choose an organization from a list of shared organizations
+	 * @param {Array} organizations shared by two users
+	 * @return {Object} valid organization
+	 */
+    TimelyUi.utils.chooseOrganization = function(organizations) {
+        return organizations[0];
+    }
 })(TimelyUi);

@@ -247,16 +247,6 @@
         getEventUserId: function(calEvent, calendar) {
           return calEvent.userId;
         },
-        /**
-         * Sets user id(s) to the calEvent
-         * @param {Object} calEvent the calEvent to set informations to.
-         * @param {jQuery} calendar the calendar object.
-         * @return {Object} the calEvent with modified user id.
-         */
-        setEventUserId: function(userId, calEvent, calendar) {
-          calEvent.userId = userId;
-          return calEvent;
-        },
 
         /*** FreeBusy options ***/
 
@@ -1345,13 +1335,9 @@
               
               var newCalEvent = {start: eventDuration.start, end: eventDuration.end, title: options.newEventText};
               var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+              var userId = showAsSeparatedUser ? $weekDay.data('wcUserId') : self._getUserIdFromIndex(0);
 
-              if (showAsSeparatedUser) {
-                newCalEvent = self._setEventUserId(newCalEvent, $weekDay.data('wcUserId'));
-              }
-              else if (!options.showAsSeparateUsers && options.users && options.users.length === 1) {
-                newCalEvent = self._setEventUserId(newCalEvent, self._getUserIdFromIndex(0));
-              }
+              newCalEvent = self._setEventUser(newCalEvent, userId);
 
               var freeBusyManager = self.getFreeBusyManagerForEvent(newCalEvent);
               var $renderedCalEvent = self._renderEvent(newCalEvent, $weekDay);
@@ -2206,7 +2192,7 @@
                   userIdList.push(newUserId);
                 }
               }
-              newCalEvent = self._setEventUserId(newCalEvent, ((userIdList.length === 1) ? userIdList[0] : userIdList));
+              newCalEvent = self._setEventUser(newCalEvent, ((userIdList.length === 1) ? userIdList[0] : userIdList));
             }
             self._adjustForEventCollisions($weekDay, $calEvent, newCalEvent, calEvent, true);
             var $weekDayColumns = self.element.find('.wc-day-column-inner');
@@ -2532,11 +2518,7 @@
         return utils.toDate(date);
       },
 
-      /* USER MANAGEMENT FUNCTIONS */
-
-      getUserForId: function(id) {
-        return $.extend({}, this.options.users[this._getUserIndexFromId(id)]);
-      },
+      /* User management functions */
 
       /*
        * Return the user name for header
@@ -2574,6 +2556,15 @@
       },
 
       /*
+       * Returns user according to selected id
+       */
+      _getUserFromId: function(id) {
+          var self = this;
+
+          return self.options.users[self._getUserIndexFromId(id)];
+      },
+
+      /*
        * Return the user ids for given calEvent.
        * default is calEvent.userId field.
        */
@@ -2593,13 +2584,13 @@
        * Sets the event user id on given calEvent
        * Default is calEvent.userId field.
        */
-      _setEventUserId: function(calEvent, userId) {
-        var self = this;
-        var options = this.options;
-        if ($.isFunction(options.setEventUserId)) {
-          return options.setEventUserId(userId, calEvent, self.element);
-        }
+      _setEventUser: function(calEvent, userId) {
+        var self = this,
+            calendar = self.element,
+            options = this.options;
+
         calEvent.userId = userId;
+        calEvent.user = self._getUserFromId(userId);
         return calEvent;
       },
 
@@ -2803,7 +2794,7 @@
           start: date,
           end: date
         };
-        this._setEventUserId(calEvent, users);
+        this._setEventUser(calEvent, users);
         return this.getFreeBusyManagerForEvent(calEvent);
       },
 
