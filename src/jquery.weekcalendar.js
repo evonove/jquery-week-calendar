@@ -179,6 +179,7 @@
           return calEvent.title;
         },
 
+
         /*** Users configuration ***/
 
         /**
@@ -371,11 +372,51 @@
                 return false;
             }
         };
+
+
+        /**
+         * Register a callback for mobile view
+         */
+        enquire
+            .register('screen and (max-width: 767px) and (min-width: 480px)', function() {
+                self.lastRefresh = new Date().getTime();
+                if(TimelyUi.compat.isTablet){
+                    $('.wc-timeslot-placeholder').attr('colspan', 1);
+                    TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
+                    self.setReadOnly(false);
+                } else {
+                    $('.wc-timeslot-placeholder').attr('colspan', 4);
+                    TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
+                    self.setReadOnly(true);
+                }
+                setTimeout(TimelyUi.utils._resetIScrolls, 500);
+            })
+            .register('screen and (min-width: 768px)' , function() {
+                self.lastRefresh = new Date().getTime();
+                $('.wc-timeslot-placeholder').attr('colspan', 4);
+                TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
+                self.setReadOnly(false);
+                setTimeout(TimelyUi.utils._resetIScrolls, 500);
+            })
+            .register('screen and (max-width: 480px)', function() {
+                self.lastRefresh = new Date().getTime();
+                $('.wc-timeslot-placeholder').attr('colspan', 1);
+                TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
+                self.setReadOnly(false);
+                setTimeout(TimelyUi.utils._resetIScrolls, 500);
+            });
       },
 
       /********************
        * Public functions *
        ********************/
+      /*
+       * set readOnly and allowEventCreation options.
+       */
+      setReadOnly: function(value) {
+        this.options.readOnly = value;
+        this.options.allowEventCreation = !value;
+      },
       /*
        * Refresh the events for the currently displayed week.
        */
@@ -1442,6 +1483,9 @@
         };
 
         self.downEventCreation = function(event) {
+           if (!options.allowEventCreation){
+            return false;
+           }
           console.log('downEventCreation');
 
           var $target = $(event.target);
@@ -1474,7 +1518,9 @@
             on($('html'), events.up, self.upEventCreation);
           }
         };
+
         on($weekDay, events.hold, self.downEventCreation);
+
       },
 
       /*

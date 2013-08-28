@@ -116,23 +116,8 @@ TimelyUi.init = function(id, conf) {
 	TimelyUi.calendar.lastRefresh = new Date().getTime();
 	TimelyUi.calendar.lastWidth = window.innerWidth;
 
-	/**
-	 * Register a callback for mobile view 
-	 */
-	enquire.register('screen and (max-width: 767px)', {
-		match : function() {
-			TimelyUi.calendar.lastRefresh = new Date().getTime();
-			$('.wc-timeslot-placeholder').attr('colspan', 1);
-			TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
-			setTimeout(TimelyUi.utils._resetIScrolls, 500);
 
-		},
-		unmatch : function() {
-			TimelyUi.calendar.lastRefresh = new Date().getTime();
-			$('.wc-timeslot-placeholder').attr('colspan', 4);
-			TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
-			setTimeout(TimelyUi.utils._resetIScrolls, 500);
-		}
-	});
 	TimelyUi.utils._resetIScrolls(true, false);
+    setTimeout(window.removeUrlBar());
+
 };
