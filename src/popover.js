@@ -40,14 +40,13 @@
 			return self;
 		},
 		save: function() {
-			var calendar = TimelyUi.calendar,
-                commonOrganizations = utils.commonOrganizations(calendar.options.currentUser.organizations, self.options.calEvent.user.organizations);
+			var calendar = TimelyUi.calendar;
 
             if (calendar.getLastEventId !== null) {
 			    self.options.calEvent.id = calendar.getLastEventId();
             }
             self.options.calEvent.owner = calendar.options.currentUser.id;
-            self.options.calEvent.organization = calendar.options.currentUser.id === self.options.calEvent.userId ? null : utils.chooseOrganization(commonOrganizations);
+            self.options.calEvent.organization = calendar.options.currentUser.id === self.options.calEvent.userId ? null : utils.chooseOrganization(calendar.options.currentUser.organizations, self.options.calEvent.user.organizations);
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);

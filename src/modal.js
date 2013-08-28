@@ -12,24 +12,17 @@
 	$.extend(self, {
         init: function(selector) {
             if (typeof self.instance === 'undefined') {
-                var options = TimelyUi.calendar.options;
+                var calendar = TimelyUi.calendar;
 
                 /* Create and register modal object */
                 self.instance = selector.modal({ show: false }).data('modal');
 
-                /* Load users and organizations dynamically */
+                /* Assign all selector to local variables */
                 self.organizationSelect = $('.modal-body #organization');
                 self.ownerSelect = $('.modal-body #owner');
                 self.userSelect = $('.modal-body #user');
-
-                $.each(options.users, function(index, user) {
-                    self.ownerSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
-                    self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
-                });
-
-                $.each(options.currentUserOrganizations, function(index, organization) {
-                    self.organizationSelect.append('<option value="{0}">{1}</option>'.format(organization.id, organization.name));
-                });
+                self.title = $('.modal-header #title');
+                self.content = $('.modal-body #description');
 
                 if(!isMobile){
                     /* Set all date and time widgets */
@@ -38,7 +31,22 @@
                 }
 
                 /* Component listeners */
-                self.organizationSelect.change(function(e) {
+                self.userSelect.on('change', function(e) {
+                    var _selectedUserId = parseInt(this.value, 10),
+                        _commonOrganizations = self._getValidOrganizations(_selectedUserId),
+                        _lastStoredValue;
+
+                    _lastStoredValue = self.organizationSelect.val();
+                    self.initOrganizations(_commonOrganizations);
+
+                    if (_.filter(_commonOrganizations, function(organization) { return organization.id === _lastStoredValue }).length > 0) {
+                        self.organizationSelect.val(_lastStoredValue);
+                    } else {
+                        self.organizationSelect.val(_.first(_commonOrganizations).id);
+                    }
+                });
+
+                self.organizationSelect.on('change', function(e) {
                     if ($(this).val() === String(null)) {
                         self.userSelect.attr('disabled', 'disabled');
                         self.userSelect.val(self.ownerSelect.val());
@@ -74,6 +82,48 @@
             }
         },
 
+        _getValidOrganizations: function(selectedUserId) {
+            var calendar = TimelyUi.calendar,
+                options = calendar.options,
+                selectedUser = calendar._getUserFromId(selectedUserId),
+                commonOrganizations,
+                validOrganizations;
+
+            if (selectedUserId !== options.currentUser.id) {
+                commonOrganizations = utils._commonOrganizations(options.currentUser.organizations, selectedUser.organizations);
+                validOrganizations = _.filter(options.currentUserOrganizations, function(organization) {
+                    return _.contains(commonOrganizations, organization.id)
+                });
+            } else {
+                validOrganizations = options.currentUserOrganizations;
+            }
+
+            return validOrganizations;
+        },
+
+        initUsers: function() {
+            var options = TimelyUi.calendar.options;
+
+            self.ownerSelect.empty();
+            self.userSelect.empty();
+            $.each(options.users, function(index, user) {
+                self.ownerSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
+                self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
+            });
+
+            return this;
+        },
+
+        initOrganizations: function(organizations) {
+            self.organizationSelect.empty();
+            self.organizationSelect.append('<option value="{0}">{1}</option>'.format('null', 'Private'));
+            $.each(organizations, function(index, organization) {
+                self.organizationSelect.append('<option value="{0}">{1}</option>'.format(organization.id, organization.name));
+            });
+
+            return this;
+        },
+
 		clear: function() {
             var self = this;
 
@@ -86,6 +136,7 @@
 
 		load: function() {
 			var calendar = TimelyUi.calendar,
+                options = calendar.options,
                 chosenEvent = this.instance.options.calEvent,
 				deleteButton = $('.modal-footer #modalDelete');
 
@@ -96,28 +147,25 @@
 				deleteButton.hide();
 			}
 
-            /* Assign all selector to local variables */
-            self.organizationSelect = $('.modal-body #organization');
-            self.ownerSelect = $('.modal-body #owner');
-            self.userSelect = $('.modal-body #user');
-            self.title = $('.modal-header #title');
-
             self.eventDate = self.createEventDate('.modal-body #eventDate');
             self.startTime = self.createEventTime('.modal-body #startTime');
             self.endTime = self.createEventTime('.modal-body #endTime');
 
-            self.content = $('.modal-body #description');
+            // Load users and organizations dynamically
+            var _validOrganizations = self._getValidOrganizations(chosenEvent.userId);
+            self.initUsers().initOrganizations(_validOrganizations);
 
-			// Set all inputs with chosen event
-			self.title.val(chosenEvent.title);
-            if (chosenEvent.organization === null) {
+            // Set correct organization value
+            if ((chosenEvent.userId === options.currentUser.id) && (chosenEvent.organization === null || typeof chosenEvent.id === 'undefined')) {
                 self.userSelect.attr('disabled', 'disabled');
                 self.organizationSelect.val(String(null));
             } else {
                 self.userSelect.removeAttr('disabled');
-                self.organizationSelect.val(chosenEvent.organization || String(calendar.options.currentUser.defaultOrganization));
+                self.organizationSelect.val(chosenEvent.organization || utils._chooseDefaultOrganization(_validOrganizations).id);
             }
 
+            // Set all others input with chosen event
+			self.title.val(chosenEvent.title);
             self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
 			self.userSelect.val(chosenEvent.userId);
 

@@ -617,16 +617,28 @@
      * @param {Array} secondOrganizations which contain second user
 	 * @return {Array} shared organizations between two users
 	 */
-    TimelyUi.utils.commonOrganizations = function(firstOrganizations, secondOrganizations) {
+    TimelyUi.utils._commonOrganizations = function(firstOrganizations, secondOrganizations) {
         return _.intersection(firstOrganizations, secondOrganizations);
-    }
+    };
 
     /**
-	 * Logic to choose an organization from a list of shared organizations
+	 * Default logic to choose an organization from a list of shared organizations
 	 * @param {Array} organizations shared by two users
 	 * @return {Object} valid organization
 	 */
-    TimelyUi.utils.chooseOrganization = function(organizations) {
+    TimelyUi.utils._chooseDefaultOrganization = function(organizations) {
         return organizations[0];
-    }
+    };
+
+    /**
+	 * Choose an organization between two users
+	 * @param {Array} currentUserOrganizations which contain first user
+     * @param {Array} userOrganizations which contain second user
+	 * @return {Object} valid organization
+	 */
+    TimelyUi.utils.chooseOrganization = function(currentUserOrganizations, userOrganizations) {
+            var commonOrganizations = this._commonOrganizations(currentUserOrganizations, userOrganizations);
+
+            return this._chooseDefaultOrganization(commonOrganizations);
+    };
 })(TimelyUi);

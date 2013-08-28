@@ -186,8 +186,7 @@
          */
         currentUser: {
           "id": 1,
-          "username": "evonove",
-          "defaultOrganization": null
+          "username": "evonove"
         },
         currentUserOrganizations: [],
 
