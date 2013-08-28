@@ -10,8 +10,10 @@
         isMobile = TimelyUi.compat.isMobile;
 
 	$.extend(self, {
-        init: function(selector, users, organizations) {
+        init: function(selector) {
             if (typeof self.instance === 'undefined') {
+                var options = TimelyUi.calendar.options;
+
                 /* Create and register modal object */
                 self.instance = selector.modal({ show: false }).data('modal');
 
@@ -20,12 +22,12 @@
                 self.ownerSelect = $('.modal-body #owner');
                 self.userSelect = $('.modal-body #user');
 
-                $.each(users, function(index, user) {
+                $.each(options.users, function(index, user) {
                     self.ownerSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
                     self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
                 });
 
-                $.each(organizations, function(index, organization) {
+                $.each(options.currentUserOrganizations, function(index, organization) {
                     self.organizationSelect.append('<option value="{0}">{1}</option>'.format(organization.id, organization.name));
                 });
 
@@ -36,7 +38,7 @@
                 }
 
                 /* Component listeners */
-                $('.modal-body #organization').change(function(e) {
+                self.organizationSelect.change(function(e) {
                     if ($(this).val() === String(null)) {
                         self.userSelect.attr('disabled', 'disabled');
                         self.userSelect.val(self.ownerSelect.val());

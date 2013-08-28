@@ -181,12 +181,15 @@
 
         /*** Users configuration ***/
 
-        /* Defaults for quick insert */
+        /**
+         * Used to quickly grab current user informations
+         */
         currentUser: {
           "id": 1,
           "username": "evonove",
           "defaultOrganization": null
         },
+        currentUserOrganizations: [],
 
         /**
          * The available users for calendar.
@@ -494,7 +497,7 @@
             modal = TimelyUi.modal,
             isMobile = TimelyUi.compat.isMobile;
 
-        modal.init($('#ajax-modal'), self.options.users, self.options.organizations);
+        modal.init($('#ajax-modal'));
         modal.instance.options.calEvent = calEvent;
         modal.instance.$element.modal('show');
 
