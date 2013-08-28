@@ -4,7 +4,8 @@
 	/* Popover initial configuration */
 	TimelyUi.popover = TimelyUi.popover || {};
 	var self = TimelyUi.popover,
-		events = TimelyUi.compat.events;
+		events = TimelyUi.compat.events,
+        utils = TimelyUi.utils;
 
 	self.options = {
 		html: true,
@@ -39,13 +40,14 @@
 			return self;
 		},
 		save: function() {
-			var calendar = TimelyUi.calendar;
+			var calendar = TimelyUi.calendar,
+                commonOrganizations = utils.commonOrganizations(calendar.options.currentUser.organizations, self.options.calEvent.user.organizations);
 
             if (calendar.getLastEventId !== null) {
 			    self.options.calEvent.id = calendar.getLastEventId();
             }
             self.options.calEvent.owner = calendar.options.currentUser.id;
-            self.options.calEvent.organization = calendar.options.currentUser.id === self.options.calEvent.userId ? null : calendar.options.currentUser.defaultOrganization;
+            self.options.calEvent.organization = calendar.options.currentUser.id === self.options.calEvent.userId ? null : utils.chooseOrganization(commonOrganizations);
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);
