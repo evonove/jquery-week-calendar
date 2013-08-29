@@ -916,7 +916,7 @@
 
               userNavHtml += '<div class="btn-group pull-right">';
               userNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
-              userNavHtml += 'Users ';
+              userNavHtml += '<i class="icon-group"></i> Users ';
               userNavHtml += '<span class="caret"></span>';
               userNavHtml += '</a>';
               userNavHtml += '<ul id="dropdown-user" class="dropdown-menu">';
