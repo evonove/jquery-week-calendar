@@ -941,7 +941,7 @@
 
               orgNavHtml += '<div class="btn-group pull-right">';
               orgNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
-              orgNavHtml += 'Teams ';
+              orgNavHtml += '<i class="icon-building"></i> Teams ';
               orgNavHtml += '<span class="caret"></span>';
               orgNavHtml += '</a>';
               orgNavHtml += '<ul id="dropdown-organization" class="dropdown-menu">';
