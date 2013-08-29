@@ -564,6 +564,14 @@
           this.removeEvent(calEventToRemove.id);
       },
 
+      /**
+       * Search function. You can override this from other framework to do a real search.
+       * @param param query search param
+       */
+      onSearch: function(param) {
+        console.log('Search query: ' + param);
+      },
+
       /*
        * Remove an event based on it's id
        */
@@ -890,13 +898,15 @@
       _renderCalendarButtons: function($calendarContainer) {
         var self = this, options = this.options,
           calendarNavHtml = '',
-          $calendarNavContainer,
+          $rightMenuContainer,
+          _searchForm,
+          _searchBar,
           $container;
 
         if (options.showHeader) {
           if (options.buttons) {
 
-            // Rendering header without switchDisplay
+            // Rendering header with calendar controls
             calendarNavHtml += '<div id="first-row" class="row-fluid calendar-buttons">';
             calendarNavHtml += '<div class="wc-nav span12">';
             calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button>';
@@ -904,21 +914,36 @@
             calendarNavHtml += '<button class="btn btn-inverse wc-prev"><i class="icon-chevron-left"></i></button>';
             calendarNavHtml += '<button class="btn btn-inverse wc-next"><i class="icon-chevron-right"></i></button>';
             calendarNavHtml += '</div>';
+            calendarNavHtml += '<form class="navbar-search pull-right">';
             calendarNavHtml += '<div class="js-right-menu pull-right" />';
+            calendarNavHtml += '</form>';
             calendarNavHtml += '</div>';
             calendarNavHtml += '</div>';
             $(calendarNavHtml).appendTo($calendarContainer);
 
-            // Add search widget
-            $calendarNavContainer = $calendarContainer.find('.js-right-menu');
-            $('<input class="js-search search-query search-event" type="text" placeholder="Search..." />').appendTo($calendarNavContainer);
+            $rightMenuContainer = $calendarContainer.find('.js-right-menu');
 
-            // Append search animation
-            $(".js-search").focus(function () {
+            // Add search widget
+            _searchBar = $('<input class="js-search search-query search-event" type="text" placeholder="Search..." />');
+            _searchBar.appendTo($rightMenuContainer);
+
+            // Add search animation
+            _searchBar.focus(function() {
               $(this).animate({ width: "250px"}, 'slow');
             }).blur(function () {
               $(this).animate({ width: "100px"}, 'slow');
               $(this).val('');
+            });
+
+            // Fire onSearch function on submit
+            _searchForm = $('.navbar-search');
+            _searchForm.on('submit', function(e) {
+                var text = _searchBar.val();
+
+                e.preventDefault();
+                if (text) {
+                    self.onSearch(_searchBar.val());
+                }
             });
 
             // Rendering users filter if they are more than 1
@@ -933,11 +958,11 @@
               userNavHtml += '<ul id="dropdown-user" class="dropdown-menu">';
               userNavHtml += '</ul>';
               userNavHtml += '</div>';
-              $(userNavHtml).appendTo($calendarNavContainer);
+              $(userNavHtml).appendTo($rightMenuContainer);
 
               $container = $calendarContainer.find('#dropdown-user');
               $.each(options.users, function(index, user) {
-                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn active" data-toggle="button" data-propagation="false" data-user-id="'+user.id+'">' + options.getUserName(user) + '</button></a></li>');
+                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn active" data-toggle="button" data-propagation="false" data-user-id="' + user.id + '">' + options.getUserName(user) + '</button></a></li>');
                 $container.append(_input);
               });
               $container.find('[data-propagation=\"false\"]').click(function(event) {
@@ -958,7 +983,7 @@
               orgNavHtml += '<ul id="dropdown-organization" class="dropdown-menu">';
               orgNavHtml += '</ul>';
               orgNavHtml += '</div>';
-              $(orgNavHtml).appendTo($calendarNavContainer);
+              $(orgNavHtml).appendTo($rightMenuContainer);
 
               $container = $calendarContainer.find('#dropdown-organization');
               $.each(options.currentUserOrganizations, function(index, organization) {
