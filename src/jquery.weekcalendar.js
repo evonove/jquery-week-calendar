@@ -377,15 +377,20 @@
         /**
          * Register a callback for mobile view
          */
+
         enquire
-            .register('screen and (max-width: 767px) and (min-width: 480px)', function() {
+            .register('screen and (max-width: 480px)', function() {
+                self.lastRefresh = new Date().getTime();
+                TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
+                self.setReadOnly(false);
+                setTimeout(TimelyUi.utils._resetIScrolls, 500);
+            })
+            .register('screen and (max-width: 767px) and (min-width: 481px)', function() {
                 self.lastRefresh = new Date().getTime();
                 if(TimelyUi.compat.isTablet){
-                    $('.wc-timeslot-placeholder').attr('colspan', 1);
                     TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
                     self.setReadOnly(false);
                 } else {
-                    $('.wc-timeslot-placeholder').attr('colspan', 4);
                     TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
                     self.setReadOnly(true);
                 }
@@ -393,15 +398,7 @@
             })
             .register('screen and (min-width: 768px)' , function() {
                 self.lastRefresh = new Date().getTime();
-                $('.wc-timeslot-placeholder').attr('colspan', 4);
                 TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
-                self.setReadOnly(false);
-                setTimeout(TimelyUi.utils._resetIScrolls, 500);
-            })
-            .register('screen and (max-width: 480px)', function() {
-                self.lastRefresh = new Date().getTime();
-                $('.wc-timeslot-placeholder').attr('colspan', 1);
-                TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
                 self.setReadOnly(false);
                 setTimeout(TimelyUi.utils._resetIScrolls, 500);
             });
@@ -937,7 +934,7 @@
             // Rendering organizations filter if they are more than 1 and have extended profile
             if (options.organizations && options.organizations.length > 1) {
               var orgNavHtml = '';
-              
+
               orgNavHtml += '<div class="btn-group pull-right">';
               orgNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
               orgNavHtml += 'Teams ';
@@ -1021,7 +1018,7 @@
         // Header containers
         calendarHeaderHtml = '<div class=\"row-fluid calendar-header\">';
         calendarHeaderHtml += '<div class=\"wc-header span12\">';
-        
+
         // Days row
         calendarHeaderHtml += '<table ><thead><tr><th class=\"wc-time-column-header\"></th>';
         for (var i = 1; i <= options.daysToShow; i++) {
@@ -1078,18 +1075,18 @@
 
         // Create the structure
         $calendarBody = '';
-        
+
         $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid wc-scrollbar-wrapper\">';
         $calendarBody += '  <div class=\"wc-scroller-height\">';
 
         $calendarBody += '    <div id="calendar-body-wrapper" class=\"wc-scrollable-grid wc-calendar-body-wrapper\">';
         $calendarBody += '      <div class=\"wc-scroller-width\">';
-        
+
         $calendarBody += '        <table class=\"wc-time-slots\" >';
         $calendarBody += '          <tbody>';
         $calendarBody += '          </tbody>';
         $calendarBody += '      </table>';
-        
+
         $calendarBody += '    </div>';
         $calendarBody += '    <div id="day-hours" class="wc-day-hours">'+self._renderDayHours()+'</div>';
         $calendarBody += '    </div>';
@@ -1263,7 +1260,7 @@
 
 
       _renderDayHours: function() {
-        
+
         var self = this;
         var options = this.options;
         var start = (options.businessHours.limitDisplay ? options.businessHours.start : 0);
@@ -1291,7 +1288,7 @@
         var start = (options.businessHours.limitDisplay ? options.businessHours.start : 0);
         var end = (options.businessHours.limitDisplay ? options.businessHours.end : 24);
         var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
-        
+
 
         renderRow = '<tr class=\"wc-grid-row-events\">';
         renderRow += '<td class=\"wc-grid-timeslot-header\">';
@@ -1342,7 +1339,7 @@
        * Setup events for capturing new events
        */
       _setupEventCreationForWeekDay: function($weekDay) {
-      
+
         var events = TimelyUi.compat.events,
             utils = TimelyUi.utils,
             on = TimelyUi.compat.on,
@@ -1364,7 +1361,7 @@
 
             /* I don't know its utility */
             //off($weekDay, events.down, self.downEventCreation);
-            
+
             if ($newEvent.length) {
               var createdFromSingleClick = !$newEvent.hasClass('ui-resizable-resizing');
 
@@ -1375,7 +1372,7 @@
               var top = parseInt($newEvent.css('top'), 10);
               var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $newEvent, top);
 
-              
+
               var newCalEvent = {start: eventDuration.start, end: eventDuration.end, title: options.newEventText};
               var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
               var userId = showAsSeparatedUser ? $weekDay.data('wcUserId') : self._getUserIdFromIndex(0);
@@ -1443,13 +1440,13 @@
           } else {
             $newEvent.css('height', height + (options.timeslotHeight - remainder));
           }
-         
+
           console.log('css(height), '+$newEvent.css('height'));
         };
 
         self.removeEventAddClass = function($event) {
           console.log('removeEventAddClass');
-          
+
           var $newEvent = self.removeEventAddClass.$newEvent,
            $target = self.removeEventAddClass.$target;
 
@@ -1476,7 +1473,7 @@
           } else {
             clickY = event.pageY - columnOffset;
           }
-          
+
           var clickYRounded = (clickY - (clickY % options.timeslotHeight)) / options.timeslotHeight;
           var topPosition = clickYRounded * options.timeslotHeight;
           return topPosition;
@@ -1507,7 +1504,7 @@
             $newEvent.css({top: topPosition});
 
             if (!options.preventDragOnEventCreation) {
-             
+
               console.log('on move, '+$target[0].className);
 
               on($target, events.move, self.move);

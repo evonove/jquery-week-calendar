@@ -465,17 +465,17 @@
 		var dividend = (options.users.length > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : options.users.length,
 			rightSingleWidth = width/dividend,
 			rightWidth = rightSingleWidth*options.users.length+45;
-		
-		TimelyUi.dispelVodooMagic();
-		$('.wc-scroller-width, .wc-time-slots').width(rightWidth);
-		$('#scrollbar-wrapper').height($(window).height()-$('#first-row').height()-$('.calendar-header').height());
-		$('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
-			$(this).width(rightSingleWidth);
+
+        TimelyUi.dispelVodooMagic();
+        $('.wc-scroller-width, .wc-time-slots').width(rightWidth);
+        $('.wc-timeslot-placeholder').attr('colspan', dividend);
+        $('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
+			$(this).get(0).clientWidth = rightSingleWidth; //$(this).width(rightSingleWidth);
 		});
+		$('#scrollbar-wrapper').height($(window).height()-$('#first-row').height()-$('.calendar-header').height());
 		$.each(TimelyUi.iScrollEls, function(key, val){
 			val.refresh();
 		});
-
 		TimelyUi.vodooMagic();
 		
 	};

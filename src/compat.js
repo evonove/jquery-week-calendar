@@ -86,7 +86,7 @@ window.tabletcheck = function() {
     return isTabletCheck;
 };
 window.removeUrlBar = function () {
-    if (navigator.userAgent.match(/Android/i)) {
+    /*if (navigator.userAgent.match(/Android/i)) {
 
         window.scrollTo(0,0); // reset in case prev not scrolled
         var nPageH = $(document).height();
@@ -96,14 +96,14 @@ window.removeUrlBar = function () {
             $('BODY').css('height',nViewH + 'px');
         }
         window.scrollTo(0,100);
-    }
+    }*/
     /*var target = $('#day-hours');//#first-row
     target.trigger('mousedown');
     var e = $.Event('mousemove');
     e.pageY = parseInt(100);
     target.trigger(e);
     target.trigger('mouseup');*/
-    //$('.day-hours').simulate('drag', {dx: 0, dy: 500});
+    //$('document').simulate('drag', {dx: 0, dy: 10});
 };
 TimelyUi.compat.initTypeEvents();
 
