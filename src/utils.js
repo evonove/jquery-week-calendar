@@ -544,7 +544,7 @@
 			filter = TimelyUi.utils._filter,
 			endArray = [];
 
-		endArray = filter(options.organizations, 'id', organizationId, true);
+		endArray = filter(options.currentUserOrganizations, 'id', organizationId, true);
 		if ( endArray.length === 1 ){
 			var organization = endArray[0];
 			$.each(organization.users, function(index, userId){

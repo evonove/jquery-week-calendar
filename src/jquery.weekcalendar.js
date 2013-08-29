@@ -936,7 +936,7 @@
             }
 
             // Rendering organizations filter if they are more than 1 and have extended profile
-            if (options.organizations && options.organizations.length > 1) {
+            if (options.currentUserOrganizations && options.currentUserOrganizations.length > 1) {
               var orgNavHtml = '';
 
               orgNavHtml += '<div class="btn-group pull-right">';
@@ -950,7 +950,7 @@
               $(orgNavHtml).appendTo($calendarNavContainer);
 
               $container = $calendarContainer.find('#dropdown-organization');
-              $.each(options.organizations, function(index, organization) {
+              $.each(options.currentUserOrganizations, function(index, organization) {
                 var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn" data-organization-id="'+organization.id+'">' + options.getOrganizationName(organization) + '</button></a></li>');
                 $container.append(_input);
               });
