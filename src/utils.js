@@ -466,18 +466,20 @@
 			rightSingleWidth = width/dividend,
 			rightWidth = rightSingleWidth*options.users.length+45;
 
+
         TimelyUi.dispelVodooMagic();
-        $('.wc-scroller-width, .wc-time-slots').width(rightWidth);
+        $('.wc-body-scroller-placeholder, .wc-head-scroller-placeholder, .wc-time-slots').width(rightWidth);
         $('.wc-timeslot-placeholder').attr('colspan', dividend);
-        $('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
-			$(this).get(0).clientWidth = rightSingleWidth; //$(this).width(rightSingleWidth);
-		});
 		$('#scrollbar-wrapper').height($(window).height()-$('#first-row').height()-$('.calendar-header').height());
 		$.each(TimelyUi.iScrollEls, function(key, val){
 			val.refresh();
 		});
 		TimelyUi.vodooMagic();
-		
+        $('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function(index, el){
+			$(this).get(0).clientWidth = rightSingleWidth;
+            $(this).width(rightSingleWidth);
+		});
+
 	};
 
 	TimelyUi.utils.toggleUserByButton = function(event, $button) {

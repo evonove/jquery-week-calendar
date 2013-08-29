@@ -386,13 +386,17 @@
                 setTimeout(TimelyUi.utils._resetIScrolls, 500);
             })
             .register('screen and (max-width: 767px) and (min-width: 481px)', function() {
+                var compat = TimelyUi.compat;
                 self.lastRefresh = new Date().getTime();
-                if(TimelyUi.compat.isTablet){
+                if(compat.isTablet){
                     TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
                     self.setReadOnly(false);
-                } else {
+                } else if (compat.isMobile){
                     TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
                     self.setReadOnly(true);
+                } else {
+                    TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
+                    self.setReadOnly(false);
                 }
                 setTimeout(TimelyUi.utils._resetIScrolls, 500);
             })
@@ -1028,7 +1032,7 @@
 
         // Users row
         if (showAsSeparatedUser) {
-          calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper wc-calendar-header-wrapper"><thead class="wc-scroller-width">';
+          calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper wc-calendar-header-wrapper"><thead class="wc-scroller-width wc-head-scroller-placeholder">';
           calendarHeaderHtml += '<tr><th class=\"wc-time-column-header\"></th>';
           var uLength = options.users.length, _headerClass = '';
 
@@ -1080,7 +1084,7 @@
         $calendarBody += '  <div class=\"wc-scroller-height\">';
 
         $calendarBody += '    <div id="calendar-body-wrapper" class=\"wc-scrollable-grid wc-calendar-body-wrapper\">';
-        $calendarBody += '      <div class=\"wc-scroller-width\">';
+        $calendarBody += '      <div class=\"wc-scroller-width wc-body-scroller-placeholder\">';
 
         $calendarBody += '        <table class=\"wc-time-slots\" >';
         $calendarBody += '          <tbody>';
