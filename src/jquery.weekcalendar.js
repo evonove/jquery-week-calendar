@@ -899,22 +899,33 @@
             // Rendering header without switchDisplay
             calendarNavHtml += '<div id="first-row" class="row-fluid calendar-buttons">';
             calendarNavHtml += '<div class="wc-nav span12">';
-            calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button> ';
+            calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button>';
             calendarNavHtml += '<div class="btn-group">';
             calendarNavHtml += '<button class="btn btn-inverse wc-prev"><i class="icon-chevron-left"></i></button>';
             calendarNavHtml += '<button class="btn btn-inverse wc-next"><i class="icon-chevron-right"></i></button>';
             calendarNavHtml += '</div>';
-            calendarNavHtml += '<div class="wc-display btn-group pull-right" data-toggle="buttons-radio"></div>';
+            calendarNavHtml += '<div class="js-right-menu pull-right" />';
             calendarNavHtml += '</div>';
             calendarNavHtml += '</div>';
             $(calendarNavHtml).appendTo($calendarContainer);
 
+            // Add search widget
+            $calendarNavContainer = $calendarContainer.find('.js-right-menu');
+            $('<input class="js-search search-query search-event" type="text" placeholder="Search..." />').appendTo($calendarNavContainer);
+
+            // Append search animation
+            $(".js-search").focus(function () {
+              $(this).animate({ width: "250px"}, 'slow');
+            }).blur(function () {
+              $(this).animate({ width: "100px"}, 'slow');
+              $(this).val('');
+            });
+
             // Rendering users filter if they are more than 1
             if (options.users && options.users.length > 1) {
               var userNavHtml = '';
-              $calendarNavContainer = $calendarContainer.find('.wc-nav');
 
-              userNavHtml += '<div class="btn-group pull-right">';
+              userNavHtml += '<div class="js-user btn-group pull-right user-group">';
               userNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
               userNavHtml += '<i class="icon-group"></i> Users ';
               userNavHtml += '<span class="caret"></span>';
@@ -939,7 +950,7 @@
             if (options.currentUserOrganizations && options.currentUserOrganizations.length > 1) {
               var orgNavHtml = '';
 
-              orgNavHtml += '<div class="btn-group pull-right">';
+              orgNavHtml += '<div class="btn-group pull-right team-group">';
               orgNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
               orgNavHtml += '<i class="icon-building"></i> Teams ';
               orgNavHtml += '<span class="caret"></span>';
