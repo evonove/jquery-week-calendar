@@ -12,11 +12,11 @@ Prerequisite
 [node]: https://github.com/creationix/nvm
 
 * Install [Node version manager][node] (nvm)
-* Install node 0.10.8 as follows:
+* Install node 0.10.x as follows:
 
 ```
-nvm install 0.10.8
-nvm alias default 0.10.8
+nvm install 0.10
+nvm alias default 0.10
 ```
 
 * Configure Yeoman, Bower and Grunt:
@@ -59,6 +59,15 @@ Run a development server with:
 ```
 grunt server
 ```
+
+### Notes on how to update this project version
+
+To update this project version you should change these files:
+
+* `package.json`
+* `bower.json`
+
+**NOTE**: always create a new commit: `Bumped to version x.x.x` and then add a **new tag**.
 
 Tools an Techs
 --------------
