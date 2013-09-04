@@ -695,6 +695,20 @@
         return this._addDays(this.getCurrentFirstDay(), this.options.daysToShow - 1);
       },
 
+      getUsernameById: function(id) {
+        var self = TimelyUi.calendar,
+            foundItem = utils._findById(self.options.users, id);
+
+        return foundItem ? foundItem.username : "";
+      },
+
+      getOrganizationNameById: function(id) {
+        var self = TimelyUi.calendar,
+            foundItem = utils._findById(self.options.currentUserOrganizations, id);
+
+        return foundItem ? foundItem.name : "";
+      },
+
       /**********************
         * Private functions *
         *********************/

@@ -615,6 +615,18 @@
 
     /**
 	 * Return a list of common organizations
+	 * @param {Array} collection which should be filtered
+     * @param {Number} id of object to search
+	 * @return {Object} object found
+	 */
+    TimelyUi.utils._findById = function(collection, id) {
+        return _.find(collection, function(object) {
+           return object.id === id;
+        });
+    };
+
+    /**
+	 * Return a list of common organizations
 	 * @param {Array} firstOrganizations which contain first user
      * @param {Array} secondOrganizations which contain second user
 	 * @return {Array} shared organizations between two users
