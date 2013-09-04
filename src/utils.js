@@ -483,8 +483,9 @@
 	};
 
 	TimelyUi.utils.toggleUserByButton = function(event, $button) {
-		var userId = $button.data('user-id'),
-			utils = TimelyUi.utils,
+		var calendar = TimelyUi.calendar,
+            utils = TimelyUi.utils,
+            userId = $button.data('user-id'),
 			$wcUser = $('.wc-user-' + userId);
 
 		if ($wcUser.is(':visible')) {
@@ -495,6 +496,7 @@
 
 		$wcUser.toggle();
 		$button.button('toggle');
+        calendar._drawCurrentHourLine();
 	};
 	TimelyUi.utils.disableIScroll = function(index) {
 		TimelyUi.iScrollEls[index].disable();
