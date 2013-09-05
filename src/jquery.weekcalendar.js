@@ -717,11 +717,11 @@
         return foundItem ? foundItem.username : "";
       },
 
-      getOrganizationNameById: function(id) {
+      _getOrganizationById: function(id) {
         var self = TimelyUi.calendar,
             foundItem = utils._findById(self.options.currentUserOrganizations, id);
 
-        return foundItem ? foundItem.name : "";
+        return foundItem ? foundItem : {};
       },
 
       /**********************
@@ -2376,6 +2376,11 @@
         $('.ui-resizable-handle').addClass('wc-resizable');
       },
 
+      _getBackgroundColorBySeed: function(seed){
+          var value = (seed !== undefined) ? Math.abs(Math.floor(6*(Math.sin(seed*60)))) : 0,
+              bg_class = 'bg_'+value;
+          return value ? bg_class : '';
+      },
       /*
        * Refresh the displayed details of a calEvent in the calendar
        */
@@ -2384,9 +2389,17 @@
         if (!this.options.readonly && this.options.allowEventDelete && this.options.deletable(calEvent,$calEvent)) {
           suffix = '<div class="wc-cal-event-delete ui-icon ui-icon-close"></div>';
         }
-
-        $calEvent.find('.wc-time').html(this.options.eventHeader(calEvent, this.element) + suffix);
-        $calEvent.find('.wc-title').html(this.options.eventBody(calEvent, this.element));
+        var wc_time = $calEvent.find('.wc-time'),
+            wc_title = $calEvent.find('.wc-title'),
+            wc_resizable = $calEvent.find('.wc-resizable');
+        wc_time.html(this.options.eventHeader(calEvent, this.element) + suffix);
+        wc_title.html(this.options.eventBody(calEvent, this.element));
+        if (calEvent.organization !== undefined && calEvent.organization != null) {
+            var bg_class = this._getBackgroundColorBySeed(calEvent.organization);
+            wc_time.addClass(bg_class+'_t');
+            $calEvent.addClass(bg_class);
+            wc_resizable.addClass(bg_class);
+        }
         $calEvent.data('calEvent', calEvent);
         this.options.eventRefresh(calEvent, $calEvent);
       },
@@ -2707,6 +2720,20 @@
 
         calEvent.userId = userId;
         calEvent.user = self._getUserFromId(userId);
+        return calEvent;
+      },
+
+      /*
+       * Sets the event organization id on given calEvent
+       * Default is calEvent.organizationId field.
+       */
+      _setEventOrganization: function(calEvent, organizationId) {
+        var self = this,
+            calendar = self.element,
+            options = this.options;
+
+        calEvent.organizationId = organizationId;
+        calEvent.organization = self._getOrganizationById(userId);
         return calEvent;
       },
 

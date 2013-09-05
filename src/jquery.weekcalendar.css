@@ -449,6 +449,54 @@ body {
   background-color: white;
 }
 
+.bg_1{
+   background-color:  #33CCCC;
+}
+
+.bg_2{
+   background-color:  #CCFF99;
+}
+
+.bg_3{
+   background-color:  #99CCFF;
+}
+
+.bg_4{
+   background-color:  #CC99FF;
+}
+
+.bg_5{
+   background-color:  #FFCCFF;
+}
+
+.bg_6{
+   background-color:  #FFCCCC;
+}
+
+.bg_1_t{
+   background-color:  #33CCFF !important;
+}
+
+.bg_2_t{
+   background-color:  #CCFFCC !important;
+}
+
+.bg_3_t{
+   background-color:  #6699FF !important;
+}
+
+.bg_4_t{
+   background-color:  #CC66FF !important;
+}
+
+.bg_5_t{
+   background-color:  #FF99CC !important;
+}
+
+.bg_6_t{
+   background-color:  #FF9999 !important;
+}
+
 /*TODO: needed to remove a scrollbar, here maybe lay the bug of 23th hour*/
 body {
     overflow: hidden;
