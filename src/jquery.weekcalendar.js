@@ -99,37 +99,43 @@
         // If true, a drag or resize events is currently happening
         eventAction: false,
         eventDrag: function(calEvent, element) {
-          this.eventAction = true;
-          TimelyUi.utils.disableIScrolls();
+          var calendar = TimelyUi.calendar;
+
+          calendar.eventAction = true;
+          utils.disableIScrolls();
         },
         eventDrop: function(calEvent, element) {
           var calendar = TimelyUi.calendar,
 	          maxColumnNumber = TimelyUi.maxColumnNumber;
 
-          TimelyUi.utils.enableIScroll(0);
+          utils.enableIScroll(0);
           if (maxColumnNumber <= calendar.options.users.length){
-            TimelyUi.utils.enableIScroll(1);
-            TimelyUi.utils.enableIScroll(2);
+            utils.enableIScroll(1);
+            utils.enableIScroll(2);
           }
 
           // Persist new changes
           calendar.onSave(calEvent);
-          this.eventAction = false;
+          calendar.eventAction = false;
         },
         eventResizeStart: function() {
-          this.eventAction = true;
+          var calendar = TimelyUi.calendar;
+
+          calendar.eventAction = true;
         },
         eventResizeEnd: function(calEvent, element) {
-          TimelyUi.calendar.onSave(calEvent);
-          this.eventAction = false;
+          var calendar = TimelyUi.calendar;
+
+          calendar.onSave(calEvent);
+          calendar.eventAction = false;
         },
         eventNew: function(calEvent, element, dayFreeBusyManager, calendar, upEvent) {
           TimelyUi.calendar.showPopoverForm(calEvent, element);
           var iscroll = TimelyUi.iScrollEls[1];
-          TimelyUi.utils.lastPos = TimelyUi.utils._posByEl(iscroll,  element[0]);
+          utils.lastPos = TimelyUi.utils._posByEl(iscroll,  element[0]);
 
           var iscroll0 = TimelyUi.iScrollEls[0];
-          var pos = TimelyUi.utils._posByEl(iscroll0, element[0]);
+          var pos = utils._posByEl(iscroll0, element[0]);
           iscroll0.scrollTo(pos.left, pos.top+150, 0); //in old widget pos.left+40
           return true;
         },
@@ -142,16 +148,15 @@
         eventMouseout: function(calEvent, $event) {
         },
         eventMousedownNewEvent: function(calEvent, $event) {
-            TimelyUi.utils.disableIScrolls();
+            utils.disableIScrolls();
         },
         eventMouseupNewEvent: function(calEvent, $event) {
-            var options = TimelyUi.calendar.options,
-			    maxColumnNumber = TimelyUi.maxColumnNumber;
+            var options = TimelyUi.calendar.options;
 
-            TimelyUi.utils.enableIScroll(0);
+            utils.enableIScroll(0);
             if (TimelyUi.maxColumnNumber <= options.users.length){
-                TimelyUi.utils.enableIScroll(1);
-                TimelyUi.utils.enableIScroll(2);
+                utils.enableIScroll(1);
+                utils.enableIScroll(2);
             }
         },
         eventDelete: function(calEvent, element, dayFreeBusyManager, calendar, clickEvent) {
@@ -165,9 +170,9 @@
         noEvents: function() {
         },
         eventHeader: function(calEvent, calendar) {
-          var options = calendar.weekCalendar('option'),
+          var options = calendar.options,
               oneHour = 3600000,
-              displayTitleWithTime = calEvent.end.getTime() - calEvent.start.getTime() <= (oneHour / options.timeslotsPerHour) ? true : false;
+              displayTitleWithTime = !!(calEvent.end.getTime() - calEvent.start.getTime() <= (oneHour / options.timeslotsPerHour));
 
           if (displayTitleWithTime) {
             return utils.formatDate(calEvent.start, options.timeFormat) + ': ' + calEvent.title;
@@ -178,7 +183,6 @@
         eventBody: function(calEvent, calendar) {
           return calEvent.title;
         },
-
 
         /*** Users configuration ***/
 
@@ -198,7 +202,7 @@
          * if you provide a list of user and do not enable showAsSeparateUsers
          * option, then only the events that belongs to one or several of
          * given users will be displayed
-         * @type {array}
+         * @type {Array}
          */
         users: [],
         /**
@@ -217,7 +221,6 @@
          * @return {int|String} the user id.
          */
         getUserId: function(user, index, calendar) {
-          //return index;
           return user.id;
         },
         /**
@@ -228,7 +231,6 @@
          * @return {String} the user name.
          */
         getUserName: function(user, index, calendar) {
-          //return user;
           return user.username;
         },
         /**
