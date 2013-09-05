@@ -104,7 +104,7 @@
           calendar.eventAction = true;
           utils.disableIScrolls();
         },
-        eventDrop: function(calEvent, element) {
+        eventDrop: function(newCalEvent, oldCalEvent, element) {
           var calendar = TimelyUi.calendar,
 	          maxColumnNumber = TimelyUi.maxColumnNumber;
 
@@ -115,8 +115,10 @@
           }
 
           // Persist new changes
-          calendar.onSave(calEvent);
+          var result = calendar.onSave(newCalEvent, oldCalEvent);
           calendar.eventAction = false;
+
+          return result;
         },
         eventResizeStart: function() {
           var calendar = TimelyUi.calendar;
@@ -550,15 +552,26 @@
       },
 
       /*** Persistence provider ***/
-      getLastEventId: function() { return this.options.lastEventId },
-      onSave: function(calEvent) {
-          if (!calEvent.id) {
+      getLastEventId: function() {
+          return this.options.lastEventId
+      },
+
+      /**
+       * Save new event if this action is granted
+       * @param {Object} newCalEvent to persist
+       * @param {Object} oldCalEvent to re-create in case of errors
+       * @returns {Boolean} true | false for success or fail
+       */
+      onSave: function(newCalEvent, oldCalEvent) {
+          if (!newCalEvent.id) {
               var data = this.options.data;
               this.options.lastEventId += 1;
-              data.push(calEvent);
+              data.push(newCalEvent);
           }
-          this.updateEvent(calEvent);
+          this.updateEvent(newCalEvent);
+          return true;
       },
+
       onDelete: function(calEventToRemove) {
           var data = this.options.data;
 
@@ -2299,21 +2312,23 @@
             var $weekDayColumns = self.element.find('.wc-day-column-inner');
 
             // Trigger drop callback
-            options.eventDrop(newCalEvent, calEvent, $calEvent);
+            var saveStatus = options.eventDrop(newCalEvent, calEvent, $calEvent);
 
-            var $newEvent = self._renderEvent(newCalEvent, self._findWeekDayForEvent(newCalEvent, $weekDayColumns));
-            $calEvent.hide();
+            if (saveStatus) {
+              self._renderEvent(newCalEvent, self._findWeekDayForEvent(newCalEvent, $weekDayColumns));
+              $calEvent.hide();
 
-            $calEvent.data('preventClick', true);
+              $calEvent.data('preventClick', true);
 
-            var $weekDayOld = self._findWeekDayForEvent($calEvent.data('calEvent'), self.element.find('.wc-time-slots .wc-day-column-inner'));
+              var $weekDayOld = self._findWeekDayForEvent($calEvent.data('calEvent'), self.element.find('.wc-time-slots .wc-day-column-inner'));
 
-            if ($weekDayOld.data('startDate') !== $weekDay.data('startDate')) {
-              self._adjustOverlappingEvents($weekDayOld);
+              if ($weekDayOld.data('startDate') !== $weekDay.data('startDate')) {
+                self._adjustOverlappingEvents($weekDayOld);
+              }
+              self._adjustOverlappingEvents($weekDay);
+
+              $calEvent.remove();
             }
-            self._adjustOverlappingEvents($weekDay);
-
-            $calEvent.remove();
           }
         });
       },
