@@ -22,7 +22,7 @@
 }
 
 .search-event {
-  width: 100px;
+  width: 80px;
   margin-right: 5px;
 }
 
@@ -319,6 +319,10 @@ input.input-title {
 .modal-body {
   position: static;
   max-height: 450px;
+}
+
+.alert {
+  text-align: center;
 }
 
 /*-----------------------------------------------------------------------------------------*/

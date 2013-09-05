@@ -33,6 +33,7 @@
         date: new Date(),
         timeFormat: 'HH:mm',
         dateFormat: 'dddd DD MMMM',
+        alertFadeOutInterval: 3000,
         alwaysDisplayTimeMinutes: true,
         daysToShow: 1,
         minBodyHeight: 300,
@@ -938,14 +939,21 @@
             // Rendering header with calendar controls
             calendarNavHtml += '<div id="first-row" class="row-fluid calendar-buttons">';
             calendarNavHtml += '<div class="wc-nav span12">';
+            calendarNavHtml += '<div class="span3 pull-left">';
             calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button>';
             calendarNavHtml += '<div class="btn-group">';
             calendarNavHtml += '<button class="btn btn-inverse wc-prev"><i class="icon-chevron-left"></i></button>';
             calendarNavHtml += '<button class="btn btn-inverse wc-next"><i class="icon-chevron-right"></i></button>';
             calendarNavHtml += '</div>';
+            calendarNavHtml += '</div>';
+            calendarNavHtml += '<div class="span6">';
+            calendarNavHtml += '<div class="js-alert alert alert-error fade"></div>';
+            calendarNavHtml += '</div>';
+            calendarNavHtml += '<div class="span3">';
             calendarNavHtml += '<form class="navbar-search pull-right">';
             calendarNavHtml += '<div class="js-right-menu pull-right" />';
             calendarNavHtml += '</form>';
+            calendarNavHtml += '</div>';
             calendarNavHtml += '</div>';
             calendarNavHtml += '</div>';
             $(calendarNavHtml).appendTo($calendarContainer);
@@ -958,9 +966,9 @@
 
             // Add search animation
             _searchBar.focus(function() {
-              $(this).animate({ width: "250px"}, 'slow');
+              $(this).animate({ width: "150px"}, 'slow');
             }).blur(function () {
-              $(this).animate({ width: "100px"}, 'slow');
+              $(this).animate({ width: "80px"}, 'slow');
               $(this).val('');
             });
 
@@ -1067,6 +1075,23 @@
         } else {
           return;
         }
+      },
+
+      /**
+       * Show an alert message with Twitter Bootstrap alert (fade in and fade out)
+       * @param {String} text you want to show
+       */
+      showErrorMessage: function(text) {
+        var _self = this,
+            _alert = $('.js-alert');
+
+        _alert.text(text);
+        _alert.addClass('in');
+
+        // Remove after some delay
+        setTimeout(function() {
+          _alert.removeClass('in');
+        }, _self.options.alertFadeOutInterval);
       },
 
       /*
