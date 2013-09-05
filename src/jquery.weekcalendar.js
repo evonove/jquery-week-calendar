@@ -170,7 +170,7 @@
         noEvents: function() {
         },
         eventHeader: function(calEvent, calendar) {
-          var options = calendar.options,
+          var options = calendar.weekCalendar('option'),
               oneHour = 3600000,
               displayTitleWithTime = !!(calEvent.end.getTime() - calEvent.start.getTime() <= (oneHour / options.timeslotsPerHour));
 
