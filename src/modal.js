@@ -55,13 +55,13 @@
                     }
                 });
 
-                $('.modal-footer #modalSave').click(function(e) {
+                $('.js-modal-footer #modalSave').click(function(e) {
                     self.save();
                     self.instance.hide();
                     e.preventDefault();
                 });
 
-                $('.modal-footer #modalDelete').click(function(e) {
+                $('.js-modal-footer #modalDelete').click(function(e) {
                     self.delete();
                     self.instance.hide();
                     e.preventDefault();
