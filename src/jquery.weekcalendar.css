@@ -453,52 +453,58 @@ body {
   background-color: white;
 }
 
-.bg_1{
-   background-color:  #33CCCC;
+.wc-bg-1{
+    background-color:  #33CCCC;
 }
 
-.bg_2{
-   background-color:  #CCFF99;
+.wc-bg-2{
+    background-color:  #999966;
 }
 
-.bg_3{
-   background-color:  #99CCFF;
+.wc-bg-3{
+    background-color:  #FF9966;
 }
 
-.bg_4{
-   background-color:  #CC99FF;
+.wc-bg-4{
+    background-color:  #993366;
 }
 
-.bg_5{
-   background-color:  #FFCCFF;
+.wc-bg-5{
+    background-color:  #FFCC66;
 }
 
-.bg_6{
-   background-color:  #FFCCCC;
+.wc-bg-6{
+    background-color:  #CCCCFF;
 }
 
-.bg_1_t{
-   background-color:  #33CCFF !important;
+.wc-bg-1 div.wc-time{
+    background-color:  #0033CC;
+    border:1px solid #003399;
 }
 
-.bg_2_t{
-   background-color:  #CCFFCC !important;
+.wc-bg-2 div.wc-time{
+    background-color:  #996633;
+    border:1px solid #663300;
 }
 
-.bg_3_t{
-   background-color:  #6699FF !important;
+.wc-bg-3 div.wc-time{
+    background-color:  #FF6600;
+    border:1px solid #800000;
 }
 
-.bg_4_t{
-   background-color:  #CC66FF !important;
+.wc-bg-4 div.wc-time{
+    background-color:  #660033;
+    border:1px solid #800000;
 }
 
-.bg_5_t{
-   background-color:  #FF99CC !important;
+.wc-bg-5 div.wc-time{
+    background-color:  #CC6600;
+    border:1px solid #993300;
 }
 
-.bg_6_t{
-   background-color:  #FF9999 !important;
+.wc-bg-6 div.wc-time{
+    background-color:  #FFCCFF;
+    border:1px solid #3399FF;
 }
 
 /*TODO: needed to remove a scrollbar, here maybe lay the bug of 23th hour*/

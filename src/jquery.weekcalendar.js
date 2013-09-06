@@ -2403,7 +2403,7 @@
 
       _getBackgroundColorBySeed: function(seed){
           var value = (seed !== undefined) ? Math.abs(Math.floor(6*(Math.sin(seed*60)))) : 0,
-              bg_class = 'bg_'+value;
+              bg_class = 'wc-bg-'+value;
           return value ? bg_class : '';
       },
       /*
@@ -2414,16 +2414,12 @@
         if (!this.options.readonly && this.options.allowEventDelete && this.options.deletable(calEvent,$calEvent)) {
           suffix = '<div class="wc-cal-event-delete ui-icon ui-icon-close"></div>';
         }
-        var wc_time = $calEvent.find('.wc-time'),
-            wc_title = $calEvent.find('.wc-title'),
-            wc_resizable = $calEvent.find('.wc-resizable');
-        wc_time.html(this.options.eventHeader(calEvent, this.element) + suffix);
-        wc_title.html(this.options.eventBody(calEvent, this.element));
+        var wcTime = $calEvent.find('.wc-time');
+        wcTime.html(this.options.eventHeader(calEvent, this.element) + suffix);
+        $calEvent.find('.wc-title').html(this.options.eventBody(calEvent, this.element));
         if (calEvent.organization !== undefined && calEvent.organization != null) {
-            var bg_class = this._getBackgroundColorBySeed(calEvent.organization);
-            wc_time.addClass(bg_class+'_t');
-            $calEvent.addClass(bg_class);
-            wc_resizable.addClass(bg_class);
+            var bgClass = this._getBackgroundColorBySeed(calEvent.organization);
+            $calEvent.addClass(bgClass);
         }
         $calEvent.data('calEvent', calEvent);
         this.options.eventRefresh(calEvent, $calEvent);
