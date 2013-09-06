@@ -507,6 +507,16 @@ body {
     border:1px solid #3399FF;
 }
 
+.my-modal-footer {
+    margin-bottom: 0;
+    text-align: right;
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: inset 0 1px 0 white;
+    -moz-box-shadow: inset 0 1px 0 white;
+    box-shadow: inset 0 1px 0 white;
+}
 /*TODO: needed to remove a scrollbar, here maybe lay the bug of 23th hour*/
 body {
     overflow: hidden;
