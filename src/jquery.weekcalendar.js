@@ -253,7 +253,7 @@
          * @return {number|String|Array} the user id(s) to appened events for.
          */
         getEventUserId: function(calEvent, calendar) {
-          return calEvent.userId;
+          return calEvent.assignees;
         },
 
         /*** FreeBusy options ***/
@@ -270,7 +270,7 @@
          * @return {number|String|Array} the user id(s) to appened events for.
          */
         getFreeBusyUserId: function(calFreeBusy, calendar) {
-          return calFreeBusy.userId;
+          return calFreeBusy.assignees;
         },
         /**
          * The default freeBusy object, used to manage default state
@@ -2725,7 +2725,7 @@
           if ($.isFunction(options.getEventUserId)) {
             return options.getEventUserId(calEvent, self.element);
           }
-          return calEvent.userId;
+          return calEvent.assignees;
         }
         return [];
       },
@@ -2735,12 +2735,14 @@
        * Default is calEvent.userId field.
        */
       _setEventUser: function(calEvent, userId) {
-        var self = this,
-            calendar = self.element,
-            options = this.options;
+        var self = this;
 
-        calEvent.userId = userId;
-        calEvent.user = self._getUserFromId(userId);
+        if (typeof calEvent.assignees !== 'undefined') {
+            calEvent.assignees.push(userId);
+        } else {
+            calEvent.assignees = [userId]
+        }
+
         return calEvent;
       },
 
@@ -2749,12 +2751,10 @@
        * Default is calEvent.organizationId field.
        */
       _setEventOrganization: function(calEvent, organizationId) {
-        var self = this,
-            calendar = self.element,
-            options = this.options;
+        var self = this;
 
         calEvent.organizationId = organizationId;
-        calEvent.organization = self._getOrganizationById(userId);
+        calEvent.organization = self._getOrganizationById(organizationId);
         return calEvent;
       },
 

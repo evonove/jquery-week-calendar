@@ -12,15 +12,18 @@
 	$.extend(self, {
         init: function(selector) {
             if (typeof self.instance === 'undefined') {
-                var calendar = TimelyUi.calendar;
-
                 /* Create and register modal object */
                 self.instance = selector.modal({ show: false }).data('modal');
 
                 /* Assign all selector to local variables */
                 self.organizationSelect = $('.modal-body #organization');
                 self.ownerSelect = $('.modal-body #owner');
-                self.userSelect = $('.modal-body #user');
+                self.usersSelect = $('.modal-body #users').selectize({
+                    plugins: ['remove_button'],
+                    valueField: 'id',
+                    labelField: 'username',
+                    searchField: 'username'
+                })[0].selectize;
                 self.title = $('.modal-header #title');
                 self.content = $('.modal-body #description');
 
@@ -48,10 +51,11 @@
 
                 self.organizationSelect.on('change', function(e) {
                     if ($(this).val() === String(null)) {
-                        self.userSelect.attr('disabled', 'disabled');
-                        self.userSelect.val(self.ownerSelect.val());
+                        self.usersSelect.clear();
+                        self.usersSelect.lock();
+                        self.usersSelect.addItem(self.ownerSelect.val());
                     } else {
-                        self.userSelect.removeAttr('disabled');
+                        self.usersSelect.unlock();
                     }
                 });
 
@@ -105,10 +109,10 @@
             var options = TimelyUi.calendar.options;
 
             self.ownerSelect.empty();
-            self.userSelect.empty();
+            self.usersSelect.clearOptions();
             $.each(options.users, function(index, user) {
                 self.ownerSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
-                self.userSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
+                self.usersSelect.addOption({id: user.id, username: user.username});
             });
 
             return this;
@@ -152,22 +156,22 @@
             self.endTime = self.createEventTime('.modal-body #endTime');
 
             // Load users and organizations dynamically
-            var _validOrganizations = self._getValidOrganizations(chosenEvent.userId);
+            var _validOrganizations = self._getValidOrganizations(chosenEvent.assignees);
             self.initUsers().initOrganizations(_validOrganizations);
 
             // Set correct organization value
-            if ((chosenEvent.userId === options.currentUser.id) && (chosenEvent.organization === null || typeof chosenEvent.id === 'undefined')) {
-                self.userSelect.attr('disabled', 'disabled');
+            if ((_.contains(chosenEvent.assignees, options.currentUser.id)) && (chosenEvent.organization === null || typeof chosenEvent.id === 'undefined')) {
+                self.usersSelect.lock();
                 self.organizationSelect.val(String(null));
             } else {
-                self.userSelect.removeAttr('disabled');
+                self.usersSelect.unlock();
                 self.organizationSelect.val(chosenEvent.organization || utils._chooseDefaultOrganization(_validOrganizations).id);
             }
 
             // Set all others input with chosen event
 			self.title.val(chosenEvent.title);
             self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
-			self.userSelect.val(chosenEvent.userId);
+            self.usersSelect.setValue(chosenEvent.assignees);
 
             self.setDate(self.eventDate, chosenEvent.start);
             self.setTime(self.startTime, chosenEvent.start);
@@ -187,7 +191,7 @@
 				title: self.title.val(),
                 organization: self.organizationSelect.val(),
                 owner: parseInt(self.ownerSelect.val(), 10),
-                userId: parseInt(self.userSelect.val(), 10),
+                assignees: self.usersSelect.getValue(),
 				start: this.getTime(eventDate, self.startTime),
 				end: this.getTime(eventDate, self.endTime),
 				content: self.content.val()
