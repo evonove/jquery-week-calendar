@@ -592,12 +592,18 @@
        * Remove an event based on it's id
        */
       removeEvent: function(eventId) {
-        var self = this;
+        var self = this,
+            _event;
 
         self.element.find('.wc-cal-event').each(function() {
-          if ($(this).data('calEvent').id === eventId) {
+          _event = $(this).data('calEvent');
+          if (_event.id === eventId) {
             $(this).remove();
-            return false;
+
+            // Stop searching if it's just a single event
+            if (!_event.assignees.length > 1) {
+              return false;
+            }
           }
         });
 
