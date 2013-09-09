@@ -2325,9 +2325,7 @@
               var newUserId = $weekDay.data('wcUserId');
               var userIdList = self._getEventUserId(calEvent);
               var oldUserId = $(ui.draggable.parents('.wc-day-column-inner').get(0)).data('wcUserId');
-              if (!$.isArray(userIdList)) {
-                userIdList = [userIdList];
-              }
+
               if ($.inArray(newUserId, userIdList) === -1) {
                 // Remove old user
                 var _index = $.inArray(oldUserId, userIdList);
@@ -2337,7 +2335,7 @@
                   userIdList.push(newUserId);
                 }
               }
-              newCalEvent = self._setEventUser(newCalEvent, ((userIdList.length === 1) ? userIdList[0] : userIdList));
+              newCalEvent = self._setEventUser(newCalEvent, userIdList);
             }
             self._adjustForEventCollisions($weekDay, $calEvent, newCalEvent, calEvent, true);
             var $weekDayColumns = self.element.find('.wc-day-column-inner');
@@ -2728,10 +2726,7 @@
         var self = this;
         var options = this.options;
         if (options.showAsSeparateUsers && options.users && options.users.length) {
-          if ($.isFunction(options.getEventUserId)) {
-            return options.getEventUserId(calEvent, self.element);
-          }
-          return calEvent.assignees;
+          return $.extend(true, [], calEvent.assignees);
         }
         return [];
       },
@@ -2741,10 +2736,8 @@
        * Default is calEvent.userId field.
        */
       _setEventUser: function(calEvent, userId) {
-        var self = this;
-
-        if (typeof calEvent.assignees !== 'undefined') {
-            calEvent.assignees.push(userId);
+        if ($.isArray(userId)) {
+            calEvent.assignees = userId;
         } else {
             calEvent.assignees = [userId]
         }
