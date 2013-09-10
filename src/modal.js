@@ -35,19 +35,17 @@
 
                 self.organizationSelect.on('change', function(e) {
                     var _value = $(this).val() === "null" ? null : parseInt($(this).val(), 10),
-                        _users = self._getUsers(_value);
+                        _users = self._getUsers(_value),
+                        _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id; }),
+                        _usersSelectedOrganization = _.map(_users, function(item) { return item.id; }),
+                        _oldUsers = _.difference(_usersOldSelectedOrganization, _usersSelectedOrganization);
+
+                    _.each(_oldUsers, function(userId) { self.usersSelect.removeOption(userId); });
+                    self.usersSelect.addOption(_users);
 
                     if(_value === null) {
-                        self.usersSelect.clear();
                         self.usersSelect.lock();
-                        self.usersSelect.addOption(_users);
                     } else {
-                        var _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id; }),
-                            _usersSelectedOrganization = _.map(_users, function(item) { return item.id; }),
-                            _oldUsers = _.difference(_usersOldSelectedOrganization, _usersSelectedOrganization);
-
-                        _.each(_oldUsers, function(userId) { self.usersSelect.removeOption(userId); });
-                        self.usersSelect.addOption(_users);
                         self.usersSelect.unlock();
                     }
                 });
