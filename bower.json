@@ -5,7 +5,7 @@
     "components-bootstrap": "2.3.2",
     "font-awesome": "3.2.1",
     "jquery": "2.0.2",
-    "jquery-simulate" : "*",
+    "jquery-simulate": "*",
     "jquery-ui": "1.10.3",
     "enquire": "2.0.2",
     "pickadate": "3.0.5",
@@ -13,6 +13,8 @@
     "iscroll": "5.0.1",
     "hammerjs": "1.0.5"
   },
-  "devDependencies" : {
-  } 
+  "devDependencies": {},
+  "resolutions": {
+    "jquery": ">=1.6"
+  }
 }
