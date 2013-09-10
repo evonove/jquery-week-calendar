@@ -73,6 +73,10 @@
   overflow: hidden;
 }
 
+.controls div.multi {
+  margin-left: 0px;
+}
+
 .wc-scrollable-grid {
   overflow: auto;
   position: relative;
@@ -88,7 +92,6 @@ table.wc-time-slots {
 }
 
 .wc-day-column {
-  /*width: 13.5%;*/
   overflow: visible;
   vertical-align: top;
 }
@@ -201,7 +204,6 @@ table.wc-time-slots {
 
 .wc-hour-header.ui-state-active,
 .wc-hour-header.ui-state-default{
-  /*border-width:0 0 1px 0;*/
   border: 0;
 }
 
@@ -278,14 +280,6 @@ table.wc-time-slots {
   z-index: 1000;
 }
 
-.free-busy-free{
-
-}
-
-.free-busy-busy{
-  
-}
-
 .wc-hourline {
   height: 0pt;
   border-top: 2px solid #FF7F6E;
@@ -324,31 +318,6 @@ input.input-title {
 .alert {
   text-align: center;
 }
-
-/*-----------------------------------------------------------------------------------------*/
-/*
-table {
-  border: 0;
-  border-spacing:0;
-  border-collapse:collapse;
-}
-
-html {
-  -ms-touch-action: none;
-}
-
-body, tr {
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
-
-body {
-  font-size: 12px;
-  font-family: ubuntu, helvetica, arial;
-  overflow: hidden; /* this is important to prevent the whole page to bounce */
-/*}*/
-
 
 .wc-scrollbar-wrapper, .wc-calendar-body-wrapper{
   overflow: hidden;
