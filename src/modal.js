@@ -33,28 +33,21 @@
                     $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
                 }
 
-                /* Component listeners */
-                self.userSelect.on('change', function(e) {
-                    var _selectedUserId = parseInt(this.value, 10),
-                        _commonOrganizations = self._getValidOrganizations(_selectedUserId),
-                        _lastStoredValue;
-
-                    _lastStoredValue = self.organizationSelect.val();
-                    self.initOrganizations(_commonOrganizations);
-
-                    if (_.filter(_commonOrganizations, function(organization) { return organization.id === _lastStoredValue }).length > 0) {
-                        self.organizationSelect.val(_lastStoredValue);
-                    } else {
-                        self.organizationSelect.val(_.first(_commonOrganizations).id);
-                    }
-                });
-
                 self.organizationSelect.on('change', function(e) {
-                    if ($(this).val() === String(null)) {
+                    var _value = $(this).val() === "null" ? null : parseInt($(this).val(), 10),
+                        _users = self._getUsers(_value);
+
+                    if(_value === null) {
                         self.usersSelect.clear();
                         self.usersSelect.lock();
-                        self.usersSelect.addItem(self.ownerSelect.val());
+                        self.usersSelect.addOption(_users);
                     } else {
+                        var _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id }),
+                            _usersSelectedOrganization = _.map(_users, function(item) { return item.id }),
+                            _oldUsers = _.difference(_usersOldSelectedOrganization, _usersSelectedOrganization);
+
+                        _.each(_oldUsers, function(userId) { self.usersSelect.removeOption(userId); });
+                        self.usersSelect.addOption(_users);
                         self.usersSelect.unlock();
                     }
                 });
@@ -105,15 +98,29 @@
             return validOrganizations;
         },
 
-        initUsers: function() {
+        _getUsers: function(organizationId) {
+            var calendar = TimelyUi.calendar,
+                options = calendar.options,
+                _results = [],
+                _usersSelectedOrganization = [];
+
+            if(organizationId === null) {
+                _results.push({ id: options.currentUser.id, username: options.currentUser.username });
+            } else {
+                _usersSelectedOrganization = utils._findById(options.currentUserOrganizations, organizationId).users;
+                _.each(_usersSelectedOrganization, function(userId) { _results.push({ id: userId, username: calendar.getUsernameById(userId) }); });
+            }
+
+            return _results;
+        },
+
+        initUsers: function(organizationId) {
             var options = TimelyUi.calendar.options;
 
             self.ownerSelect.empty();
-            self.usersSelect.clearOptions();
-            $.each(options.users, function(index, user) {
-                self.ownerSelect.append('<option value="{0}">{1}</option>'.format(user.id, user.username));
-                self.usersSelect.addOption({id: user.id, username: user.username});
-            });
+            self.ownerSelect.append('<option value="{0}">{1}</option>'.format(options.currentUser.id, options.currentUser.username));
+            self.usersSelect.clear();
+            self.usersSelect.addOption(self._getUsers(organizationId));
 
             return this;
         },
@@ -157,7 +164,7 @@
 
             // Load users and organizations dynamically
             var _validOrganizations = self._getValidOrganizations(chosenEvent.assignees);
-            self.initUsers().initOrganizations(_validOrganizations);
+            self.initUsers(chosenEvent.organization).initOrganizations(_validOrganizations);
 
             // Set correct organization value
             if ((_.contains(chosenEvent.assignees, options.currentUser.id)) && (chosenEvent.organization === null || typeof chosenEvent.id === 'undefined')) {
