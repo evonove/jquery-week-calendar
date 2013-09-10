@@ -76,10 +76,10 @@
                     return true;
                 },
                 draggable: function (calEvent, element) {
-                    return true;
+                    return calEvent.assignees.length === 1;
                 },
                 resizable: function (calEvent, element) {
-                    return true;
+                    return calEvent.assignees.length === 1;
                 },
                 eventRender: function (calEvent, $event) {
                     if (calEvent.end.getTime() < new Date().getTime()) {
