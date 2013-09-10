@@ -42,8 +42,8 @@
                         self.usersSelect.lock();
                         self.usersSelect.addOption(_users);
                     } else {
-                        var _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id }),
-                            _usersSelectedOrganization = _.map(_users, function(item) { return item.id }),
+                        var _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id; }),
+                            _usersSelectedOrganization = _.map(_users, function(item) { return item.id; }),
                             _oldUsers = _.difference(_usersOldSelectedOrganization, _usersSelectedOrganization);
 
                         _.each(_oldUsers, function(userId) { self.usersSelect.removeOption(userId); });
@@ -89,7 +89,7 @@
             if (selectedUserId !== options.currentUser.id) {
                 commonOrganizations = utils._commonOrganizations(options.currentUser.organizations, selectedUser.organizations);
                 validOrganizations = _.filter(options.currentUserOrganizations, function(organization) {
-                    return _.contains(commonOrganizations, organization.id)
+                    return _.contains(commonOrganizations, organization.id);
                 });
             } else {
                 validOrganizations = options.currentUserOrganizations;

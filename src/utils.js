@@ -413,13 +413,20 @@
         utils._redimColumnsWidth();
     };
 
-    TimelyUi.utils._offset = function (el) {
-        var left = -el.offsetLeft,
-            top = -el.offsetTop;
+    /**
+     * Used to center popover during its creation
+     * @param element node
+     * @returns {Object} with left and top position
+     * @private
+     */
+    TimelyUi.utils._offset = function (element) {
+        var left = -element.offsetLeft,
+            top = -element.offsetTop;
 
-        while (el = el.offsetParent) {
-            left -= el.offsetLeft;
-            top -= el.offsetTop;
+        // Go back until top parent
+        while (element !== null && (element = element.offsetParent)) {
+            left -= element.offsetLeft;
+            top -= element.offsetTop;
         }
 
         return {
@@ -430,11 +437,10 @@
 
     /**
      * Refresh the value of attr width in some DOM elements to render calendar widget correctly when users are added o removed.
-     * @param {Number} maxColumnNumber_ is the number of displayed user in same page by the widget. Default is 5.
      */
     TimelyUi.utils._redimColumnsWidth = function () {
         var options = TimelyUi.calendar.options,
-            width = $('#calendar-body-wrapper').width() - 45, //the width of hourday column
+            width = $('#calendar-body-wrapper').width() - 45,
             maxColumnNumber = TimelyUi.maxColumnNumber;
 
         TimelyUi.columnsToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;

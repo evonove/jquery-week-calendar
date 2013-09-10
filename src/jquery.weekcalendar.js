@@ -176,10 +176,10 @@
                 },
                 eventHeader: function (calEvent, calendar) {
                     var options = calendar.weekCalendar('option'),
-                        oneHour = 3600000,
-                        displayTitleWithTime = !!(calEvent.end.getTime() - calEvent.start.getTime() <= (oneHour / options.timeslotsPerHour));
+                        oneHour = 3600000;
 
-                    if (displayTitleWithTime) {
+                    // Display time with title
+                    if (calEvent.end.getTime() - calEvent.start.getTime() <= (oneHour / options.timeslotsPerHour)) {
                         return utils.formatDate(calEvent.start, options.timeFormat) + ': ' + calEvent.title;
                     } else {
                         return utils.formatDate(calEvent.start, options.timeFormat) + options.timeSeparator + utils.formatDate(calEvent.end, options.timeFormat);
@@ -514,7 +514,7 @@
 
             /*** Persistence provider ***/
             getLastEventId: function () {
-                return this.options.lastEventId
+                return this.options.lastEventId;
             },
 
             /**
@@ -561,7 +561,7 @@
                         $(this).remove();
 
                         // Stop searching if it's just a single event
-                        if (!_event.assignees.length > 1) {
+                        if (_event.assignees.length <= 1) {
                             return false;
                         }
                     }
@@ -1359,10 +1359,10 @@
                             var top = parseInt($newEvent.css('top'), 10);
                             var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $newEvent, top);
 
-
-                            var newCalEvent = {start: eventDuration.start, end: eventDuration.end, title: options.newEventText};
                             var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
                             var userId = showAsSeparatedUser ? $weekDay.data('wcUserId') : self._getUserIdFromIndex(0);
+                            var organization = options.currentUser.id === userId ? null : utils.chooseOrganization(options.currentUser.organizations, self._getUserFromId(userId).organizations);
+                            var newCalEvent = {title: options.newEventText, start: eventDuration.start, end: eventDuration.end, organization: organization};
 
                             newCalEvent = self._setEventUser(newCalEvent, userId);
 
@@ -2103,12 +2103,12 @@
                         var on = TimelyUi.compat.on;
                         var events = TimelyUi.compat.events;
                         if (isMobile) {
-                            on($(this.querySelector('.wc-time')), events['hold'], function (ui) {
+                            on($(this.querySelector('.wc-time')), events.hold, (function (ui) {
                                 return function (event) {
                                     var myEvent = jQuery.Event('dragstart');
                                     functionStart(myEvent, ui);
-                                }
-                            }(ui));
+                                };
+                            }(ui)));
                         }
                     },
 
@@ -2256,7 +2256,7 @@
                 var wcTime = $calEvent.find('.wc-time');
                 wcTime.html(this.options.eventHeader(calEvent, this.element) + suffix);
                 $calEvent.find('.wc-title').html(this.options.eventBody(calEvent, this.element));
-                if (calEvent.organization !== undefined && calEvent.organization != null) {
+                if (calEvent.organization !== undefined && calEvent.organization !== null) {
                     var bgClass = this._getBackgroundColorBySeed(calEvent.organization);
                     $calEvent.addClass(bgClass);
                 }
@@ -2273,7 +2273,7 @@
                 if (onlyPersistedItem) {
                     eventsToClear = this.element.find('.wc-cal-event').not('.wc-new-cal-event');
                 } else {
-                    eventsToClear = this.element.find('.wc-day-column-inner div')
+                    eventsToClear = this.element.find('.wc-day-column-inner div');
                 }
 
                 eventsToClear.remove();
@@ -2574,7 +2574,7 @@
                 if ($.isArray(userId)) {
                     calEvent.assignees = userId;
                 } else {
-                    calEvent.assignees = [userId]
+                    calEvent.assignees = [userId];
                 }
 
                 return calEvent;
