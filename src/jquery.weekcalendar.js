@@ -1397,7 +1397,14 @@
                         columnOffset = self.move.columnOffset,
                         topPosition = self.move.topPosition,
                         pageY = 0,
-                        touch;
+                        touch,
+                        _now = new Date();
+
+                    // Patch to avoid too many mouse or touch move events
+                    if (_now - self.move._date < 250) {
+                        return;
+                    }
+                    self.move_date = _now;
 
                     $newEvent.show();
                     $newEvent.addClass('ui-resizable-resizing');
@@ -1475,6 +1482,7 @@
                         self.move.columnOffset = columnOffset;
                         self.move.topPosition = topPosition;
                         self.move.$newEvent = $newEvent;
+                        self.move._date = new Date();
                         self.removeEventAddClass.$target = $target;
                         self.removeEventAddClass.$newEvent = $newEvent;
 
