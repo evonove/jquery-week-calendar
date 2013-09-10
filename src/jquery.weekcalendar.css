@@ -1,479 +1,488 @@
 .wc-toolbar {
-  padding: 1em;
+    padding: 1em;
 }
 
 .wc-toolbar .wc-nav {
-  float:left;
+    float: left;
 }
 
 .wc-toolbar .wc-display {
-  float: right;
+    float: right;
 }
 
 .wc-toolbar button {
-  margin-top: 0;
-  margin-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .wc-toolbar .wc-title {
-  text-align: center;
-  padding:0;
-  margin:0;
+    text-align: center;
+    padding: 0;
+    margin: 0;
 }
 
 .search-event {
-  width: 80px;
-  margin-right: 5px;
+    width: 80px;
+    margin-right: 5px;
 }
 
 .wc-today, .team-group {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .wc-container table {
-  border-collapse: collapse;
-  border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .wc-container table td {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .wc-header {
-  overflow: hidden;
+    overflow: hidden;
 }
 
-.wc-header table{
-  width: 100%;
-  table-layout:fixed;
+.wc-header table {
+    width: 100%;
+    table-layout: fixed;
 }
 
-.wc-header table th{
-  height: 22px;
+.wc-header table th {
+    height: 22px;
 }
 
 .wc-grid-timeslot-header,
 .wc-header .wc-time-column-header {
-  width: 45px !important;
+    width: 45px !important;
 }
 
 .wc-header .wc-scrollbar-shim {
-  width: 16px;
+    width: 16px;
 }
 
 .wc-header .wc-day-column-header {
-  text-align: center;
-  padding: 4px;
+    text-align: center;
+    padding: 4px;
 }
 
-.wc-header .wc-user-header{
-  text-align: center;
-  padding: 4px 0;
-  overflow: hidden;
+.wc-header .wc-user-header {
+    text-align: center;
+    padding: 4px 0;
+    overflow: hidden;
 }
 
 .controls div.multi {
-  margin-left: 0px;
+    margin-left: 0px;
 }
 
 .wc-scrollable-grid {
-  overflow: auto;
-  position: relative;
-  width: 100%;
-  height: 100%;
+    overflow: auto;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 table.wc-time-slots {
-  width: 100%;
-  table-layout: fixed;
-  cursor: default;
-  overflow:hidden;
+    width: 100%;
+    table-layout: fixed;
+    cursor: default;
+    overflow: hidden;
 }
 
 .wc-day-column {
-  overflow: visible;
-  vertical-align: top;
+    overflow: visible;
+    vertical-align: top;
 }
 
 .wc-day-column-header {
-  border-width: 0 0 1px 3px; 
-  border-style: solid;
-  border-color:transparent;
+    border-width: 0 0 1px 3px;
+    border-style: solid;
+    border-color: transparent;
 }
 
-.td-wrapper{
-  border: 0;
-  border-right-style: solid;
-  border-right-width: 1px; 
-  border-right-color: rgb(211, 211, 211);
-  
+.td-wrapper {
+    border: 0;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: rgb(211, 211, 211);
 }
 
 .wc-full-height-column {
-  border: 0;
-  border-right-width: 1px; 
-  border-right-style: dashed;
-  border-right-color: rgb(211, 211, 211);
-  
+    border: 0;
+    border-right-width: 1px;
+    border-right-style: dashed;
+    border-right-color: rgb(211, 211, 211);
 }
 
 .wc-day-column-inner {
-  width: 100%;
-  position:relative;
+    width: 100%;
+    position: relative;
 }
 
 .wc-no-height-wrapper {
-  position:relative;
-  overflow: visible;
-  height: 0px;
+    position: relative;
+    overflow: visible;
+    height: 0px;
 }
 
-.wc-oddeven-wrapper .wc-full-height-column{
-  /* Modern Browsers */ opacity: 0.4;
-  /* Netscape */ -moz-opacity: 0.4;
-  /* Safari 1 */ -khtml-opacity: 0.4;
+.wc-oddeven-wrapper .wc-full-height-column {
+    opacity: 0.4;
+    -moz-opacity: 0.4;
+    -khtml-opacity: 0.4;
 }
-.wc-freebusy-wrapper .wc-freebusy{
-  /* Modern Browsers */ opacity: 0.4;
-  /* Netscape */ -moz-opacity: 0.4;
-  /* Safari 1 */ -khtml-opacity: 0.4;
+
+.wc-freebusy-wrapper .wc-freebusy {
+    opacity: 0.4;
+    -moz-opacity: 0.4;
+    -khtml-opacity: 0.4;
 }
 
 .wc-time-slots {
-  position: absolute;
-  width: 100%;
-  margin-top: 2px;
+    position: absolute;
+    width: 100%;
+    margin-top: 2px;
 }
 
 .wc-column-odd,
 .wc-column-even.ui-state-hover {
-  background-image:none;
-  border:none;
+    background-image: none;
+    border: none;
 }
 
 .wc-day-column-header {
-  background-image:none;
+    background-image: none;
 }
 
 .wc-day-column-header {
-  border-width:0 3px; 
-  border-style: solid;
-}
-
-.wc-day-column-header { 
-  border-width:0;
+    border-width: 0 3px;
+    border-style: solid;
 }
 
 .wc-day-column-header {
-  background:transparent;
+    border-width: 0;
 }
 
 .wc-day-column-header {
-  background-image:none;
+    background: transparent;
 }
 
 .wc-day-column-header {
-  border-width:0;
+    background-image: none;
+}
+
+.wc-day-column-header {
+    border-width: 0;
 }
 
 .wc-header .wc-today.ui-state-active.wc-day-column-first {
-  border-left-width:3px;
+    border-left-width: 3px;
 }
 
 .wc-header .wc-today.ui-state-active.wc-day-column-last {
-  border-right-width:3px;
+    border-right-width: 3px;
 }
 
-.wc-full-height-column{
-  display:block;
+.wc-full-height-column {
+    display: block;
 }
 
 .wc-time-header-cell {
-  padding: 5px;
-  height: 80px;
+    padding: 5px;
+    height: 80px;
 }
 
 .wc-time-slot {
-  border-bottom: 1px dotted #ddd;
+    border-bottom: 1px dotted #ddd;
 }
 
 .wc-hour-header {
-  text-align: right;
+    text-align: right;
 }
 
 .wc-hour-header.ui-state-active,
-.wc-hour-header.ui-state-default{
-  border: 0;
+.wc-hour-header.ui-state-default {
+    border: 0;
 }
 
 .wc-hour-end, .wc-hour-header {
-  border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
 
 .wc-business-hours {
-  border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
 
 .wc-day-header-cell {
-  text-align: center;
-  vertical-align: middle;
-  padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
 }
 
 .wc-time-slot-header .wc-header-cell {
-  text-align: right;
-  padding-right: 10px;
+    text-align: right;
+    padding-right: 10px;
 }
 
 .wc-cal-event {
-  /* Modern Browsers */ opacity: 1.0;
-  /* Netscape */ -moz-opacity: 1.0;
-  /* Safari 1 */ -khtml-opacity: 1.0;
-  background-color: #1796b0;
-  position: absolute;
-  text-align: center;
-  overflow: hidden;
-  cursor: pointer;
-  color: #fff;
-  /*width: 100%;*/
-  width: 99%;
-  display: none;
+    opacity: 1.0;
+    -moz-opacity: 1.0;
+    -khtml-opacity: 1.0;
+    background-color: #1796b0;
+    position: absolute;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    color: #fff;
+    width: 99%;
+    display: none;
 }
 
 .wc-cal-event-delete {
-  float: right;
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
+    float: right;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
 }
 
 .wc-resizable {
-  font-size: 7px;
-  height: 15px;
-  bottom: 0px;
-  position: absolute;
-  right: 50%;
+    font-size: 7px;
+    height: 15px;
+    bottom: 0px;
+    position: absolute;
+    right: 50%;
 }
 
 .wc-cal-event .wc-time {
-  background-color: #1796b0;
-  color: #fff;
-  padding: 0;
-  font-weight: bold;
+    background-color: #1796b0;
+    color: #fff;
+    padding: 0;
+    font-weight: bold;
 }
 
-.wc-cal-event div.ui-corner-top{
+.wc-cal-event div.ui-corner-top {
     border: 1px solid #0080aa;
     background-color: #0d89aa;
 }
 
 .wc-container .ui-draggable .wc-time {
-  cursor: move;
+    cursor: move;
 }
 
 .wc-cal-event .wc-title {
-  position: relative;
+    position: relative;
 }
 
 .wc-container .ui-draggable-dragging {
-  z-index: 1000;
+    z-index: 1000;
 }
 
 .wc-hourline {
-  height: 0pt;
-  border-top: 2px solid #FF7F6E;
-  overflow: hidden;
-  position: absolute;
-  width: inherit;
+    height: 0pt;
+    border-top: 2px solid #FF7F6E;
+    overflow: hidden;
+    position: absolute;
+    width: inherit;
 }
 
 /* Prevent user selection */
 .wc-calendar {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 @media (min-width: 980px) {
-  .modal-event {
-    width: 650px;
-  }
+    .modal-event {
+        width: 650px;
+    }
 }
 
 input.input-title {
-  height: 40px;
-  font-size: 1.6em;
-  line-height: 40px;
-  margin-top: 8px;
+    height: 40px;
+    font-size: 1.6em;
+    line-height: 40px;
+    margin-top: 8px;
 }
 
 /* Bootstrap overrides */
 .modal-body {
-  position: static;
-  max-height: 450px;
+    position: static;
+    max-height: 450px;
 }
 
 .alert {
-  text-align: center;
+    text-align: center;
 }
 
-.wc-scrollbar-wrapper, .wc-calendar-body-wrapper{
-  overflow: hidden;
+.wc-scrollbar-wrapper, .wc-calendar-body-wrapper {
+    overflow: hidden;
 }
 
-.wc-scroller-height,  .wc-scroller-width{
-  /*Needed (like "css('postion', 'static')"" in scroller DOM element refreshing javascript) before initialization of IScroll to view the layout of the page. MAH*/
-  position: absolute;
-  z-index: 1;
-  background-color: white;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  /*background-color: black;*/
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-text-size-adjust: none;
-  -moz-text-size-adjust: none;
-  -ms-text-size-adjust: none;
-  -o-text-size-adjust: none;
-  text-size-adjust: none;
+.wc-scroller-height, .wc-scroller-width {
+    /*Needed (like "css('postion', 'static')"" in scroller DOM element refreshing javascript) before initialization of IScroll to view the layout of the page. MAH*/
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -o-text-size-adjust: none;
+    text-size-adjust: none;
 }
-.wc-scrollbar-wrapper{
-  height: 884px;
+
+.wc-scrollbar-wrapper {
+    height: 884px;
 
 }
+
 .wc-scroller-height {
-  height: 1924px;/*reset via JAVASCRIPT*/
-  width: 100%;
-  padding-bottom: 80px; /*TODO: workaround for 23th hour bug*/
-}
-.wc-calendar-body-wrapper{
-  width: 100%;
-}
-.wc-scroller-width{
-  width: 3835px;/*reset via JAVASCRIPT*/
-  height: 100%;
-}
-.wc-day-hours{
-  position: absolute; 
-  top: 5px; 
-  z-index:1000; 
-  width:45px; 
-  padding-left: 1px;
-  background-color: white;
+    height: 1924px;
+    width: 100%;
+    padding-bottom: 80px;
 }
 
-.wc-grid-timeslot-header .wc-hour-end, .wc-grid-timeslot-header .wc-hour-header{
-  color: white;
+.wc-calendar-body-wrapper {
+    width: 100%;
 }
 
-.wc-header{
-  height: 60px;
+.wc-scroller-width {
+    width: 3835px;
+    height: 100%;
 }
 
-.wc-calendar-header-wrapper{
-  overflow: hidden;
+.wc-day-hours {
+    position: absolute;
+    top: 5px;
+    z-index: 1000;
+    width: 45px;
+    padding-left: 1px;
+    background-color: white;
 }
-.wc-calendar-header-wrapper *, .wc-day-hours *{
-  cursor: move;
+
+.wc-grid-timeslot-header .wc-hour-end, .wc-grid-timeslot-header .wc-hour-header {
+    color: white;
 }
-.wc-go-left, .wc-go-right{
-  height: 60px;
-  width: 45px;
-  top: -58px;
-  z-index: 1;
-  position: relative;
-  display: inline-block;
-  background-color: white;
-  overflow: visible;
+
+.wc-header {
+    height: 60px;
 }
-.wc-go-left button, .wc-go-right button{
-  height: 56px;
-  width: 100%;
-  position: relative;
+
+.wc-calendar-header-wrapper {
+    overflow: hidden;
+}
+
+.wc-calendar-header-wrapper *, .wc-day-hours * {
+    cursor: move;
+}
+
+.wc-go-left, .wc-go-right {
+    height: 60px;
+    width: 45px;
+    top: -58px;
+    z-index: 1;
+    position: relative;
+    display: inline-block;
+    background-color: white;
+    overflow: visible;
+}
+
+.wc-go-left button, .wc-go-right button {
+    height: 56px;
+    width: 100%;
+    position: relative;
 
 }
+
 .wc-go-left {
-  float: left;
-  margin-left: 0 !important;
-  padding-left: 5px;
+    float: left;
+    margin-left: 0 !important;
+    padding-left: 5px;
 }
+
 .wc-go-right {
-  float: right;
-  margin-right: 0 !important;
-  padding-right: 5px;
+    float: right;
+    margin-right: 0 !important;
+    padding-right: 5px;
 }
+
 .calendar-header {
-  padding: 1px 0;
-  border-bottom: 1px solid black;
-  border-top: 1px solid black;
-  background-color: white;
-  margin-bottom: 1px; /* TODO: workaround for a glitch on a black line head border on Nexus 7*/
-}
-.calendar-header table{
-  background-color: white;
+    padding: 1px 0;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    background-color: white;
+    margin-bottom: 1px;
 }
 
-.wc-bg-1{
-    background-color:  #33CCCC;
+.calendar-header table {
+    background-color: white;
 }
 
-.wc-bg-2{
-    background-color:  #999966;
+.wc-bg-1 {
+    background-color: #33CCCC;
 }
 
-.wc-bg-3{
-    background-color:  #FF9966;
+.wc-bg-2 {
+    background-color: #999966;
 }
 
-.wc-bg-4{
-    background-color:  #993366;
+.wc-bg-3 {
+    background-color: #FF9966;
 }
 
-.wc-bg-5{
-    background-color:  #FFCC66;
+.wc-bg-4 {
+    background-color: #993366;
 }
 
-.wc-bg-6{
-    background-color:  #CCCCFF;
+.wc-bg-5 {
+    background-color: #FFCC66;
 }
 
-.wc-bg-1 div.wc-time{
-    background-color:  #0033CC;
-    border:1px solid #003399;
+.wc-bg-6 {
+    background-color: #CCCCFF;
 }
 
-.wc-bg-2 div.wc-time{
-    background-color:  #996633;
-    border:1px solid #663300;
+.wc-bg-1 div.wc-time {
+    background-color: #0033CC;
+    border: 1px solid #003399;
 }
 
-.wc-bg-3 div.wc-time{
-    background-color:  #FF6600;
-    border:1px solid #800000;
+.wc-bg-2 div.wc-time {
+    background-color: #996633;
+    border: 1px solid #663300;
 }
 
-.wc-bg-4 div.wc-time{
-    background-color:  #660033;
-    border:1px solid #800000;
+.wc-bg-3 div.wc-time {
+    background-color: #FF6600;
+    border: 1px solid #800000;
 }
 
-.wc-bg-5 div.wc-time{
-    background-color:  #CC6600;
-    border:1px solid #993300;
+.wc-bg-4 div.wc-time {
+    background-color: #660033;
+    border: 1px solid #800000;
 }
 
-.wc-bg-6 div.wc-time{
-    background-color:  #FFCCFF;
-    border:1px solid #3399FF;
+.wc-bg-5 div.wc-time {
+    background-color: #CC6600;
+    border: 1px solid #993300;
+}
+
+.wc-bg-6 div.wc-time {
+    background-color: #FFCCFF;
+    border: 1px solid #3399FF;
 }
 
 .my-modal-footer {
@@ -486,50 +495,54 @@ input.input-title {
     -moz-box-shadow: inset 0 1px 0 white;
     box-shadow: inset 0 1px 0 white;
 }
-/*TODO: needed to remove a scrollbar, here maybe lay the bug of 23th hour*/
+
 body {
     overflow: hidden;
 }
-/*-----------------------------------------------------------------------------------------*/
 
 .wc-dropdown-user > li > a:hover, .wc-dropdown-user > li > a:focus, .wc-dropdown-user .dropdown-submenu:hover > a, .wc-dropdown-user .dropdown-submenu:focus > a {
-  background-color: white;
-  background-image: none;
-  filter: none;
-  color: black;
+    background-color: white;
+    background-image: none;
+    filter: none;
+    color: black;
 }
 
 input[readonly] {
-  background-color: white;
+    background-color: white;
 }
 
 span.visible-desktop {
-  display: inline !important;
+    display: inline !important;
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
-  span.hidden-desktop {
-    display: inline !important;
-  }
-  span.visible-desktop {
-    display: none !important;
-  }
-  span.visible-tablet {
-    display: inline !important;
-  }
+    span.hidden-desktop {
+        display: inline !important;
+    }
+
+    span.visible-desktop {
+        display: none !important;
+    }
+
+    span.visible-tablet {
+        display: inline !important;
+    }
 }
 
 @media (max-width: 767px) {
-  span.hidden-desktop {
-    display: inline !important;
-  }
-  span.visible-desktop {
-    display: none !important;
-  }
-  span.visible-phone {
-    display: inline !important;
-  }
-  div.wc-body{
+    span.hidden-desktop {
+        display: inline !important;
+    }
+
+    span.visible-desktop {
+        display: none !important;
+    }
+
+    span.visible-phone {
+        display: inline !important;
+    }
+
+    div.wc-body {
         margin-left: -20px;
         margin-right: -20px;
     }
