@@ -891,23 +891,21 @@
                     if (options.buttons) {
 
                         // Rendering header with calendar controls
-                        calendarNavHtml += '<div id="first-row" class="row-fluid calendar-buttons">';
-                        calendarNavHtml += '<div class="wc-nav span12">';
-                        calendarNavHtml += '<div class="span3 pull-left">';
-                        calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> ' + options.buttonText.today + '</button>';
-                        calendarNavHtml += '<div class="btn-group">';
+                        calendarNavHtml += '<div id="first-row" class="calendar-buttons">';
+                        calendarNavHtml += '<div class="wc-nav">';
+                        calendarNavHtml += '<div class="pull-left">';
+                        calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> <span class="hidden-phone">' + options.buttonText.today + '</span></button>';
+                        calendarNavHtml += '<div class="btn-group hidden-phone">';
                         calendarNavHtml += '<button class="btn btn-inverse wc-prev"><i class="icon-chevron-left"></i></button>';
                         calendarNavHtml += '<button class="btn btn-inverse wc-next"><i class="icon-chevron-right"></i></button>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
-                        calendarNavHtml += '<div class="span6">';
+                        calendarNavHtml += '<div class="alert-parent">';
                         calendarNavHtml += '<div class="js-alert alert alert-error fade"></div>';
                         calendarNavHtml += '</div>';
-                        calendarNavHtml += '<div class="span3">';
                         calendarNavHtml += '<form class="navbar-search pull-right">';
                         calendarNavHtml += '<div class="js-right-menu pull-right" />';
                         calendarNavHtml += '</form>';
-                        calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         $(calendarNavHtml).appendTo($calendarContainer);
@@ -943,7 +941,7 @@
 
                             userNavHtml += '<div class="js-user btn-group pull-right user-group">';
                             userNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
-                            userNavHtml += '<i class="icon-group"></i> Users ';
+                            userNavHtml += '<i class="icon-group"></i> <span class="hidden-phone">Users</span> ';
                             userNavHtml += '<span class="caret"></span>';
                             userNavHtml += '</a>';
                             userNavHtml += '<ul id="dropdown-user" class="dropdown-menu">';
@@ -968,7 +966,7 @@
 
                             orgNavHtml += '<div class="btn-group pull-right team-group">';
                             orgNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
-                            orgNavHtml += '<i class="icon-building"></i> Teams ';
+                            orgNavHtml += '<i class="icon-building"></i> <span class="hidden-phone">Teams</span> ';
                             orgNavHtml += '<span class="caret"></span>';
                             orgNavHtml += '</a>';
                             orgNavHtml += '<ul id="dropdown-organization" class="dropdown-menu">';
