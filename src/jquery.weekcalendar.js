@@ -366,8 +366,13 @@
                         setTimeout(TimelyUi.utils._resetIScrolls, 500);
                     })
                     .register('screen and (min-width: 768px)', function () {
+                        var compat = TimelyUi.compat;
                         self.lastRefresh = new Date().getTime();
-                        TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
+                        if (compat.isTablet) {
+                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 3;;
+                        } else {
+                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
+                        }
                         self.setReadOnly(false);
                         setTimeout(TimelyUi.utils._resetIScrolls, 500);
                     });
