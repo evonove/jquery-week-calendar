@@ -186,7 +186,7 @@
                     }
                 },
                 eventBody: function (calEvent, calendar) {
-                    return calEvent.title;
+                    return calEvent.assignees.length === 1 ? calEvent.title : '<i class="icon-group"></i> ' + calEvent.title;
                 },
 
                 /*** Users configuration ***/
