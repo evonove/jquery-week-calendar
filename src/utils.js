@@ -465,7 +465,11 @@
         });
         TimelyUi.vodooMagic();
         $('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function (index, el) {
-            $(this).get(0).clientWidth = rightSingleWidth;
+            try {
+                $(this).get(0).clientWidth = rightSingleWidth;
+            } catch(ex) {
+                $(this).get(0).setAttribute('clientWidth', rightSingleWidth);
+            }
             $(this).width(rightSingleWidth);
         });
     };
