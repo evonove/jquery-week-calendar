@@ -887,7 +887,9 @@
              * Render the nav buttons on top of the calendar
              */
             _renderCalendarButtons: function ($calendarContainer) {
-                var self = this, options = this.options,
+                var self = this,
+                    options = this.options,
+                    isMobile = TimelyUi.compat.isMobile,
                     calendarNavHtml = '',
                     $rightMenuContainer,
                     _searchForm,
@@ -923,13 +925,17 @@
                         _searchBar = $('<input class="js-search search-query search-event" type="text" placeholder="Search..." />');
                         _searchBar.appendTo($rightMenuContainer);
 
-                        // Add search animation
-                        _searchBar.focus(function () {
-                            $(this).animate({ width: "150px"}, 'slow');
-                        }).blur(function () {
-                                $(this).animate({ width: "80px"}, 'slow');
-                                $(this).val('');
-                            });
+                        // Add search animation if not mobile
+                        if (!isMobile) {
+                            _searchBar
+                                .focus(function () {
+                                    $(this).animate({ width: "150px"}, 'slow');
+                                })
+                                .blur(function () {
+                                    $(this).animate({ width: "80px"}, 'slow');
+                                    $(this).val('');
+                                });
+                        }
 
                         // Fire onSearch function on submit
                         _searchForm = $('.navbar-search');
