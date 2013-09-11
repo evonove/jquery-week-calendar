@@ -903,10 +903,10 @@
                         calendarNavHtml += '<div id="first-row" class="calendar-buttons">';
                         calendarNavHtml += '<div class="wc-nav">';
                         calendarNavHtml += '<div class="pull-left">';
-                        calendarNavHtml += '<button class="btn btn-inverse wc-today"><i class="icon-home"></i> <span class="hidden-phone">' + options.buttonText.today + '</span></button>';
-                        calendarNavHtml += '<div class="btn-group hidden-phone">';
-                        calendarNavHtml += '<button class="btn btn-inverse wc-prev"><i class="icon-chevron-left"></i></button>';
-                        calendarNavHtml += '<button class="btn btn-inverse wc-next"><i class="icon-chevron-right"></i></button>';
+                        calendarNavHtml += '<div class="btn-group">';
+                        calendarNavHtml += '<button class="btn btn-primary wc-prev"><i class="icon-double-angle-left"></i></button>';
+                        calendarNavHtml += '<button class="btn btn-primary wc-today"><i class="icon-calendar"></i> <span class="hidden-phone">' + options.buttonText.today + '</span></button>';
+                        calendarNavHtml += '<button class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></button>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="alert-parent">';
@@ -922,11 +922,12 @@
                         $rightMenuContainer = $calendarContainer.find('.js-right-menu');
 
                         // Add search widget
-                        _searchBar = $('<input class="js-search search-query search-event" type="text" placeholder="Search..." />');
-                        _searchBar.appendTo($rightMenuContainer);
+                        if (isMobile) {
+                            _searchBar = $('<button class="btn btn-inverse"><i class="icon-search"></i></button>');
+                        } else {
+                            _searchBar = $('<input class="js-search search-query search-event" type="text" placeholder="Search..." />');
 
-                        // Add search animation if not mobile
-                        if (!isMobile) {
+                            // Add search animation
                             _searchBar
                                 .focus(function () {
                                     $(this).animate({ width: "150px"}, 'slow');
@@ -936,6 +937,7 @@
                                     $(this).val('');
                                 });
                         }
+                        _searchBar.appendTo($rightMenuContainer);
 
                         // Fire onSearch function on submit
                         _searchForm = $('.navbar-search');
@@ -1077,7 +1079,7 @@
                 calendarHeaderHtml += '<div class=\"wc-header span12\">';
 
                 // Days row
-                calendarHeaderHtml += '<table ><thead><tr><th class=\"wc-time-column-header\"></th>';
+                calendarHeaderHtml += '<table ><thead><tr>';
                 for (var i = 1; i <= options.daysToShow; i++) {
                     calendarHeaderHtml += '<th class=\"wc-day-column-header wc-day-' + i + '\"' + colspan + '></th>';
                 }
@@ -1112,8 +1114,8 @@
                     calendarHeaderHtml += '</tr>';
                 }
                 calendarHeaderHtml += '</thead></table>';
-                calendarHeaderHtml += '<div class=\"wc-go-left\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-left"></i></button></div>';
-                calendarHeaderHtml += '<div class=\"wc-go-right\"><button type="button" class="btn btn-large btn-inverse"><i class="icon-chevron-right"></i></button></div>';
+                calendarHeaderHtml += '<div class=\"wc-go-left\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-left"></i></button></div>';
+                calendarHeaderHtml += '<div class=\"wc-go-right\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-right"></i></button></div>';
                 calendarHeaderHtml += '</div></div>';
 
                 $(calendarHeaderHtml).appendTo($calendarContainer);

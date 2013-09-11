@@ -7,11 +7,10 @@ TimelyUi.iScrollEls = TimelyUi.iScrollEls || {};
 TimelyUi.initIScrolls  = function(justHeader_) {
     var justHeader = (justHeader_ === undefined) ? false : justHeader_;
     var iScroll2 = new IScroll('#calendar-header-wrapper', {
-        scrollX: true,
+        scrollX: false,
         scrollY: false,
         momentum: true,
-        bounceEasing: 'elastic',
-        bounceTime: 1200
+        bounce: false
     });
 
     TimelyUi.iScrollEls[2] = iScroll2;
@@ -22,18 +21,16 @@ TimelyUi.initIScrolls  = function(justHeader_) {
             scrollY: true,
             momentum: true,
             mouseWheel: true,
-            bounceEasing: 'elastic',
-            bounceTime: 1200
+            bounce: false
         });
 
         TimelyUi.iScrollEls[0] = iScroll0;
 
         var iScroll1 = new IScroll('#calendar-body-wrapper', {
-            scrollX: true,
+            scrollX: false,
             scrollY: false,
             momentum: true,
-            bounceEasing: 'elastic',
-            bounceTime: 1200
+            bounce: false
         });
 
         TimelyUi.iScrollEls[1] = iScroll1;
