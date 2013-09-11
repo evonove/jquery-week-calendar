@@ -1406,7 +1406,7 @@
                         _now = new Date();
 
                     // Patch to avoid too many mouse or touch move events
-                    if (_now - self.move._date < 250) {
+                    if (_now - self.move._date < 100) {
                         return;
                     }
                     self.move_date = _now;
