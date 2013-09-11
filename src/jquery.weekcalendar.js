@@ -1930,7 +1930,7 @@
 
                     // If not found, creates a new group
                     curGroups.push([$curEvent]);
-                    if (lastEndTime.getTime() < $curEvent.data('calEvent').end.getTime()) {
+                    if (typeof $curEvent.data('calEvent') !== 'undefined' && (lastEndTime.getTime() < $curEvent.data('calEvent').end.getTime())) {
                         lastEndTime = $curEvent.data('calEvent').end;
                     }
                 });
