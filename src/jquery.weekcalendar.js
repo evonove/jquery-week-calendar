@@ -102,13 +102,14 @@
                 // If true, a drag or resize events is currently happening
                 eventAction: false,
                 eventDrag: function (calEvent, element) {
-                    var calendar = TimelyUi.calendar;
+                    var options = TimelyUi.calendar.options;
 
-                    calendar.eventAction = true;
+                    options.eventAction = true;
                     utils.disableIScrolls();
                 },
                 eventDrop: function (newCalEvent, oldCalEvent, element) {
                     var calendar = TimelyUi.calendar,
+                        options = calendar.options,
                         maxColumnNumber = TimelyUi.maxColumnNumber;
 
                     utils.enableIScroll(0);
@@ -119,20 +120,21 @@
 
                     // Persist new changes
                     var result = calendar.onSave(newCalEvent, oldCalEvent);
-                    calendar.eventAction = false;
+                    options.eventAction = false;
 
                     return result;
                 },
                 eventResizeStart: function () {
-                    var calendar = TimelyUi.calendar;
+                    var options = TimelyUi.calendar.options;
 
-                    calendar.eventAction = true;
+                    options.eventAction = true;
                 },
                 eventResizeEnd: function (calEvent, element) {
-                    var calendar = TimelyUi.calendar;
+                    var calendar = TimelyUi.calendar,
+                        options = calendar.options;
 
                     calendar.onSave(calEvent);
-                    calendar.eventAction = false;
+                    options.eventAction = false;
                 },
                 eventNew: function (calEvent, element, calendar, upEvent) {
                     TimelyUi.calendar.showPopoverForm(calEvent, element);
