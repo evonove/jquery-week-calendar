@@ -159,6 +159,9 @@
                 eventMouseout: function (calEvent, $event) {
                 },
                 eventMousedownNewEvent: function (calEvent, $event) {
+                    var options = TimelyUi.calendar.options;
+
+                    options.eventAction = true;
                     utils.disableIScrolls();
                 },
                 eventMouseupNewEvent: function (calEvent, $event) {
@@ -169,6 +172,7 @@
                         utils.enableIScroll(1);
                         utils.enableIScroll(2);
                     }
+                    options.eventAction = false;
                 },
                 eventDelete: function (calEvent, element, calendar, clickEvent) {
                 },
@@ -1912,6 +1916,9 @@
                     curGroups = [],
                     $curEvent,
                     sortedEvents = $events.sort(function (a, b) {
+                        if (typeof $(a).data('calEvent') === 'undefined') {
+                            return
+                        }
                         return $(a).data('calEvent').start.getTime() - $(b).data('calEvent').start.getTime();
                     });
 

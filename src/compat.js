@@ -21,7 +21,7 @@
 		cancel : 'touchcancel',
 		up : 'touchend',
 		over: 'drag',
-		out: 'realese',
+		out: 'release',
 		drag: 'drag',
 		hold: 'hold'
 	};
