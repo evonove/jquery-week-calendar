@@ -34,21 +34,21 @@
 			return;
 		}
 		TimelyUi.compat.events = TimelyUi.compat.mouse;
-
-
 	};
 
 	TimelyUi.compat.on = function(el, name, callback){
 		var isMobile = TimelyUi.compat.isMobile,
-			events = TimelyUi.compat.events;
-		var $el = el.nodeType ? $(el) : el.jquery ? el : $(document.querySelector(el));
+		    $el = el.nodeType ? $(el) : el.jquery ? el : $(document.querySelector(el));
+
 		if (isMobile && name.length === 0){
 			return;
 		}
+
 		if (isMobile && name.indexOf('touch') === -1){
 			$el = $el.hammer();
 			return $el.on(name,callback);
 		}
+
 		$el.each(function(index, element) {
 			element.addEventListener(name, callback, false);
 		});
@@ -70,6 +70,7 @@
 	};
 
 })(TimelyUi);
+
 window.mobilecheck = function() {
 	'use strict';
 	var a = navigator.userAgent||navigator.vendor||window.opera;
@@ -78,6 +79,7 @@ window.mobilecheck = function() {
 
     return isMobileCheck1 || isMobileCheck2;
 };
+
 window.tabletcheck = function() {
 	'use strict';
 	var a = navigator.userAgent||navigator.vendor||window.opera;
@@ -85,25 +87,6 @@ window.tabletcheck = function() {
 
     return isTabletCheck;
 };
-window.removeUrlBar = function () {
-    /*if (navigator.userAgent.match(/Android/i)) {
 
-        window.scrollTo(0,0); // reset in case prev not scrolled
-        var nPageH = $(document).height();
-        var nViewH = window.outerHeight;
-        if (nViewH > nPageH) {
-            nViewH = nViewH / window.devicePixelRatio;
-            $('BODY').css('height',nViewH + 'px');
-        }
-        window.scrollTo(0,100);
-    }*/
-    /*var target = $('#day-hours');//#first-row
-    target.trigger('mousedown');
-    var e = $.Event('mousemove');
-    e.pageY = parseInt(100);
-    target.trigger(e);
-    target.trigger('mouseup');*/
-    //$('document').simulate('drag', {dx: 0, dy: 10});
-};
 TimelyUi.compat.initTypeEvents();
 

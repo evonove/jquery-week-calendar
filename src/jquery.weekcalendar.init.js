@@ -100,5 +100,4 @@ TimelyUi.init = function(id, conf) {
     TimelyUi.calendar.lastWidth = window.innerWidth;
 
     TimelyUi.utils._resetIScrolls(true, false);
-    setTimeout(window.removeUrlBar());
 };
