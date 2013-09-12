@@ -59,9 +59,7 @@
 
         if (redim) {
             $.each(TimelyUi.iScrollEls, function (key, val) {
-                if (typeof val === 'IScroll') {
-                    val.destroy();
-                }
+                val.destroy();
             });
             TimelyUi.iScrollEls = {};
             TimelyUi.utils._resetHelperValues();
