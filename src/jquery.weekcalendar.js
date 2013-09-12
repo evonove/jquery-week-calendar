@@ -71,6 +71,7 @@
                 allowEventCreation: true,
                 hourLine: true,
                 modalTemplate: '/template/modal.html',
+                modalSearchTemplate: '/template/modal-search.html',
                 popoverTemplate: '/template/popover.html',
                 deletable: function (calEvent, element) {
                     return true;
@@ -333,6 +334,9 @@
                 self._setupEventDelegation();
                 self._addClassesWidget();
                 self._loadModalForm();
+                if (TimelyUi.compat.isMobile) {
+                    self._loadModalSearch();
+                }
                 self._loadPopoverForm();
                 self._renderCalendar();
                 self._loadCalEvents();
@@ -863,6 +867,32 @@
             },
 
             /*
+             * Append modal search to calendar if it's a mobile device
+             */
+            _loadModalSearch: function () {
+                var calendarContainer = this.element,
+                    _html = "";
+
+                _html += '<div id="modal-search" class="modal modal-event hide fade">';
+                _html += '<div class="modal-header">';
+                _html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+                _html += '<h5>Search:</h5>';
+                _html += '</div>';
+
+                _html += '<div class="modal-body">';
+                _html += '<form class="navbar-search span12">';
+                _html += '<input class="js-search search-query span12" type="text" placeholder="Search..." />';
+                _html += '</form>';
+                _html += '</div>';
+
+                _html += '<div class="modal-footer">';
+                _html += '<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>';
+                _html += '</div>';
+
+                calendarContainer.append(_html);
+            },
+
+            /*
              * Append popover form to calendar div loading dynamically all contents
              */
             _loadPopoverForm: function () {
@@ -922,7 +952,6 @@
 
                 if (options.showHeader) {
                     if (options.buttons) {
-
                         // Rendering header with calendar controls
                         calendarNavHtml += '<div id="first-row" class="calendar-buttons">';
                         calendarNavHtml += '<div class="wc-nav">';
@@ -933,22 +962,31 @@
                         calendarNavHtml += '<button class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></button>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
-                        calendarNavHtml += '<form class="navbar-search pull-right">';
-                        calendarNavHtml += '<div class="js-right-menu pull-right" />';
-                        calendarNavHtml += '</form>';
+                        calendarNavHtml += '<div class="js-right-menu pull-right">';
+                        calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         $(calendarNavHtml).appendTo($calendarContainer);
 
                         $rightMenuContainer = $calendarContainer.find('.js-right-menu');
 
-                        // Add search widget
                         if (isMobile) {
-                            _searchBar = $('<button class="btn btn-inverse"><i class="icon-search"></i></button>');
+                            // Modal button
+                            var _searchButton = $('<button class="btn btn-inverse"><i class="icon-search"></i></button>');
+                            _searchBar = $('.js-search');
+                            _searchButton.on('click', function(e) {
+                                $('#modal-search').modal({show: true, backdrop: false});
+                            });
+                            _searchButton.appendTo($rightMenuContainer);
                         } else {
-                            _searchBar = $('<input class="js-search search-query search-event" type="text" placeholder="Search..." />');
+                            // Create search widget
+                            calendarNavHtml = '<form class="navbar-search">';
+                            calendarNavHtml += '<input class="js-search search-query search-event" type="text" placeholder="Search..." />';
+                            calendarNavHtml += '</form>';
+                            $(calendarNavHtml).appendTo($rightMenuContainer);
 
                             // Add search animation
+                            _searchBar = $('.js-search');
                             _searchBar
                                 .focus(function () {
                                     $(this).animate({ width: "150px"}, 'slow');
@@ -958,7 +996,6 @@
                                     $(this).val('');
                                 });
                         }
-                        _searchBar.appendTo($rightMenuContainer);
 
                         // Fire onSearch function on submit
                         _searchForm = $('.navbar-search');
@@ -967,6 +1004,9 @@
 
                             e.preventDefault();
                             if (text) {
+                                if (!isMobile) {
+                                    $('#modal-search').modal('hide');
+                                }
                                 self.onSearch(_searchBar.val());
                             }
                         });
