@@ -141,13 +141,19 @@
                     options.eventAction = false;
                 },
                 eventNew: function (calEvent, element, calendar, upEvent) {
-                    TimelyUi.calendar.showPopoverForm(calEvent, element);
-                    var iscroll = TimelyUi.iScrollEls[1];
-                    utils.lastPos = TimelyUi.utils._posByEl(iscroll, element[0]);
+                    var isMobile = TimelyUi.compat.isMobile;
 
-                    var iscroll0 = TimelyUi.iScrollEls[0];
-                    var pos = utils._posByEl(iscroll0, element[0]);
-                    iscroll0.scrollTo(pos.left, pos.top + 150, 0); //in old widget pos.left+40
+                    if (!isMobile) {
+                        TimelyUi.calendar.showPopoverForm(calEvent, element);
+                        var iscroll = TimelyUi.iScrollEls[1];
+                        utils.lastPos = TimelyUi.utils._posByEl(iscroll, element[0]);
+
+                        var iscroll0 = TimelyUi.iScrollEls[0];
+                        var pos = utils._posByEl(iscroll0, element[0]);
+                        iscroll0.scrollTo(pos.left, pos.top + 150, 0);
+                    } else {
+                        TimelyUi.calendar.showModalForm(calEvent);
+                    }
                     return true;
                 },
                 eventClick: function (calEvent, element, calendar, clickEvent) {
