@@ -390,7 +390,7 @@
                         var compat = TimelyUi.compat;
                         self.lastRefresh = new Date().getTime();
                         if (compat.isTablet) {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 3;;
+                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 3;
                         } else {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
                         }
@@ -1974,7 +1974,7 @@
                     $curEvent,
                     sortedEvents = $events.sort(function (a, b) {
                         if (typeof $(a).data('calEvent') === 'undefined') {
-                            return
+                            return;
                         }
                         return $(a).data('calEvent').start.getTime() - $(b).data('calEvent').start.getTime();
                     });

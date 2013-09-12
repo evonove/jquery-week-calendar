@@ -25,17 +25,18 @@
      * If for supporting the old browser, I wrote my one.
      */
     TimelyUi.utils._filter = function (array, attrName, attrValue, likeQuery) {
+        var endArray;
+
         if (!likeQuery) {
             likeQuery = false;
         }
         try {
-            var endArray = array.filter(function (el) {
-                var returnValue = (likeQuery) ? el[attrName] === attrValue : el[attrName] !== attrValue;
-                return returnValue;
+            endArray = array.filter(function (el) {
+                return (likeQuery) ? el[attrName] === attrValue : el[attrName] !== attrValue;
             });
             return endArray;
         } catch (err) {
-            var endArray = array;
+            endArray = array;
             $.each(array, function (index, obj) {
                 if (likeQuery) {
                     if (obj[attrName] !== attrValue) {
