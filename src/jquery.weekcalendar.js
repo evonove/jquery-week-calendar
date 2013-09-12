@@ -331,6 +331,7 @@
                 self._renderCalendar();
                 self._loadCalEvents();
                 self._resizeCalendar();
+                self._loadAlertMessage();
 
                 if (this.options.resizeEvent) {
                     $(window).unbind(this.options.resizeEvent);
@@ -866,6 +867,15 @@
             },
 
             /*
+             * Append alert popup
+             */
+            _loadAlertMessage: function () {
+                var calendarContainer = this.element;
+
+                calendarContainer.append('<div class="js-alert alert alert-error fade"></div>');
+            },
+
+            /*
              * Render the main calendar layout
              */
             _renderCalendar: function () {
@@ -916,9 +926,6 @@
                         calendarNavHtml += '<button class="btn btn-primary wc-today"><i class="icon-calendar"></i> <span class="hidden-phone">' + options.buttonText.today + '</span></button>';
                         calendarNavHtml += '<button class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></button>';
                         calendarNavHtml += '</div>';
-                        calendarNavHtml += '</div>';
-                        calendarNavHtml += '<div class="alert-parent">';
-                        calendarNavHtml += '<div class="js-alert alert alert-error fade"></div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<form class="navbar-search pull-right">';
                         calendarNavHtml += '<div class="js-right-menu pull-right" />';
@@ -1056,14 +1063,18 @@
              */
             showErrorMessage: function (text) {
                 var _self = this,
-                    _alert = $('.js-alert');
+                    _calendarContainer = _self.element,
+                    _alert = $('.js-alert').clone();
 
                 _alert.text(text);
-                _alert.addClass('in');
+                _alert.addClass('alert-top');
+                _calendarContainer.append(_alert);
 
+                // Show alert
+                _alert.addClass('in');
                 // Remove after some delay
                 setTimeout(function () {
-                    _alert.removeClass('in');
+                    _alert.alert('close');
                 }, _self.options.alertFadeOutInterval);
             },
 
