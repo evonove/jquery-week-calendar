@@ -12,6 +12,7 @@
     "moment": "2.0.0",
     "iscroll": "5.0.1",
     "jqueryui-touch-punch": "*",
+    "selectize": "0.7.5",
     "hammerjs": "1.0.5"
   },
   "devDependencies": {},
