@@ -59,20 +59,24 @@
 
         if (redim) {
             $.each(TimelyUi.iScrollEls, function (key, val) {
-                val.destroy();
+                if (typeof val === 'IScroll') {
+                    val.destroy();
+                }
             });
             TimelyUi.iScrollEls = {};
             TimelyUi.utils._resetHelperValues();
             TimelyUi.initIScrolls();
         }
         if (!redim && justHeader) {
-            TimelyUi.iScrollEls[2].destroy();
-            TimelyUi.iScrollEls[2] = {};
-            TimelyUi.initIScrolls(justHeader);
-            var iscroll = TimelyUi.iScrollEls[2];
-            if (TimelyUi.utils.lastPos !== undefined) {
-                var pos = TimelyUi.utils.lastPos;
-                iscroll.scrollTo((pos.left + 45), 0, 0);
+            if (typeof TimelyUi.iScrollEls[2] === 'IScroll') {
+                TimelyUi.iScrollEls[2].destroy();
+                TimelyUi.iScrollEls[2] = {};
+                TimelyUi.initIScrolls(justHeader);
+                var iscroll = TimelyUi.iScrollEls[2];
+                if (TimelyUi.utils.lastPos !== undefined) {
+                    var pos = TimelyUi.utils.lastPos;
+                    iscroll.scrollTo((pos.left + 45), 0, 0);
+                }
             }
         }
         TimelyUi.boundIScrolls();
