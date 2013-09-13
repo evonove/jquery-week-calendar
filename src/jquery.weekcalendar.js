@@ -1015,7 +1015,7 @@
                         if (options.users && options.users.length > 1) {
                             var userNavHtml = '';
 
-                            userNavHtml += '<div class="js-user btn-group pull-right user-group">';
+                            userNavHtml += '<div class="js-user btn-group btn-margin pull-right">';
                             userNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
                             userNavHtml += '<i class="icon-group"></i> <span class="hidden-phone">Users</span> ';
                             userNavHtml += '<span class="caret"></span>';
@@ -1040,7 +1040,7 @@
                         if (options.currentUserOrganizations && options.currentUserOrganizations.length > 1) {
                             var orgNavHtml = '';
 
-                            orgNavHtml += '<div class="btn-group pull-right team-group">';
+                            orgNavHtml += '<div class="btn-group btn-margin pull-right">';
                             orgNavHtml += '<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">';
                             orgNavHtml += '<i class="icon-building"></i> <span class="hidden-phone">Teams</span> ';
                             orgNavHtml += '<span class="caret"></span>';
