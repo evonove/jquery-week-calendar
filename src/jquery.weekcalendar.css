@@ -493,10 +493,6 @@ input.input-title {
     box-shadow: inset 0 1px 0 white;
 }
 
-body {
-    overflow: hidden;
-}
-
 .wc-dropdown-user > li > a:hover, .wc-dropdown-user > li > a:focus, .wc-dropdown-user .dropdown-submenu:hover > a, .wc-dropdown-user .dropdown-submenu:focus > a {
     background-color: white;
     background-image: none;
