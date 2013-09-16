@@ -529,7 +529,7 @@
                     modal = TimelyUi.modal,
                     isMobile = TimelyUi.compat.isMobile;
 
-                modal.init($('#ajax-modal'));
+                modal.instance = $('#ajax-modal').modal({ show: false }).data('modal');
                 modal.instance.options.calEvent = calEvent;
                 modal.instance.$element.modal('show');
 
@@ -860,10 +860,15 @@
              * Append modal form to calendar div loading dynamically all contents
              */
             _loadModalForm: function () {
-                var calendarContainer = this.element;
+                var calendarContainer = this.element,
+                    modal = TimelyUi.modal;
 
                 calendarContainer.append('<div id="ajax-modal" class="modal modal-event hide fade"/>');
-                $('#ajax-modal').load(this.options.modalTemplate);
+
+                var modalNode = $('#ajax-modal');
+                modalNode.load(this.options.modalTemplate, function() {
+                    modal.init(modalNode);
+                });
             },
 
             /*
