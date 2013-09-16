@@ -352,10 +352,24 @@
 
                 // http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
                 window.onresize = function (e) {
-                    if (e.originalEvent === undefined && e.timeStamp - TimelyUi.calendar.lastRefresh > 500) {
-                        var withRedim = TimelyUi.calendar.lastWidth !== window.innerWidth;
+                    var now = new Date();
+                    var timeStampNow = now.getTime();
+                    if (e.originalEvent === undefined && timeStampNow - TimelyUi.calendar.lastRefresh > 100) {
+                        var heightResize = TimelyUi.calendar.lastHeight !== window.innerHeight,
+                            resize = TimelyUi.calendar.lastWidth !== window.innerWidth,
+                            modal = TimelyUi.modal;
+                        TimelyUi.calendar.lastRefresh = timeStampNow;
                         TimelyUi.calendar.lastWidth = window.innerWidth;
-                        TimelyUi.utils._resetIScrolls(withRedim, true);
+                        TimelyUi.calendar.lastHeight = window.innerHeight;
+                        if (heightResize && modal.instance !== undefined && modal.instance.isShown){
+                            var desktop = !(TimelyUi.compat.isMobile || TimelyUi.compat.isTablet);
+                            if (!desktop) {
+                                self._scaleModal(modal.instance.$element);
+                                var ele = document.activeElement;
+                                $( ele ).blur().focus();
+                            }
+                        }
+                        TimelyUi.utils._resetIScrolls(true, true);
                         return false;
                     }
                 };
@@ -369,7 +383,6 @@
                         self.lastRefresh = new Date().getTime();
                         TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
                         self.setReadOnly(false);
-                        setTimeout(TimelyUi.utils._resetIScrolls, 500);
                     })
                     .register('screen and (max-width: 767px) and (min-width: 481px)', function () {
                         var compat = TimelyUi.compat;
@@ -384,18 +397,17 @@
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
                             self.setReadOnly(false);
                         }
-                        setTimeout(TimelyUi.utils._resetIScrolls, 500);
                     })
                     .register('screen and (min-width: 768px)', function () {
                         var compat = TimelyUi.compat;
                         self.lastRefresh = new Date().getTime();
                         if (compat.isTablet) {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 3;
+                            self.setReadOnly(true);
                         } else {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
+                            self.setReadOnly(false);
                         }
-                        self.setReadOnly(false);
-                        setTimeout(TimelyUi.utils._resetIScrolls, 500);
                     });
             },
 
