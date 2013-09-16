@@ -44,6 +44,7 @@
 
                 if(_value === null) {
                     self.usersSelect.lock();
+                    self.usersSelect.addItem(_.first(_users).id);
                 } else {
                     self.usersSelect.unlock();
                 }
