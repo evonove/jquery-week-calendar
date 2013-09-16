@@ -350,12 +350,15 @@ input.input-title {
 
 .wc-scrollbar-wrapper {
     height: 884px;
+    padding-top: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 .wc-scroller-height {
     height: 1924px;
     width: 100%;
-    padding-bottom: 80px;
 }
 
 .wc-calendar-body-wrapper {

@@ -29,6 +29,8 @@
 	TimelyUi.compat.initTypeEvents = function () {
 		TimelyUi.compat.isMobile = window.mobilecheck();
         TimelyUi.compat.isTablet = window.tabletcheck();
+        TimelyUi.compat.isSafari = window.safaricheck();
+
 		if (TimelyUi.compat.isMobile){
 			TimelyUi.compat.events = TimelyUi.compat.touch;
 			return;
@@ -88,5 +90,11 @@ window.tabletcheck = function() {
     return isTabletCheck;
 };
 
+window.safaricheck = function() {
+	'use strict';
+	var isSafariCheck =  /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor) && !/CriOS/.test(navigator.userAgent);
+
+    return isSafariCheck;
+};
 TimelyUi.compat.initTypeEvents();
 

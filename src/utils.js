@@ -444,6 +444,7 @@
     TimelyUi.utils._redimColumnsWidth = function () {
         var options = TimelyUi.calendar.options,
             width = $('#calendar-body-wrapper').width() - 45,
+            isSafari = TimelyUi.compat.isSafari,
             maxColumnNumber = TimelyUi.maxColumnNumber;
 
         TimelyUi.columnsToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;
@@ -462,6 +463,16 @@
         TimelyUi.dispelVodooMagic();
         $('.wc-body-scroller-placeholder, .wc-head-scroller-placeholder, .wc-time-slots').width(rightWidth);
         $('.wc-timeslot-placeholder').attr('colspan', dividend);
+        var $wcScrollerHeight = $('.wc-scroller-height');
+        var height = $('header').height();
+        var scrollHeight = $wcScrollerHeight.height();
+
+        $('#scrollbar-wrapper').height($(window).height() - height);
+        if (isSafari) {
+            $wcScrollerHeight.height(scrollHeight + height + 85);
+        } else {
+            $wcScrollerHeight.height(scrollHeight + height);
+        }
         $.each(TimelyUi.iScrollEls, function (key, val) {
             val.refresh();
         });
