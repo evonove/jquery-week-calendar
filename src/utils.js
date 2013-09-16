@@ -462,7 +462,6 @@
         TimelyUi.dispelVodooMagic();
         $('.wc-body-scroller-placeholder, .wc-head-scroller-placeholder, .wc-time-slots').width(rightWidth);
         $('.wc-timeslot-placeholder').attr('colspan', dividend);
-        $('#scrollbar-wrapper').height($(window).height() - $('#first-row').height() - $('.calendar-header').height());
         $.each(TimelyUi.iScrollEls, function (key, val) {
             val.refresh();
         });

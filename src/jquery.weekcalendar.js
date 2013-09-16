@@ -962,15 +962,19 @@
                     options = this.options,
                     isMobile = TimelyUi.compat.isMobile,
                     calendarNavHtml = '',
+                    headerHtml = '',
                     $rightMenuContainer,
                     _searchForm,
                     _searchBar,
                     $container;
 
                 if (options.showHeader) {
+                    headerHtml += '<header></header>';
+                    var $headerHtml = $(headerHtml)
+                    $headerHtml.appendTo($calendarContainer);
                     if (options.buttons) {
                         // Rendering header with calendar controls
-                        calendarNavHtml += '<div id="first-row" class="calendar-buttons">';
+
                         calendarNavHtml += '<div class="wc-nav">';
                         calendarNavHtml += '<div class="pull-left">';
                         calendarNavHtml += '<div class="btn-group">';
@@ -982,8 +986,7 @@
                         calendarNavHtml += '<div class="js-right-menu pull-right">';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
-                        calendarNavHtml += '</div>';
-                        $(calendarNavHtml).appendTo($calendarContainer);
+                        $(calendarNavHtml).appendTo($headerHtml);
 
                         $rightMenuContainer = $calendarContainer.find('.js-right-menu');
 
@@ -1150,6 +1153,7 @@
                 var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
                 var calendarHeaderHtml;
                 var rowspan = '', colspan = '';
+                var $headerHtml = $('header');
 
                 if (showAsSeparatedUser) {
                     rowspan = ' rowspan=\"2\"';
@@ -1157,8 +1161,7 @@
                 }
 
                 // Header containers
-                calendarHeaderHtml = '<div class=\"row-fluid calendar-header\">';
-                calendarHeaderHtml += '<div class=\"wc-header span12\">';
+                calendarHeaderHtml = '<div class=\"wc-header calendar-header\">';
 
                 // Days row
                 calendarHeaderHtml += '<table ><thead><tr>';
@@ -1198,9 +1201,10 @@
                 calendarHeaderHtml += '</thead></table>';
                 calendarHeaderHtml += '<div class=\"wc-go-left\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-left"></i></button></div>';
                 calendarHeaderHtml += '<div class=\"wc-go-right\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-right"></i></button></div>';
-                calendarHeaderHtml += '</div></div>';
+                calendarHeaderHtml += '</div>';
 
-                $(calendarHeaderHtml).appendTo($calendarContainer);
+
+                $(calendarHeaderHtml).appendTo($headerHtml);
             },
 
             /*
