@@ -11,70 +11,68 @@
 
 	$.extend(self, {
         init: function(selector) {
-            if (typeof self.instance === 'undefined') {
-                /* Create and register modal object */
-                self.instance = selector.modal({ show: false }).data('modal');
+            /* Create and register modal object */
+            self.instance = selector.modal({ show: false }).data('modal');
 
-                /* Assign all selector to local variables */
-                self.organizationSelect = $('.modal-body #organization');
-                self.ownerSelect = $('.modal-body #owner');
-                self.usersSelect = $('.modal-body #users').selectize({
-                    plugins: ['remove_button'],
-                    valueField: 'id',
-                    labelField: 'username',
-                    searchField: 'username'
-                })[0].selectize;
-                self.title = $('.modal-header #title');
-                self.content = $('.modal-body #description');
+            /* Assign all selector to local variables */
+            self.organizationSelect = $('.modal-body #organization');
+            self.ownerSelect = $('.modal-body #owner');
+            self.usersSelect = $('.modal-body #users').selectize({
+                plugins: ['remove_button'],
+                valueField: 'id',
+                labelField: 'username',
+                searchField: 'username'
+            })[0].selectize;
+            self.title = $('.modal-header #title');
+            self.content = $('.modal-body #description');
 
-                if(!isMobile){
-                    /* Set all date and time widgets */
-                    $('.modal-body .datepicker').pickadate({ format: 'dd/mm/yyyy' });
-                    $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
-                }
-
-                self.organizationSelect.on('change', function(e) {
-                    var _value = $(this).val() === "null" ? null : parseInt($(this).val(), 10),
-                        _users = self._getUsers(_value),
-                        _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id; }),
-                        _usersSelectedOrganization = _.map(_users, function(item) { return item.id; }),
-                        _oldUsers = _.difference(_usersOldSelectedOrganization, _usersSelectedOrganization);
-
-                    _.each(_oldUsers, function(userId) { self.usersSelect.removeOption(userId); });
-                    self.usersSelect.addOption(_users);
-
-                    if(_value === null) {
-                        self.usersSelect.lock();
-                    } else {
-                        self.usersSelect.unlock();
-                    }
-                });
-
-                $('.js-modal-footer #modalSave').click(function(e) {
-                    self.save();
-                    self.instance.hide();
-                    e.preventDefault();
-                });
-
-                $('.js-modal-footer #modalDelete').click(function(e) {
-                    self.delete();
-                    self.instance.hide();
-                    e.preventDefault();
-                });
-
-                /* Twitter bootstrap events handler */
-                self.instance.$element.on('show', function() {
-                    self.load();
-                });
-
-                self.instance.$element.on('shown', function() {
-                    self.title.focus();
-                });
-
-                self.instance.$element.on('hide', function() {
-                    self.clear();
-                });
+            if(!isMobile){
+                /* Set all date and time widgets */
+                $('.modal-body .datepicker').pickadate({ format: 'dd/mm/yyyy' });
+                $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
             }
+
+            self.organizationSelect.on('change', function(e) {
+                var _value = $(this).val() === "null" ? null : parseInt($(this).val(), 10),
+                    _users = self._getUsers(_value),
+                    _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id; }),
+                    _usersSelectedOrganization = _.map(_users, function(item) { return item.id; }),
+                    _oldUsers = _.difference(_usersOldSelectedOrganization, _usersSelectedOrganization);
+
+                _.each(_oldUsers, function(userId) { self.usersSelect.removeOption(userId); });
+                self.usersSelect.addOption(_users);
+
+                if(_value === null) {
+                    self.usersSelect.lock();
+                } else {
+                    self.usersSelect.unlock();
+                }
+            });
+
+            $('.js-modal-footer #modalSave').click(function(e) {
+                self.save();
+                self.instance.hide();
+                e.preventDefault();
+            });
+
+            $('.js-modal-footer #modalDelete').click(function(e) {
+                self.delete();
+                self.instance.hide();
+                e.preventDefault();
+            });
+
+            /* Twitter bootstrap events handler */
+            self.instance.$element.on('show', function() {
+                self.load();
+            });
+
+            self.instance.$element.on('shown', function() {
+                self.title.focus();
+            });
+
+            self.instance.$element.on('hide', function() {
+                self.clear();
+            });
         },
 
         _getValidOrganizations: function(selectedUserId) {
