@@ -463,15 +463,14 @@
         TimelyUi.dispelVodooMagic();
         $('.wc-body-scroller-placeholder, .wc-head-scroller-placeholder, .wc-time-slots').width(rightWidth);
         $('.wc-timeslot-placeholder').attr('colspan', dividend);
-        var $wcScrollerHeight = $('.wc-scroller-height');
-        var height = $('header').height();
-        var scrollHeight = $wcScrollerHeight.height();
 
+        var height = $('header').height();
         $('#scrollbar-wrapper').height($(window).height() - height);
-        if (isSafari) {
-            $wcScrollerHeight.height(scrollHeight + height + 85);
-        } else {
+        if (!TimelyUi.calendar.initedHeight) {
+            var $wcScrollerHeight = $('.wc-scroller-height');
+            var scrollHeight = $wcScrollerHeight.height();
             $wcScrollerHeight.height(scrollHeight + height);
+            TimelyUi.calendar.initedHeight = true;
         }
         $.each(TimelyUi.iScrollEls, function (key, val) {
             val.refresh();

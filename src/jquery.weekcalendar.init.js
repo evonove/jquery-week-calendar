@@ -1,5 +1,4 @@
 'use strict';
-
 var TimelyUi = TimelyUi || {};
 TimelyUi.calendar = TimelyUi.calendar || {};
 TimelyUi.iScrollEls = TimelyUi.iScrollEls || {};
@@ -93,8 +92,11 @@ TimelyUi.init = function(id, conf) {
     TimelyUi.calendar = $('#' + id).weekCalendar(conf).data('ui-weekCalendar');
     TimelyUi.calendar.conf = conf;
     TimelyUi.calendar.id = id;
+
     TimelyUi.calendar.lastRefresh = new Date().getTime();
     TimelyUi.calendar.lastWidth = window.innerWidth;
+    TimelyUi.calendar.lastHeight = window.innerHeight;
+    TimelyUi.calendar.initedHeight = false;
 
     TimelyUi.utils._resetIScrolls(true, false);
 };
