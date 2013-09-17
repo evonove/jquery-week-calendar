@@ -350,27 +350,15 @@
                     });
                 }
 
-                // http://stackoverflow.com/questions/13244667/window-resize-event-fires-twice-in-jquery
                 window.onresize = function (e) {
-                    var now = new Date();
-                    var timeStampNow = now.getTime();
-                    if (e.originalEvent === undefined && timeStampNow - TimelyUi.calendar.lastRefresh > 100) {
-                        var heightResize = TimelyUi.calendar.lastHeight !== window.innerHeight,
-                            resize = TimelyUi.calendar.lastWidth !== window.innerWidth,
-                            modal = TimelyUi.modal;
-                        TimelyUi.calendar.lastRefresh = timeStampNow;
-                        TimelyUi.calendar.lastWidth = window.innerWidth;
-                        TimelyUi.calendar.lastHeight = window.innerHeight;
-                        if (heightResize && modal.instance !== undefined && modal.instance.isShown){
-                            var desktop = !(TimelyUi.compat.isMobile || TimelyUi.compat.isTablet);
-                            if (!desktop) {
-                                self._scaleModal(modal.instance.$element);
-                                var ele = document.activeElement;
-                                $( ele ).blur().focus();
-                            }
-                        }
-                        TimelyUi.utils._resetIScrolls(true, true);
-                        return false;
+                    var _modal = TimelyUi.modal,
+                        _desktop = !(TimelyUi.compat.isMobile || TimelyUi.compat.isTablet);
+
+                    TimelyUi.utils._resetIScrolls(true, true);
+                    if (!_desktop) {
+                        self._scaleModal(_modal.instance.$element);
+                        var ele = document.activeElement;
+                        $(ele).blur().focus();
                     }
                 };
 
