@@ -179,6 +179,10 @@ table.wc-time-slots {
     border-right-width: 3px;
 }
 
+.wc-today {
+    margin-left: 5px;
+}
+
 .wc-full-height-column {
     display: block;
 }
@@ -372,6 +376,10 @@ input.input-title {
 .datepicker, .timepicker {
     -webkit-appearance: none;
     -moz-appearance: none;
+}
+
+.picker__holder {
+    min-width: 494px;
 }
 
 .navbar-search {

@@ -929,18 +929,23 @@
                     $container;
 
                 if (options.showHeader) {
+                    // Append date selector used to change current date
+                    $calendarContainer.append('<input type="date" class="js-date-selected datepicker" />');
+
+                    // Rendering header with calendar controls
                     headerHtml += '<header></header>';
                     var $headerHtml = $(headerHtml)
                     $headerHtml.appendTo($calendarContainer);
                     if (options.buttons) {
-                        // Rendering header with calendar controls
-
                         calendarNavHtml += '<div class="wc-nav">';
                         calendarNavHtml += '<div class="pull-left">';
                         calendarNavHtml += '<div class="btn-group">';
                         calendarNavHtml += '<button class="btn btn-primary wc-prev"><i class="icon-double-angle-left"></i></button>';
-                        calendarNavHtml += '<button class="btn btn-primary wc-today"><i class="icon-calendar"></i> <span class="hidden-phone">' + options.buttonText.today + '</span></button>';
+                        calendarNavHtml += '<button class="js-date-selector btn btn-primary"><i class="icon-calendar"></i></button>';
                         calendarNavHtml += '<button class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></button>';
+                        calendarNavHtml += '</div>';
+                        calendarNavHtml += '<div class="btn-group">';
+                        calendarNavHtml += '<button class="btn btn-primary wc-today hidden-desktop">' + options.buttonText.today + '</button>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="js-right-menu pull-right">';
@@ -951,6 +956,15 @@
                         $rightMenuContainer = $calendarContainer.find('.js-right-menu');
 
                         if (isMobile) {
+                            // Add date chooser controller
+                            $('.js-date-selector').on('click', function() {
+                                $('.js-date-selected').focus();
+                            });
+
+                            $('.js-date-selected').on('change', function(event) {
+                                self.gotoDate(new Date($(this).val()));
+                            });
+
                             // Modal button
                             var _searchButton = $('<button class="btn btn-inverse"><i class="icon-search"></i></button>');
                             _searchBar = $('.js-search');
@@ -959,6 +973,14 @@
                             });
                             _searchButton.appendTo($rightMenuContainer);
                         } else {
+                            // Add date chooser controller
+                            var $picker = $('.js-date-selector').pickadate(),
+                                picker = $picker.pickadate('picker');
+
+                            picker.on('set', function() {
+                                self.gotoDate(new Date(picker.get('select').obj));
+                            });
+
                             // Create search widget
                             calendarNavHtml = '<form class="navbar-search">';
                             calendarNavHtml += '<input class="js-search search-query search-event" type="text" placeholder="Search..." />';
@@ -1658,9 +1680,9 @@
                 var paddingStart = businessHours.limitDisplay ? businessHours.start : 0;
                 var nbHours = d.getHours() - paddingStart + d.getMinutes() / 60;
                 var positionTop = nbHours * options.timeslotHeight * options.timeslotsPerHour;
-                var lineWidth = $('.wc-scrollable-grid .wc-today', this.element).width() + 3;
+                var lineWidth = $('.wc-scrollable-grid', this.element).width() + 3;
 
-                $('.wc-scrollable-grid .wc-today', this.element).append(
+                $('.wc-scrollable-grid', this.element).append(
                     $('<div>', {
                         'class': 'wc-hourline',
                         style: 'top: ' + positionTop + 'px; width: ' + lineWidth + 'px'
@@ -1676,7 +1698,7 @@
                     options = self.options,
                     currentDay = self._cloneDate(self.element.data('startDate')),
                     showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
-                    todayClass = 'state-active wc-today';
+                    todayClass = 'state-active';
 
                 self.element.find('.wc-header th.wc-day-column-header').each(function (i, val) {
                     $(this).html(self._getHeaderDate(currentDay));
