@@ -921,6 +921,7 @@
                 var self = this,
                     options = this.options,
                     isMobile = TimelyUi.compat.isMobile,
+                    isSafari = TimelyUi.compat.isSafari,
                     calendarNavHtml = '',
                     headerHtml = '',
                     $rightMenuContainer,
@@ -957,11 +958,16 @@
 
                         if (isMobile) {
                             // Add date chooser controller
+                            var $selected = $('.js-date-selected');
                             $('.js-date-selector').on('click', function() {
-                                $('.js-date-selected').focus();
+                                if (isSafari) {
+                                    $selected.focus();
+                                } else {
+                                    $selected.click();
+                                }
                             });
 
-                            $('.js-date-selected').on('change', function(event) {
+                            $selected.on('change', function(event) {
                                 self.gotoDate(new Date($(this).val()));
                             });
 
