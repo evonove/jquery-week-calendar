@@ -371,7 +371,7 @@
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
                             self.setReadOnly(false);
                         } else if (compat.isMobile) {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
+                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 4;
                             self.setReadOnly(true);
                         } else {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
@@ -383,11 +383,10 @@
                         self.lastRefresh = new Date().getTime();
                         if (compat.isTablet) {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 3;
-                            self.setReadOnly(true);
                         } else {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
-                            self.setReadOnly(false);
                         }
+                        self.setReadOnly(false);
                     });
             },
 
