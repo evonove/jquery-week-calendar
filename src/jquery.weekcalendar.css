@@ -368,6 +368,12 @@ input.input-title {
     z-index: 1040;
 }
 
+/* Override HTML5 native controls (date and time) */
+.datepicker, .timepicker {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
 .navbar-search {
     margin-top: 0;
 }
