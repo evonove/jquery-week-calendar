@@ -20,7 +20,7 @@ TimelyUi.initIScrolls  = function(justHeader_) {
             scrollY: true,
             momentum: true,
             mouseWheel: true,
-            bounce: false
+            bounce: true
         });
 
         TimelyUi.iScrollEls[0] = iScroll0;
