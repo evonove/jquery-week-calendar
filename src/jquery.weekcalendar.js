@@ -250,10 +250,11 @@
                  * @param {Object} user the user to retrieve the name from.
                  * @param {number} index the user index from user list.
                  * @param {jQuery} calendar the calendar object.
-                 * @return {String} the user name.
+                 * @return {String} the label which is not more length than selected characters.
                  */
                 getUserName: function (user, index, calendar) {
-                    return user.username;
+                    var userLabel = user.last_name ? "{0} {1}.".format(user.first_name, user.last_name[0]) : user.username;
+                    return userLabel.trunc(15);
                 },
                 /**
                  * Callback used to read organization name from a organization object.
