@@ -289,12 +289,6 @@ table.wc-time-slots {
     user-select: none;
 }
 
-@media (min-width: 980px) {
-    .modal-event {
-        width: 650px;
-    }
-}
-
 input.input-title {
     height: 40px;
     font-size: 1.6em;
@@ -303,10 +297,67 @@ input.input-title {
 }
 
 /* Bootstrap overrides */
-.modal-body {
-    position: static;
-    max-height: 450px;
+
+/* Bootstrap modal */
+.modal {
+	outline: none;
+	position: absolute;
+	margin-top: 0;
+	top: 50%;
+	overflow: visible;
 }
+
+.modal-body {
+	max-height: none;
+	overflow: visible;
+}
+
+.modal-overflow .modal-body {
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 979px) {
+	.modal,
+	.modal.container,
+	.modal.modal-overflow 	{
+		top: 1%;
+		right: 1%;
+		left: 1%;
+		bottom: auto;
+		width: auto !important;
+		height: auto !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	.modal.fade.in,
+	.modal.container.fade.in,
+	.modal.modal-overflow.fade.in {
+		top: 1%;
+		bottom: auto;
+	}
+
+	.modal-body,
+	.modal-overflow .modal-body {
+		position: static;
+		margin: 0;
+		height: auto !important;
+		max-height: none !important;
+		overflow: visible !important;
+	}
+
+	.modal-footer,
+	.modal-overflow .modal-footer {
+		position: static;
+	}
+}
+
+.modal-buttons {
+    text-align: right;
+}
+
+/* End bootstrap modal */
 
 .alert-top {
     position: absolute;
@@ -483,17 +534,6 @@ input.input-title {
 .wc-bg-6 div.wc-time {
     background-color: #FFCCFF;
     border: 1px solid #3399FF;
-}
-
-.my-modal-footer {
-    margin-bottom: 0;
-    text-align: right;
-    -webkit-border-radius: 0 0 6px 6px;
-    -moz-border-radius: 0 0 6px 6px;
-    border-radius: 0 0 6px 6px;
-    -webkit-box-shadow: inset 0 1px 0 white;
-    -moz-box-shadow: inset 0 1px 0 white;
-    box-shadow: inset 0 1px 0 white;
 }
 
 .wc-dropdown-user > li > a:hover, .wc-dropdown-user > li > a:focus, .wc-dropdown-user .dropdown-submenu:hover > a, .wc-dropdown-user .dropdown-submenu:focus > a {

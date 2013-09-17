@@ -351,15 +351,7 @@
                 }
 
                 window.onresize = function (e) {
-                    var _modal = TimelyUi.modal,
-                        _desktop = !(TimelyUi.compat.isMobile || TimelyUi.compat.isTablet);
-
                     TimelyUi.utils._resetIScrolls(true, true);
-                    if (!_desktop) {
-                        self._scaleModal(_modal.instance.$element);
-                        var ele = document.activeElement;
-                        $(ele).blur().focus();
-                    }
                 };
 
 
@@ -508,34 +500,14 @@
             },
 
             /*
-             * Scale bootstrap modal form
-             * http://stackoverflow.com/questions/14009178/correct-way-to-increase-bootstrap-modals-height
-             */
-            _scaleModal: function ($element) {
-                var size = { width: $(window).width(), height: $(window).height() },
-                    offset = 20,
-                    offsetBody = 113; //TODO: make a better choice
-
-                $element.css('height', size.height - offset);
-                $('.modal-body').css('height', size.height - (offset + offsetBody + 50));
-                $element.css('top', 0);
-            },
-
-            /*
              * Show modal form to create/edit event details
              */
             showModalForm: function (calEvent) {
-                var self = this,
-                    modal = TimelyUi.modal,
-                    isMobile = TimelyUi.compat.isMobile;
+                var modal = TimelyUi.modal;
 
                 modal.instance = $('#ajax-modal').modal({ show: false }).data('modal');
                 modal.instance.options.calEvent = calEvent;
                 modal.instance.$element.modal('show');
-
-                if (isMobile) {
-                    self._scaleModal(modal.instance.$element);
-                }
             },
 
             /*** Persistence provider ***/

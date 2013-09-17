@@ -50,13 +50,13 @@
                 }
             });
 
-            $('.js-modal-footer #modalSave').click(function(e) {
+            $('.js-modal-save').click(function(e) {
                 self.save();
                 self.instance.hide();
                 e.preventDefault();
             });
 
-            $('.js-modal-footer #modalDelete').click(function(e) {
+            $('.js-modal-delete').click(function(e) {
                 self.delete();
                 self.instance.hide();
                 e.preventDefault();
