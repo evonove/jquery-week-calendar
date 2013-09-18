@@ -1,6 +1,6 @@
 {
   "name": "jquery-week-calendar",
-  "version": "0.3.0",
+  "version": "1.0.0-beta1",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
