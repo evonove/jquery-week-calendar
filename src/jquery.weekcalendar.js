@@ -924,6 +924,7 @@
                     isSafari = TimelyUi.compat.isSafari,
                     calendarNavHtml = '',
                     headerHtml = '',
+                    settingsHtml = '',
                     $rightMenuContainer,
                     _searchForm,
                     _searchBar,
@@ -955,6 +956,12 @@
                         $(calendarNavHtml).appendTo($headerHtml);
 
                         $rightMenuContainer = $calendarContainer.find('.js-right-menu');
+
+                        // Settings menu
+                        settingsHtml += '<div class="btn-group btn-margin pull-right">';
+                        settingsHtml += '<a href="/settings/" class="btn btn-inverse visible-desktop"><i class="icon-cogs"></i> Settings</a>';
+                        settingsHtml += '</div>';
+                        $(settingsHtml).appendTo($rightMenuContainer);
 
                         if (isMobile) {
                             // Add date chooser controller
