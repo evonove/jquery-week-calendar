@@ -283,7 +283,7 @@ table.wc-time-slots {
     overflow: hidden;
     position: absolute;
     width: inherit;
-    z-index: 1030;
+    z-index: 1000;
 }
 
 /* Prevent user selection */
