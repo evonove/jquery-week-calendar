@@ -130,16 +130,11 @@
                     return result;
                 },
                 eventResizeStart: function () {
-                    var options = TimelyUi.calendar.options;
-
-                    options.eventAction = true;
+                    TimelyUi.calendar.options.eventAction = true;
                 },
                 eventResizeEnd: function (calEvent, element) {
-                    var calendar = TimelyUi.calendar,
-                        options = calendar.options;
-
-                    calendar.onSave(calEvent);
-                    options.eventAction = false;
+                    TimelyUi.calendar.onSave(calEvent);
+                    TimelyUi.calendar.options.eventAction = false;
                 },
                 eventNew: function (calEvent, element, calendar, upEvent) {
                     var isMobile = TimelyUi.compat.isMobile;
@@ -349,9 +344,9 @@
                 self._resizeCalendar();
                 self._loadAlertMessage();
 
-                if (this.options.resizeEvent) {
-                    $(window).unbind(this.options.resizeEvent);
-                    $(window).bind(this.options.resizeEvent, function () {
+                if (self.options.resizeEvent) {
+                    $(window).unbind(self.options.resizeEvent);
+                    $(window).bind(self.options.resizeEvent, function () {
                         self._resizeCalendar();
                     });
                 }
@@ -2346,10 +2341,6 @@
                         self._refreshEventDetails(newCalEvent, $calEvent);
                         self._positionEvent($weekDay, $calEvent);
                         self._adjustOverlappingEvents($weekDay);
-                        $calEvent.data('preventClick', true);
-                        setTimeout(function () {
-                            $calEvent.removeData('preventClick');
-                        }, 500);
                     }
                 });
 
