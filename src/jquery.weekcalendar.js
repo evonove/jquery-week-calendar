@@ -2402,10 +2402,10 @@
                     var $target = this.element.find('.wc-grid-timeslot-header .wc-hour-header:eq(' + slot + ')');
                     var targetOffset = ($target.offset().top < 1920) ? $target.offset().top : 1920;
                     var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
-                    if (scroll < 0) {
-                        scroll = 0;
-                    }
-                    iscroll.scrollTo(0, -scroll, 0);
+
+                    // Avoid too much scrolling
+                    var _scrollY = -scroll < iscroll.maxScrollY ? iscroll.maxScrollY : -scroll;
+                    iscroll.scrollTo(0, _scrollY, 0);
                 }
             },
 
