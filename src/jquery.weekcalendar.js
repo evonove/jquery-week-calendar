@@ -352,7 +352,9 @@
                 }
 
                 window.onresize = function (e) {
-                    TimelyUi.utils._resetIScrolls(true, true);
+                    if (typeof e.originalEvent === 'undefined') {
+                        TimelyUi.utils._resetIScrolls(true, true);
+                    }
                 };
 
 
