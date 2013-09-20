@@ -140,17 +140,9 @@
                     var isMobile = TimelyUi.compat.isMobile;
 
                     if (!isMobile) {
-                        var _iScroll = TimelyUi.iScrollEls[0],
-                            _currentScroll = utils._posByEl(_iScroll, element[0]).top,
-                            _popoverPosition = _currentScroll <= -265 ? 'top' : 'bottom';
-
+                        // Show popover
+                        var _popoverPosition = $(element).offset().top < 247 ? 'bottom' : 'top';
                         TimelyUi.calendar.showPopoverForm(calEvent, element, _popoverPosition);
-                        var _popoverOffset = $('.popover').offset().top;
-
-                        // Show popover and move iScroll if popover goes behind header
-                        if (_popoverOffset < 90) {
-                            _iScroll.scrollBy(0, 90 - _popoverOffset, 0);
-                        }
                     } else {
                         // Show modal in mobile
                         TimelyUi.calendar.showModalForm(calEvent);
