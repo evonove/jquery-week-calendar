@@ -301,6 +301,10 @@ input.input-title {
     margin-top: 8px;
 }
 
+.form-popover {
+    display: inline-block;
+}
+
 /* Bootstrap overrides */
 
 /* Bootstrap modal */

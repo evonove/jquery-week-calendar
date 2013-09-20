@@ -11,18 +11,15 @@
 		html: true,
 		placement: 'top',
 		title: 'Create new event',
-		content: function() {
-			return $('#popover-form').html();
-		}
+		content: ''
 	};
 
 	$.extend(self, {
-		title: [],
 		attachTo: function(element) {
 			// Only one instance should be activated at the same time
-			element.popover(this.options);
+			element.popover(self.options);
 			self.instance = element.popover('show').data('popover');
-			self.title = $('.popover #title');
+            self.title = $('.js-popover-title');
 			self.title.focus();
 			self.initListeners();
 		},
@@ -51,30 +48,26 @@
 
             calendar.onSave(self.options.calEvent);
             self.hide();
-			return this;
+			return self;
 		},
 		edit: function() {
 			var calendar = TimelyUi.calendar;
 			
 			calendar.showModalForm(self.options.calEvent);
-			return this;
+			return self;
 		},
 		initListeners: function() {
 			/* Attach listener to popover buttons */
-			$('.popover #popoverSave').on(events.down,function() {
+			$('.js-popover-save').on(events.down, function() {
 				self.save();
 			});
 
-			$('.popover #popoverCancel').on(events.down, function() {
+			$('.js-popover-cancel').on(events.down, function() {
 				self.clear();
 			});
 
-			$('.popover #popoverDetails').on(events.down,function() {
+			$('.js-popover-details').on(events.down, function() {
 				self.edit().hide();
-			});
-
-			$('.popover #title').on(events.down,function() {
-				self.title.focus();
 			});
 		}
 	});

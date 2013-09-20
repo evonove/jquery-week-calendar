@@ -145,7 +145,15 @@
                     var isMobile = TimelyUi.compat.isMobile;
 
                     if (!isMobile) {
+                        // Show popover only if is a desktop
                         TimelyUi.calendar.showPopoverForm(calEvent, element);
+
+                        // Save on submit
+                        $('.js-form-popover').on('submit', function(e) {
+                            e.preventDefault();
+                            TimelyUi.popover.save();
+                        });
+
                         var iscroll = TimelyUi.iScrollEls[1];
                         utils.lastPos = TimelyUi.utils._posByEl(iscroll, element[0]);
 
@@ -873,10 +881,11 @@
              * Append popover form to calendar div loading dynamically all contents
              */
             _loadPopoverForm: function () {
-                var calendarContainer = this.element;
+                var popover = TimelyUi.popover;
 
-                calendarContainer.append('<div id="popover-form" class="hide"/>');
-                $('#popover-form').load(this.options.popoverTemplate);
+                $.get(this.options.popoverTemplate, function(template) {
+                    popover.options.content = template;
+                });
             },
 
             /*
