@@ -23,19 +23,6 @@
 			self.title.focus();
 			self.initListeners();
 		},
-		clear: function() {
-			// Destroy enabled popover and cancel event creation
-            TimelyUi.calendar.removeLastUnsavedEvent();
-            self.hide();
-			return self;
-		},
-		hide: function() {
-			// Destroy visible popover without event delete
-			self.instance.destroy();
-			delete self.instance;
-			delete self.options.calEvent;
-			return self;
-		},
 		save: function() {
 			var calendar = TimelyUi.calendar;
 
@@ -56,6 +43,16 @@
 			calendar.showModalForm(self.options.calEvent);
 			return self;
 		},
+		close: function() {
+			// Remove visible popover and delete instance
+            $('.popover').remove();
+			delete self.instance;
+			delete self.options.calEvent;
+
+            TimelyUi.calendar.removeLastUnsavedEvent();
+
+			return self;
+		},
 		initListeners: function() {
 			/* Attach listener to popover buttons */
 			$('.js-popover-save').on(events.down, function() {
@@ -63,11 +60,11 @@
 			});
 
 			$('.js-popover-cancel').on(events.down, function() {
-				self.clear();
+				self.close();
 			});
 
 			$('.js-popover-details').on(events.down, function() {
-				self.edit().hide();
+				self.edit().close();
 			});
 		}
 	});

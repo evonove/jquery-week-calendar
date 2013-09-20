@@ -148,19 +148,13 @@
                         // Show popover only if is a desktop
                         TimelyUi.calendar.showPopoverForm(calEvent, element);
 
-                        // Save on submit
-                        $('.js-form-popover').on('submit', function(e) {
-                            e.preventDefault();
-                            TimelyUi.popover.save();
-                        });
-
-                        var iscroll = TimelyUi.iScrollEls[1];
-                        utils.lastPos = TimelyUi.utils._posByEl(iscroll, element[0]);
-
-                        var iscroll0 = TimelyUi.iScrollEls[0];
-                        var pos = utils._posByEl(iscroll0, element[0]);
-                        iscroll0.scrollTo(pos.left, pos.top + 150, 0);
+                        // Move iScroll if popover goes behind header
+                        var _popoverOffset = $('.popover').offset().top;
+                        if (_popoverOffset < 90) {
+                            TimelyUi.iScrollEls[0].scrollBy(0, 90 - _popoverOffset, 0);
+                        }
                     } else {
+                        // Show modal in mobile
                         TimelyUi.calendar.showModalForm(calEvent);
                     }
                     return true;
@@ -497,14 +491,19 @@
 
                 // Remove existing popover and last unsaved event
                 if (typeof popover.instance !== 'undefined') {
-                    popover.clear();
-                    calendar.removeLastUnsavedEvent();
+                    popover.close();
                 }
 
                 calendar.options.unsavedEvents.push(element);
 
                 popover.options.calEvent = calEvent;
                 popover.attachTo(element);
+
+                // Save on submit
+                $('.js-form-popover').on('submit', function(e) {
+                    e.preventDefault();
+                    TimelyUi.popover.save();
+                });
             },
 
             /*
