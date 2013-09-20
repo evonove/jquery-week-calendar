@@ -34,7 +34,7 @@
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);
-            self.hide();
+            self.close();
 			return self;
 		},
 		edit: function() {
