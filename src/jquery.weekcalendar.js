@@ -145,13 +145,16 @@
                     var isMobile = TimelyUi.compat.isMobile;
 
                     if (!isMobile) {
-                        // Show popover only if is a desktop
-                        TimelyUi.calendar.showPopoverForm(calEvent, element);
+                        var _iScroll = TimelyUi.iScrollEls[0],
+                            _currentScroll = utils._posByEl(_iScroll, element[0]).top,
+                            _popoverPosition = _currentScroll <= -265 ? 'top' : 'bottom';
 
-                        // Move iScroll if popover goes behind header
+                        TimelyUi.calendar.showPopoverForm(calEvent, element, _popoverPosition);
                         var _popoverOffset = $('.popover').offset().top;
+
+                        // Show popover and move iScroll if popover goes behind header
                         if (_popoverOffset < 90) {
-                            TimelyUi.iScrollEls[0].scrollBy(0, 90 - _popoverOffset, 0);
+                            _iScroll.scrollBy(0, 90 - _popoverOffset, 0);
                         }
                     } else {
                         // Show modal in mobile
@@ -485,7 +488,7 @@
             /*
              * Create a popover attached to an element
              */
-            showPopoverForm: function (calEvent, element) {
+            showPopoverForm: function (calEvent, element, popoverPosition) {
                 var calendar = TimelyUi.calendar,
                     popover = TimelyUi.popover;
 
@@ -497,6 +500,7 @@
                 calendar.options.unsavedEvents.push(element);
 
                 popover.options.calEvent = calEvent;
+                popover.options.placement = popoverPosition;
                 popover.attachTo(element);
 
                 // Save on submit
