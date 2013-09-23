@@ -69,8 +69,8 @@
 }
 
 /* First user color override */
-.wc-user-1 {
-    color: #006ccc !important;
+th.wc-day-column-first {
+    color: #006ccc;
 }
 
 .controls div.multi {
