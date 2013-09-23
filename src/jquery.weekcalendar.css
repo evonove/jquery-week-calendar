@@ -68,6 +68,11 @@
     overflow: hidden;
 }
 
+/* First user color override */
+.wc-user-1 {
+    color: #006ccc !important;
+}
+
 .controls div.multi {
     margin-left: 0px;
 }
