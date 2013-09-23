@@ -43,10 +43,7 @@
                 self.usersSelect.addOption(_users);
 
                 if(_value === null) {
-                    self.usersSelect.lock();
                     self.usersSelect.addItem(_.first(_users).id);
-                } else {
-                    self.usersSelect.unlock();
                 }
             });
 
@@ -166,10 +163,8 @@
 
             // Set correct organization value
             if ((_.contains(chosenEvent.assignees, options.currentUser.id)) && (chosenEvent.organization === null || typeof chosenEvent.id === 'undefined')) {
-                self.usersSelect.lock();
                 self.organizationSelect.val(String(null));
             } else {
-                self.usersSelect.unlock();
                 self.organizationSelect.val(chosenEvent.organization || utils._chooseDefaultOrganization(_validOrganizations).id);
             }
 
