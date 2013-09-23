@@ -155,9 +155,10 @@
 				deleteButton.hide();
 			}
 
-            self.eventDate = self.createEventDate('.modal-body #eventDate');
-            self.startTime = self.createEventTime('.modal-body #startTime');
-            self.endTime = self.createEventTime('.modal-body #endTime');
+            self.startDate = self.createEventDate('.modal-body .js-start-date');
+            self.startTime = self.createEventTime('.modal-body .js-start-time');
+            self.endDate = self.createEventDate('.modal-body .js-end-date');
+            self.endTime = self.createEventTime('.modal-body .js-end-time');
 
             // Load users and organizations dynamically
             var _validOrganizations = self._getValidOrganizations(chosenEvent.assignees);
@@ -177,8 +178,9 @@
             self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
             self.usersSelect.setValue(chosenEvent.assignees);
 
-            self.setDate(self.eventDate, chosenEvent.start);
+            self.setDate(self.startDate, chosenEvent.start);
             self.setTime(self.startTime, chosenEvent.start);
+            self.setDate(self.endDate, chosenEvent.end);
             self.setTime(self.endTime, chosenEvent.end);
 
 			self.content.val(chosenEvent.content);
@@ -187,8 +189,7 @@
 
 		save: function() {
 			var self = this,
-                calendar = TimelyUi.calendar,
-                eventDate = this.getDate(this.eventDate);
+                calendar = TimelyUi.calendar;
 
 			self.instance.options.calEvent = {
 				id: self.instance.options.calEvent.id || calendar.getLastEventId(),
@@ -196,8 +197,8 @@
                 organization: self.organizationSelect.val() === "null" ? null : parseInt(self.organizationSelect.val(), 10),
                 owner: parseInt(self.ownerSelect.val(), 10),
                 assignees: self.usersSelect.getValue(),
-				start: this.getTime(eventDate, self.startTime),
-				end: this.getTime(eventDate, self.endTime),
+				start: this.getTime(self.getDate(this.startDate), self.startTime),
+				end: this.getTime(self.getDate(this.endDate), self.endTime),
 				content: self.content.val()
 			};
             calendar.onSave(self.instance.options.calEvent);
