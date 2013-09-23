@@ -1,6 +1,6 @@
 {
   "name": "jquery-week-calendar",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta2",
   "dependencies": {
     "components-bootstrap": "2.3.2",
     "font-awesome": "3.2.1",
