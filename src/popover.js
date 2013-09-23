@@ -49,8 +49,6 @@
 			delete self.instance;
 			delete self.options.calEvent;
 
-            TimelyUi.calendar.removeLastUnsavedEvent();
-
 			return self;
 		},
 		initListeners: function() {
@@ -60,6 +58,7 @@
 			});
 
 			$('.js-popover-cancel').on(events.down, function() {
+                TimelyUi.calendar.removeLastUnsavedEvent();
 				self.close();
 			});
 
