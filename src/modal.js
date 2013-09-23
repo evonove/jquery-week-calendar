@@ -191,7 +191,7 @@
 			var self = this,
                 calendar = TimelyUi.calendar;
 
-			self.instance.options.calEvent = {
+			self.instance.options.newEvent = {
 				id: self.instance.options.calEvent.id || calendar.getLastEventId(),
 				title: self.title.val(),
                 organization: self.organizationSelect.val() === "null" ? null : parseInt(self.organizationSelect.val(), 10),
@@ -201,7 +201,7 @@
 				end: this.getTime(self.getDate(this.endDate), self.endTime),
 				content: self.content.val()
 			};
-            calendar.onSave(self.instance.options.calEvent);
+            calendar.onSave(self.instance.options.newEvent, self.instance.options.calEvent);
 			return self;
 		},
 
