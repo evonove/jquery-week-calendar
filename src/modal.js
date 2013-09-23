@@ -193,7 +193,7 @@
 			self.instance.options.calEvent = {
 				id: self.instance.options.calEvent.id || calendar.getLastEventId(),
 				title: self.title.val(),
-                organization: self.organizationSelect.val(),
+                organization: self.organizationSelect.val() === "null" ? null : parseInt(self.organizationSelect.val(), 10),
                 owner: parseInt(self.ownerSelect.val(), 10),
                 assignees: self.usersSelect.getValue(),
 				start: this.getTime(eventDate, self.startTime),
