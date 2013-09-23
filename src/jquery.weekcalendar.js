@@ -948,7 +948,7 @@
                         calendarNavHtml += '<button class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></button>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="btn-group">';
-                        calendarNavHtml += '<button class="btn btn-primary wc-today hidden-desktop">' + options.buttonText.today + '</button>';
+                        calendarNavHtml += '<button class="btn btn-primary wc-today visible-tablet">' + options.buttonText.today + '</button>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="js-right-menu pull-right">';
