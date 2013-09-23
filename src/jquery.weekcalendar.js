@@ -915,6 +915,10 @@
                 });
             },
 
+            _parseDate: function (value) {
+                return !!value ? new Date(value) : new Date();
+            },
+
             /*
              * Render the nav buttons on top of the calendar
              */
@@ -976,7 +980,7 @@
                             });
 
                             $selected.on('change', function(event) {
-                                self.gotoDate(new Date($(this).val()));
+                                self.gotoDate(self._parseDate($(this).val()));
                             });
 
                             // Modal button
@@ -992,7 +996,7 @@
                                 picker = $picker.pickadate('picker');
 
                             picker.on('set', function() {
-                                self.gotoDate(new Date(picker.get('select').obj));
+                                self.gotoDate(self._parseDate(picker.get('select').obj));
                             });
 
                             // Create search widget
