@@ -29,7 +29,7 @@
 	TimelyUi.compat.initTypeEvents = function () {
 		TimelyUi.compat.isMobile = window.mobilecheck();
         TimelyUi.compat.isTablet = window.tabletcheck();
-        TimelyUi.compat.isSafari = window.safaricheck();
+        TimelyUi.compat.isSafariWebkit = window.safariWebKitCheck();
 
 		if (TimelyUi.compat.isMobile){
 			TimelyUi.compat.events = TimelyUi.compat.touch;
@@ -90,11 +90,9 @@ window.tabletcheck = function() {
     return isTabletCheck;
 };
 
-window.safaricheck = function() {
+window.safariWebKitCheck = function() {
 	'use strict';
-	var isSafariCheck =  /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor) && !/CriOS/.test(navigator.userAgent);
-
-    return isSafariCheck;
+	return  /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
 };
-TimelyUi.compat.initTypeEvents();
 
+TimelyUi.compat.initTypeEvents();
