@@ -1725,22 +1725,7 @@
                     } else {
                         $(this).removeClass(todayClass);
                     }
-                    currentDay = self._addDays(currentDay, 1);
                 });
-
-                currentDay = self._cloneDate(self.element.data('startDate'));
-                if (showAsSeparatedUser) {
-                    self.element.find('.wc-header th.wc-user-header').each(function (i, val) {
-                        if (self._isToday(currentDay)) {
-                            $(this).addClass(todayClass);
-                        } else {
-                            $(this).removeClass(todayClass);
-                        }
-                        currentDay = ((i + 1) % options.users.length) ? currentDay : self._addDays(currentDay, 1);
-                    });
-                }
-
-                currentDay = self._cloneDate(self.element.data('startDate'));
 
                 $weekDayColumns.each(function (i, val) {
                     $(this).data('startDate', self._cloneDate(currentDay));
@@ -1753,10 +1738,6 @@
                         $(this).parent()
                             .removeClass(todayClass)
                             .addClass('state-default');
-                    }
-
-                    if (!(showAsSeparatedUser && ((i + 1) % options.users.length))) {
-                        currentDay = self._addDays(currentDay, 1);
                     }
                 });
 
@@ -1863,7 +1844,8 @@
                         calEvent.start = start;
                         calEvent.end = initialEnd;
 
-                        if (((isMultiday && calEvent.start.getTime() !== calEvent.end.getTime()) || !isMultiday) && ($weekDay = self._findWeekDayForEvent(calEvent, $weekDayColumns))) {
+                        $weekDay = self._findWeekDayForEvent(calEvent, $weekDayColumns);
+                        if (typeof $weekDay !== 'undefined') {
                             self._renderEvent(calEvent, $weekDay);
                         }
                     }
