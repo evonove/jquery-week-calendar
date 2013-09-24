@@ -448,7 +448,6 @@
     TimelyUi.utils._redimColumnsWidth = function () {
         var options = TimelyUi.calendar.options,
             width = $('#calendar-body-wrapper').width() - 45,
-            isSafari = TimelyUi.compat.isSafari,
             maxColumnNumber = TimelyUi.maxColumnNumber;
 
         TimelyUi.columnsToShow = (maxColumnNumber > TimelyUi.columnsToShow) ? TimelyUi.columnsToShow : maxColumnNumber;

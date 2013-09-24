@@ -941,7 +941,7 @@
 
                     // Rendering header with calendar controls
                     headerHtml += '<header></header>';
-                    var $headerHtml = $(headerHtml)
+                    var $headerHtml = $(headerHtml);
                     $headerHtml.appendTo($calendarContainer);
                     if (options.buttons) {
                         calendarNavHtml += '<div class="wc-nav">';
@@ -1793,7 +1793,7 @@
             _renderEvents: function (data, $weekDayColumns, onlyPersistedItem) {
                 var self = this;
                 var options = this.options;
-                var eventsToRender, nbRenderedEvents = 0;
+                var eventsToRender;
 
                 if (data.options) {
                     var updateLayout = false;
@@ -1841,7 +1841,7 @@
                     while (startDate < endDate) {
                         calEvent.start = start;
 
-                        // End of this virual calEvent is set to the end of the day
+                        // End of this virtual calEvent is set to the end of the day
                         calEvent.end.setFullYear(start.getFullYear());
                         calEvent.end.setDate(start.getDate());
                         calEvent.end.setMonth(start.getMonth());
@@ -1849,7 +1849,6 @@
 
                         if (($weekDay = self._findWeekDayForEvent(calEvent, $weekDayColumns))) {
                             self._renderEvent(calEvent, $weekDay);
-                            nbRenderedEvents += 1;
                         }
 
                         // Start is set to the begin of the new day
@@ -1866,7 +1865,6 @@
 
                         if (((isMultiday && calEvent.start.getTime() !== calEvent.end.getTime()) || !isMultiday) && ($weekDay = self._findWeekDayForEvent(calEvent, $weekDayColumns))) {
                             self._renderEvent(calEvent, $weekDay);
-                            nbRenderedEvents += 1;
                         }
                     }
 
@@ -1890,10 +1888,6 @@
                     _hourLineTimeout = setInterval(function () {
                         self._drawCurrentHourLine();
                     }, 60 * 1000);
-                }
-
-                if (!nbRenderedEvents) {
-                    options.noEvents();
                 }
             },
 

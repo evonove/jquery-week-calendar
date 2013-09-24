@@ -92,7 +92,7 @@ window.tabletcheck = function() {
 
 window.safariWebKitCheck = function() {
 	'use strict';
-	return  /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+	return (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor));
 };
 
 TimelyUi.compat.initTypeEvents();
