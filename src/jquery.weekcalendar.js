@@ -333,15 +333,7 @@
                 self._loadPopoverForm();
                 self._renderCalendar();
                 self._loadCalEvents();
-                self._resizeCalendar();
                 self._loadAlertMessage();
-
-                if (self.options.resizeEvent) {
-                    $(window).unbind(self.options.resizeEvent);
-                    $(window).bind(self.options.resizeEvent, function () {
-                        self._resizeCalendar();
-                    });
-                }
 
                 window.onresize = function (e) {
                     if (typeof e.originalEvent === 'undefined') {
@@ -462,15 +454,7 @@
                 $(self.element).html('');
                 self._renderCalendar();
                 self._loadCalEvents();
-                self._resizeCalendar();
                 self._scrollToHour(hour, false);
-
-                if (this.options.resizeEvent) {
-                    $(window).unbind(this.options.resizeEvent);
-                    $(window).bind(this.options.resizeEvent, function () {
-                        self._resizeCalendar();
-                    });
-                }
             },
 
             /*
@@ -728,15 +712,6 @@
                     options.timeslotsPerDay = options.timeslotsPerHour * 24;
                     options.millisToDisplay = MILLIS_IN_DAY;
                     options.millisPerTimeslot = MILLIS_IN_DAY / options.timeslotsPerDay;
-                }
-            },
-
-            /*
-             * Resize the calendar scrollable height based on the provided function in options.
-             */
-            _resizeCalendar: function () {
-                var options = this.options;
-                if (options && $.isFunction(options.height)) {
                 }
             },
 
@@ -1803,7 +1778,6 @@
                         self._renderCalendar();
                         $weekDayColumns = self.element.find('.wc-time-slots .wc-day-column-inner');
                         self._updateDayColumnHeader($weekDayColumns);
-                        self._resizeCalendar();
                         self._scrollToHour(hour, false);
                     }
                 }

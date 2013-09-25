@@ -301,8 +301,6 @@
         TimelyUi.current = next;
         TimelyUi.currentUserId = loadedUsers[next].id;
 
-        controller.refreshIfNoSufficientColumns(current, pointerIndexLimit);
-
         utils._scrollBySelector(iScrolls[1], '.wc-time-slots td.wc-user-' + TimelyUi.currentUserId);
         utils._scrollBySelector(iScrolls[2], '#calendar-header-wrapper th.wc-user-' + TimelyUi.currentUserId);
     };
