@@ -345,10 +345,9 @@
 
                 window.onresize = function (e) {
                     if (typeof e.originalEvent === 'undefined') {
-                        TimelyUi.utils._resetIScrolls(true, true);
+                        TimelyUi.utils._resetIScrolls();
                     }
                 };
-
 
                 /**
                  * Register a callback for mobile view
@@ -1155,6 +1154,11 @@
                 var calendarHeaderHtml;
                 var rowspan = '', colspan = '';
                 var $headerHtml = $('header');
+                var goRight = utils._goRight,
+                    goLeft = utils._goLeft,
+                    events = TimelyUi.compat.events,
+                    on = TimelyUi.compat.on,
+                    off = TimelyUi.compat.off;
 
                 if (showAsSeparatedUser) {
                     rowspan = ' rowspan=\"2\"';
@@ -1206,6 +1210,10 @@
 
 
                 $(calendarHeaderHtml).appendTo($headerHtml);
+
+                // Enable iScroll with buttons click
+                on($('.wc-go-right'), events.click, goRight);
+                on($('.wc-go-left'), events.click, goLeft);
             },
 
             /*

@@ -56,41 +56,47 @@
         }
     };
 
-    TimelyUi.utils._resetIScrolls = function (redim_, justHeader_) {
-        var redim = (redim_ === undefined) ? true : redim_,
-            justHeader = (justHeader_ === undefined) ? false : justHeader_;
+    TimelyUi.utils._resetIScrolls = function() {
+        TimelyUi.iScrollEls = TimelyUi.iScrollEls || {};
 
-        TimelyUi.dispelVodooMagic();
+        $.each(TimelyUi.iScrollEls, function (key, val) {
+            val.destroy();
+        });
+        TimelyUi.utils._resetHelperValues();
+        TimelyUi.utils._initIScrolls();
+        TimelyUi.utils._redimColumnsWidth();
 
-        if (redim) {
-            $.each(TimelyUi.iScrollEls, function (key, val) {
-                val.destroy();
-            });
-            TimelyUi.iScrollEls = {};
-            TimelyUi.utils._resetHelperValues();
-            TimelyUi.initIScrolls();
-        }
-        if (!redim && justHeader) {
-            if (typeof TimelyUi.iScrollEls[2] === 'IScroll') {
-                TimelyUi.iScrollEls[2].destroy();
-                TimelyUi.iScrollEls[2] = {};
-                TimelyUi.initIScrolls(justHeader);
-                var iscroll = TimelyUi.iScrollEls[2];
-                if (TimelyUi.utils.lastPos !== undefined) {
-                    var pos = TimelyUi.utils.lastPos;
-                    iscroll.scrollTo((pos.left + 45), 0, 0);
-                }
-            }
-        }
-        TimelyUi.boundIScrolls();
-        if (redim) {
-            TimelyUi.utils._redimColumnsWidth();
-        }
-        TimelyUi.vodooMagic();
-        if (redim) {
-            TimelyUi.calendar._scrollToHour(TimelyUi.calendar.options.date.getHours(), true);
-        }
+        TimelyUi.calendar._scrollToHour(TimelyUi.calendar.options.date.getHours(), true);
+    };
 
+    TimelyUi.utils._initIScrolls  = function() {
+        var iScroll0 = new IScroll('#scrollbar-wrapper', {
+            scrollX: false,
+            scrollY: true,
+            momentum: true,
+            mouseWheel: true,
+            bounce: true
+        });
+
+        TimelyUi.iScrollEls[0] = iScroll0;
+
+        var iScroll1 = new IScroll('#calendar-body-wrapper', {
+            scrollX: false,
+            scrollY: false,
+            momentum: true,
+            bounce: false
+        });
+
+        TimelyUi.iScrollEls[1] = iScroll1;
+
+        var iScroll2 = new IScroll('#calendar-header-wrapper', {
+            scrollX: false,
+            scrollY: false,
+            momentum: true,
+            bounce: false
+        });
+
+        TimelyUi.iScrollEls[2] = iScroll2;
     };
 
     TimelyUi.utils._resetHelperValues = function () {
@@ -124,9 +130,7 @@
     /**
      * Used by .wc-go-right click/.wc-go-left click event.
      */
-    TimelyUi.utils._scrollToIfNeeded = function (iscroll, nextEl, pos, time, easing) {
-        time = time === undefined || null || time === 'auto' ? Math.max(Math.abs(pos.left) * 2, Math.abs(pos.top) * 2) : time;
-
+    TimelyUi.utils._scrollToIfNeeded = function (iscroll, nextEl, pos, time) {
         if (iscroll.lastPos === undefined || iscroll.lastPos.left !== pos.left || $(nextEl).css('display') === 'none') {
             iscroll.lastPos = pos;
             iscroll.lastIndexPointer = iscroll.pointerIndex;
@@ -139,27 +143,12 @@
     /**
      * Used by .wc-go-right click/.wc-go-left click event.
      */
-    TimelyUi.utils._posByEl = function (iscroll, el, offsetX, offsetY, pxOffsetX, pxOffsetY) {
-        el = el.nodeType ? el : iscroll.scroller.querySelector(el);
+    TimelyUi.utils._posByEl = function (iscroll, selector, pxOffsetX, pxOffsetY) {
+        var pos = TimelyUi.utils._offset(selector);
 
-        if (!el) {
-            return;
-        }
-        var pos = TimelyUi.utils._offset(el);
-
+        // Position of iScroll relative to his wrapper position (ex: the container has a top o left set)
         pos.left -= iscroll.wrapperOffset.left;
         pos.top -= iscroll.wrapperOffset.top;
-
-        // if offsetX/Y are true we center the element to the screen
-        if (offsetX === true) {
-            offsetX = Math.round(el.offsetWidth / 2 - iscroll.wrapper.offsetWidth / 2);
-        }
-        if (offsetY === true) {
-            offsetY = Math.round(el.offsetHeight / 2 - iscroll.wrapper.offsetHeight / 2);
-        }
-
-        pos.left -= offsetX || 0;
-        pos.top -= offsetY || 0;
 
         pos.left -= pxOffsetX || 0;
         pos.top -= pxOffsetY || 0;
@@ -173,7 +162,7 @@
     TimelyUi.utils._scrollBySelector = function (iscroll, selector) {
         var utils = TimelyUi.utils;
         var el0 = document.querySelector(selector);
-        var pos0 = utils._posByEl(iscroll, el0, false, false, -45, 0);
+        var pos0 = utils._posByEl(iscroll, el0, -45, 0);
         utils._scrollToIfNeeded(iscroll, el0, pos0, 1000);
     };
 
