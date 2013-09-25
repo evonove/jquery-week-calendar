@@ -1701,7 +1701,7 @@
                 var positionTop = nbHours * options.timeslotHeight * options.timeslotsPerHour;
                 var lineWidth = $('.wc-scrollable-grid', this.element).width() + 3;
 
-                $('.wc-scrollable-grid .wc-day-column', this.element).append(
+                $('.wc-day-column').not('.state-default').append(
                     $('<div>', {
                         'class': 'wc-hourline',
                         style: 'top: ' + positionTop + 'px; width: ' + lineWidth + 'px'
