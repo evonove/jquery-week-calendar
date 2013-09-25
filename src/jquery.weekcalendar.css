@@ -458,7 +458,7 @@ input.input-title {
 }
 
 .wc-header {
-    height: 42px;
+    height: 45px;
 }
 
 .wc-calendar-header-wrapper {
@@ -470,7 +470,7 @@ input.input-title {
 }
 
 .wc-go-left, .wc-go-right {
-    top: -38px;
+    top: -15px;
     z-index: 1;
     position: relative;
     display: inline-block;

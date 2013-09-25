@@ -450,7 +450,6 @@
             rightSingleWidth = width / dividend,
             rightWidth = rightSingleWidth * options.users.length + 45;
 
-        TimelyUi.dispelVodooMagic();
         $('.wc-body-scroller-placeholder, .wc-head-scroller-placeholder, .wc-time-slots').width(rightWidth);
         $('.wc-timeslot-placeholder').attr('colspan', dividend);
 
@@ -465,7 +464,7 @@
         $.each(TimelyUi.iScrollEls, function (key, val) {
             val.refresh();
         });
-        TimelyUi.vodooMagic();
+
         $('table .ui-state-default, table .wc-user-header').not('.wc-grid-timeslot-header, .wc-time-column-header').each(function (index, el) {
             try {
                 $(this).get(0).clientWidth = rightSingleWidth;

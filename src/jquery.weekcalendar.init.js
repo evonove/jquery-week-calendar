@@ -1,19 +1,6 @@
 'use strict';
 var TimelyUi = TimelyUi || {};
 TimelyUi.calendar = TimelyUi.calendar || {};
-/**
- * TODO: Remove 'magic' behaviour
- */
-TimelyUi.vodooMagic  = function() {
-    $('[class^="wc-scroller-"]').css('position', 'relative');
-};
-
-/**
- * TODO: Remove 'magic' behaviour
- */
-TimelyUi.dispelVodooMagic  = function() {
-    $('[class^="wc-scroller-"]').css('position', 'absolute');
-};
 
 TimelyUi.init = function(id, conf) {
     // i18n localization
