@@ -483,6 +483,7 @@
 
                 // Remove existing popover and last unsaved event
                 if (typeof popover.instance !== 'undefined') {
+                    calendar.removeLastUnsavedEvent();
                     popover.close();
                 }
 
