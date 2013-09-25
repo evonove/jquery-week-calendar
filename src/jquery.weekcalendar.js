@@ -2323,11 +2323,6 @@
                 $('.ui-resizable-handle').addClass('wc-resizable');
             },
 
-            _getBackgroundColorBySeed: function (seed) {
-                var value = (seed !== undefined) ? Math.abs(Math.floor(6 * (Math.sin(seed * 60)))) : 0,
-                    bg_class = 'wc-bg-' + value;
-                return value ? bg_class : '';
-            },
             /*
              * Refresh the displayed details of a calEvent in the calendar
              */
@@ -2340,7 +2335,7 @@
                 wcTime.html(this.options.eventHeader(calEvent, this.element) + suffix);
                 $calEvent.find('.wc-title').html(this.options.eventBody(calEvent, this.element));
                 if (calEvent.organization !== undefined && calEvent.organization !== null) {
-                    var bgClass = this._getBackgroundColorBySeed(calEvent.organization);
+                    var bgClass = 'wc-bg-' + calEvent.organization % 6;
                     $calEvent.addClass(bgClass);
                 }
                 $calEvent.data('calEvent', calEvent);
