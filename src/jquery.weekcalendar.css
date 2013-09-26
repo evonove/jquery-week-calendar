@@ -568,6 +568,7 @@ input.input-title {
 }
 
 input[readonly] {
+    cursor: pointer;
     background-color: white;
 }
 
