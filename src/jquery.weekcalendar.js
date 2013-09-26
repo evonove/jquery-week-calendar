@@ -26,6 +26,7 @@
     $.widget('ui.weekCalendar', (function () {
         var _currentAjaxCall, _hourLineTimeout,
             utils = TimelyUi.utils,
+            compat = TimelyUi.compat,
             MILLIS_IN_DAY = 86400000,
             MILLIS_IN_WEEK = MILLIS_IN_DAY * 7;
 
@@ -77,14 +78,10 @@
                     return true;
                 },
                 draggable: function (calEvent, element) {
-                    var isMobile = TimelyUi.compat.isMobile;
-
-                    return (!isMobile && calEvent.assignees.length === 1);
+                    return (!compat.isMobile && !compat.isTablet && calEvent.assignees.length === 1);
                 },
                 resizable: function (calEvent, element) {
-                    var isMobile = TimelyUi.compat.isMobile;
-
-                    return (!isMobile && calEvent.assignees.length === 1);
+                    return (!compat.isMobile && !compat.isTablet && calEvent.assignees.length === 1);
                 },
                 eventRender: function (calEvent, $event) {
                     if (calEvent.end.getTime() < new Date().getTime()) {
@@ -137,9 +134,7 @@
                     TimelyUi.calendar.options.eventAction = false;
                 },
                 eventNew: function (calEvent, element, calendar, upEvent) {
-                    var isMobile = TimelyUi.compat.isMobile;
-
-                    if (!isMobile) {
+                    if (!compat.isMobile && !compat.isTablet) {
                         // Show popover
                         var _popoverPosition = $(element).offset().top < 247 ? 'bottom' : 'top';
                         TimelyUi.calendar.showPopoverForm(calEvent, element, _popoverPosition);
@@ -327,7 +322,7 @@
                 self._setupEventDelegation();
                 self._addClassesWidget();
                 self._loadModalForm();
-                if (TimelyUi.compat.isMobile) {
+                if (compat.isMobile || compat.isTablet) {
                     self._loadModalSearch();
                 }
                 self._loadPopoverForm();
@@ -345,34 +340,25 @@
                  * Register a callback for mobile view
                  */
                 enquire
-                    .register('screen and (max-width: 480px)', function () {
-                        self.lastRefresh = new Date().getTime();
-                        TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
-                        self.setReadOnly(false);
-                    })
-                    .register('screen and (max-width: 767px) and (min-width: 481px)', function () {
-                        var compat = TimelyUi.compat;
+                    .register('screen and (max-width: 767px)', function () {
                         self.lastRefresh = new Date().getTime();
                         if (compat.isTablet) {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
-                            self.setReadOnly(false);
-                        } else if (compat.isMobile) {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 4;
-                            self.setReadOnly(true);
+                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 2;
                         } else {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
-                            self.setReadOnly(false);
+                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
                         }
                     })
-                    .register('screen and (min-width: 768px)', function () {
-                        var compat = TimelyUi.compat;
+                    .register('screen and (min-width: 768px) and (max-width: 991px)', function () {
                         self.lastRefresh = new Date().getTime();
                         if (compat.isTablet) {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 3;
                         } else {
                             TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
                         }
-                        self.setReadOnly(false);
+                    })
+                    .register('screen and (min-width: 992px)', function () {
+                        self.lastRefresh = new Date().getTime();
+                        TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
                     });
             },
 
@@ -720,10 +706,8 @@
              * delegation for greater efficiency
              */
             _setupEventDelegation: function () {
-                var self = this;
-                var options = this.options;
-                var events = TimelyUi.compat.events;
-                var on = TimelyUi.compat.on;
+                var self = this,
+                    options = self.options;
 
                 var clickEvent = function (event) {
                     var $target = $(event.target);
@@ -779,9 +763,9 @@
                     options.eventMouseout($calEvent.data('calEvent'), $calEvent, event);
                 };
                 var $element = $(this.element);
-                on($element, events.click, clickEvent);
-                on($element, events.over, mouseoverEvent);
-                on($element, events.out, mouseoutEvent);
+                compat.on($element, compat.events.click, clickEvent);
+                compat.on($element, compat.events.over, mouseoverEvent);
+                compat.on($element, compat.events.out, mouseoutEvent);
             },
 
             /*
@@ -900,8 +884,6 @@
             _renderCalendarButtons: function ($calendarContainer) {
                 var self = this,
                     options = this.options,
-                    isMobile = TimelyUi.compat.isMobile,
-                    isSafariWebkit = TimelyUi.compat.isSafariWebkit,
                     calendarNavHtml = '',
                     headerHtml = '',
                     settingsHtml = '',
@@ -943,11 +925,11 @@
                         settingsHtml += '</div>';
                         $(settingsHtml).appendTo($rightMenuContainer);
 
-                        if (isMobile) {
+                        if (compat.isMobile || compat.isTablet) {
                             // Add date chooser controller
                             var $selected = $('.js-date-selected');
                             $('.js-date-selector').on('click', function() {
-                                if (isSafariWebkit) {
+                                if (compat.isSafariWebkit) {
                                     $selected.focus();
                                 } else {
                                     $selected.click();
@@ -999,7 +981,7 @@
 
                             e.preventDefault();
                             if (text) {
-                                if (!isMobile) {
+                                if (!compat.isMobile || !compat.isTablet) {
                                     $('#modal-search').modal('hide');
                                 }
                                 self.onSearch(_searchBar.val());
@@ -1123,17 +1105,12 @@
              * Render the calendar header, including date and user header
              */
             _renderCalendarHeader: function ($calendarContainer) {
-                var self = this;
-                var options = this.options;
-                var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
-                var calendarHeaderHtml;
-                var rowspan = '', colspan = '';
-                var $headerHtml = $('header');
-                var goRight = utils._goRight,
-                    goLeft = utils._goLeft,
-                    events = TimelyUi.compat.events,
-                    on = TimelyUi.compat.on,
-                    off = TimelyUi.compat.off;
+                var self = this,
+                    options = self.options,
+                    showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
+                    calendarHeaderHtml,
+                    rowspan = '', colspan = '',
+                    $headerHtml = $('header');
 
                 if (showAsSeparatedUser) {
                     rowspan = ' rowspan=\"2\"';
@@ -1187,8 +1164,8 @@
                 $(calendarHeaderHtml).appendTo($headerHtml);
 
                 // Enable iScroll with buttons click
-                on($('.wc-go-right'), events.click, goRight);
-                on($('.wc-go-left'), events.click, goLeft);
+                compat.on($('.wc-go-right'), compat.events.click, utils._goRight);
+                compat.on($('.wc-go-left'), compat.events.click, utils._goLeft);
             },
 
             /*
@@ -1417,15 +1394,12 @@
              */
             _setupEventCreationForWeekDay: function ($weekDay) {
 
-                var events = TimelyUi.compat.events,
-                    on = TimelyUi.compat.on,
-                    off = TimelyUi.compat.off,
-                    self = this,
-                    options = this.options;
+                var self = this,
+                    options = self.options;
 
                 self.lastValidTagert = {};
                 self.upEventCreation = function (event) {
-                    off($('html'), events.up, self.upEventCreation);
+                    compat.off($('html'), compat.events.up, self.upEventCreation);
 
                     var $target = self.lastValidTagert;
                     if ($target.closest) {
@@ -1522,8 +1496,8 @@
                     var $newEvent = self.removeEventAddClass.$newEvent,
                         $target = self.removeEventAddClass.$target;
 
-                    off($target, events.move, self.move);
-                    off($target, events.up, self.removeEventAddClass);
+                    compat.off($target, compat.events.move, self.move);
+                    compat.off($target, compat.events.up, self.removeEventAddClass);
                     $newEvent.addClass('ui-corner-all');
                 };
 
@@ -1574,15 +1548,15 @@
                         $newEvent.css({top: topPosition});
 
                         if (!options.preventDragOnEventCreation) {
-                            on($target, events.move, self.move);
-                            on($target, events.up, self.removeEventAddClass);
+                            compat.on($target, compat.events.move, self.move);
+                            compat.on($target, compat.events.up, self.removeEventAddClass);
                         }
                         self.lastValidTagert = $target;
                         options.eventMousedownNewEvent();
-                        on($('html'), events.up, self.upEventCreation);
+                        compat.on($('html'), compat.events.up, self.upEventCreation);
                     }
                 };
-                on($weekDay, events.hold, self.downEventCreation);
+                compat.on($weekDay, compat.events.hold, self.downEventCreation);
             },
 
             /*
@@ -2149,17 +2123,17 @@
              * Add draggable capabilities to an event
              */
             _addDraggableToCalEvent: function (calEvent, $calEvent) {
-                var isMobile = TimelyUi.compat.isMobile;
-                var options = this.options;
-                var functionStart = function (event, ui) {
-                    options.tic = 0;
-                    options.dragTicTime = new Date().getTime();
-                    var $calEvent = ui.draggable || ui.helper;
-                    options.eventDrag(calEvent, $calEvent);
-                };
+                var options = this.options,
+                    functionStart = function (event, ui) {
+                        options.tic = 0;
+                        options.dragTicTime = new Date().getTime();
+                        var $calEvent = ui.draggable || ui.helper;
+                        options.eventDrag(calEvent, $calEvent);
+                    };
+
                 options.dragTicTime = undefined;
                 $calEvent.draggable({
-                    handle: (isMobile) ? '' : '.wc-time',
+                    handle: (compat.isMobile || compat.isTablet ) ? '' : '.wc-time',
                     containment: 'div.wc-time-slots',
                     snap: '.wc-day-column-inner',
                     snapMode: 'inner',
@@ -2168,11 +2142,8 @@
                     opacity: 0.5,
                     grid: [$calEvent.outerWidth() + 1, options.timeslotHeight],
                     create: function (event, ui) {
-                        var isMobile = TimelyUi.compat.isMobile;
-                        var on = TimelyUi.compat.on;
-                        var events = TimelyUi.compat.events;
-                        if (isMobile) {
-                            on($(this.querySelector('.wc-time')), events.hold, (function (ui) {
+                        if (compat.isMobile || compat.isTablet) {
+                            compat.on($(this.querySelector('.wc-time')), compat.events.hold, (function (ui) {
                                 return function (event) {
                                     var myEvent = jQuery.Event('dragstart');
                                     functionStart(myEvent, ui);
@@ -2183,15 +2154,8 @@
 
                     start: functionStart,
                     drag: function (event, ui) {
-                        /* Only in desktop enviroment */
-                        var isMobile = TimelyUi.compat.isMobile;
-                        if (isMobile) {
-                            return;
-                        }
-
                         var options = TimelyUi.calendar.options,
-                            maxColumnNumber = TimelyUi.maxColumnNumber,
-                            width = $calEvent.outerWidth();
+                            maxColumnNumber = TimelyUi.maxColumnNumber;
 
                         if (event.clientX + ui.position.left > window.screen.availWidth - 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.users.length) {
                             options.dragTicTime = new Date().getTime();
@@ -2217,8 +2181,9 @@
              * Add droppable capabilites to weekdays to allow dropping of calEvents only
              */
             _addDroppableToWeekDay: function ($weekDay) {
-                var self = this;
-                var options = this.options;
+                var self = this,
+                    options = self.options;
+
                 $weekDay.droppable({
                     accept: '.wc-cal-event',
                     drop: function (event, ui) {
@@ -2270,13 +2235,13 @@
              * Add resizable capabilities to a calEvent
              */
             _addResizableToCalEvent: function (calEvent, $calEvent, $weekDay) {
-                var self = this;
-                var options = this.options;
-                var isMobile = TimelyUi.compat.isMobile;
+                var self = this,
+                    options = self.options;
+
                 $calEvent.resizable({
-                    containment: (isMobile) ? 'parent' : $weekDay,
+                    containment: (compat.isMobile || compat.isTablet) ? 'parent' : $weekDay,
                     grid: options.timeslotHeight,
-                    handles: (isMobile) ? '' : 's',
+                    handles: (compat.isMobile || compat.isTablet) ? '' : 's',
                     minHeight: options.timeslotHeight,
                     start: function (event, ui) {
                         TimelyUi.utils.disableIScrolls();
