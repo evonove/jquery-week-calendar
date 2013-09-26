@@ -904,12 +904,12 @@
                         calendarNavHtml += '<div class="wc-nav">';
                         calendarNavHtml += '<div class="pull-left">';
                         calendarNavHtml += '<div class="btn-group">';
-                        calendarNavHtml += '<button class="btn btn-primary wc-prev"><i class="icon-double-angle-left"></i></button>';
-                        calendarNavHtml += '<button class="js-date-selector btn btn-primary"><i class="icon-calendar"></i></button>';
-                        calendarNavHtml += '<button class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></button>';
+                        calendarNavHtml += '<a class="btn btn-primary wc-prev"><i class="icon-double-angle-left"></i></a>';
+                        calendarNavHtml += '<a class="js-date-selector btn btn-primary"><i class="icon-calendar"></i></a>';
+                        calendarNavHtml += '<a class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></a>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="btn-group">';
-                        calendarNavHtml += '<button class="btn btn-primary wc-today visible-tablet">' + options.buttonText.today + '</button>';
+                        calendarNavHtml += '<a class="btn btn-primary wc-today visible-tablet">' + options.buttonText.today + '</a>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="js-right-menu pull-right">';
