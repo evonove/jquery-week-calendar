@@ -323,7 +323,15 @@
                 self._addClassesWidget();
                 self._loadModalForm();
                 if (compat.isMobile || compat.isTablet) {
+                    // Load modal form for search
                     self._loadModalSearch();
+
+                    // Avoid bouncing on mobile devices
+                    compat.on($(document), compat.events.move,
+                        function (e) {
+                            e.preventDefault();
+                        }
+                    );
                 }
                 self._loadPopoverForm();
                 self._renderCalendar();
@@ -953,14 +961,17 @@
                             });
                             _searchButton.appendTo($rightMenuContainer);
 
-                            // Add swipe capabilities with HammerJs
-                            compat.on($headerHtml, 'swipe', function(event) {
-                                if (event.gesture.direction === 'left') {
-                                    self.element.weekCalendar('next');
-                                } else if (event.gesture.direction === 'right') {
-                                    self.element.weekCalendar('prev');
+                            // Add swipe capabilities (with HammerJs) only if the swipe is quickly
+                            compat.on($('body'), 'swipe', function(event) {
+                                if (event.gesture.velocityX > 1.2) {
+                                    var $animationDay = $('.js-animation-day');
+                                    $animationDay.removeClass('fade-in-left fade-in-right');
+                                    if (event.gesture.direction === 'left') {
+                                        $animationDay.addClass('fade-left');
+                                    } else if (event.gesture.direction === 'right') {
+                                        $animationDay.addClass('fade-right');
+                                    }
                                 }
-                                return false;
                             });
                         } else {
                             // Add date chooser controller
@@ -1138,7 +1149,7 @@
                 // Days row
                 calendarHeaderHtml += '<table ><thead><tr>';
                 for (var i = 1; i <= options.daysToShow; i++) {
-                    calendarHeaderHtml += '<th class=\"wc-day-column-header wc-day-' + i + '\"' + colspan + '></th>';
+                    calendarHeaderHtml += '<th class=\"js-animation-day wc-day-column-header wc-day-' + i + '\"' + colspan + '></th>';
                 }
                 calendarHeaderHtml += '</thead></table>';
 
@@ -1177,6 +1188,28 @@
 
 
                 $(calendarHeaderHtml).appendTo($headerHtml);
+
+                // Append fade effect on mobile devices
+                if (compat.isMobile || compat.isTablet) {
+                    $(".js-animation-day").on("transitionend webkitTransitionEnd mozTransitionEnd oTransitionEnd", function(){
+                        var $self = $(this),
+                            _fadeClass,
+                            _newDay;
+
+                        //window.alert($self.hasClass('fade-left') + " / " + $self.hasClass('fade-right'));
+                        if ($self.hasClass('fade-left') === true)  {
+                            _fadeClass = 'fade-in-left';
+                            _newDay = 'next';
+                        } else if ($self.hasClass('fade-right') === true)  {
+                            _fadeClass = 'fade-in-right';
+                            _newDay = 'prev';
+                        }
+
+                        $self.removeClass('fade-left fade-right');
+                        $self.addClass(_fadeClass);
+                        self.element.weekCalendar(_newDay);
+                    });
+                }
 
                 // Enable iScroll with buttons click
                 compat.on($('.wc-go-right'), compat.events.click, utils._goRight);
