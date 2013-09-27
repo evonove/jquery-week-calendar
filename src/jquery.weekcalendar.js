@@ -932,7 +932,7 @@
                             // Add date chooser controller
                             var $selected = $('.js-date-selected');
                             $('.js-date-selector').on('click', function() {
-                                if (compat.isSafariWebkit) {
+                                if (compat.isSafariWebKit) {
                                     $selected.focus();
                                 } else {
                                     $selected.click();
