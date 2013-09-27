@@ -68,7 +68,7 @@
     // Find device informations (it's not reliable but there aren't other choices)
     self.isMobile = _mobileAgent && _mobileDevice;
     self.isTablet = (/ipad/i.test(_userAgent)) || (_mobileAgent && !_mobileDevice);
-    self.isSafariWebKit = (/safari/i.test(_userAgent) && /apple computer/i.test(_vendor));
+    self.isSafariWebKit = (/apple computer/i.test(_vendor));
 
     // Set events handler according to device type
     self.events = self.isMobile || self.isTablet ? self.touch : self.mouse;
