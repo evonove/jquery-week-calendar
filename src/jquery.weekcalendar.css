@@ -572,10 +572,6 @@ input[readonly] {
     background-color: white;
 }
 
-span.visible-desktop {
-    display: inline !important;
-}
-
 header {
     top: 0;
     left: 0;

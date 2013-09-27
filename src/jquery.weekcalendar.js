@@ -904,12 +904,15 @@
                         calendarNavHtml += '<div class="wc-nav">';
                         calendarNavHtml += '<div class="pull-left">';
                         calendarNavHtml += '<div class="btn-group">';
-                        calendarNavHtml += '<a class="btn btn-primary wc-prev"><i class="icon-double-angle-left"></i></a>';
-                        calendarNavHtml += '<a class="js-date-selector btn btn-primary"><i class="icon-calendar"></i></a>';
-                        calendarNavHtml += '<a class="btn btn-primary wc-next"><i class="icon-double-angle-right"></i></a>';
+                        calendarNavHtml += '<a class="btn btn-primary wc-prev visible-desktop"><i class="icon-double-angle-left"></i></a>';
+                        calendarNavHtml += '<a class="js-date-selector btn btn-primary visible-desktop"><i class="icon-calendar"></i></a>';
+                        calendarNavHtml += '<a class="btn btn-primary wc-next visible-desktop"><i class="icon-double-angle-right"></i></a>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="btn-group">';
-                        calendarNavHtml += '<a class="btn btn-primary wc-today visible-tablet">' + options.buttonText.today + '</a>';
+                        calendarNavHtml += '<a class="js-date-selector btn btn-primary hidden-desktop"><i class="icon-calendar"></i></a>';
+                        calendarNavHtml += '</div>';
+                        calendarNavHtml += '<div class="btn-group">';
+                        calendarNavHtml += '<a class="btn btn-primary wc-today hidden-desktop">' + options.buttonText.today + '</a>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '</div>';
                         calendarNavHtml += '<div class="js-right-menu pull-right">';
@@ -947,6 +950,16 @@
                                 $('#modal-search').modal({show: true, backdrop: false});
                             });
                             _searchButton.appendTo($rightMenuContainer);
+
+                            // Add swipe capabilities with HammerJs
+                            compat.on($headerHtml, 'swipe', function(event) {
+                                if (event.gesture.direction === 'left') {
+                                    self.element.weekCalendar('next');
+                                } else if (event.gesture.direction === 'right') {
+                                    self.element.weekCalendar('prev');
+                                }
+                                return false;
+                            });
                         } else {
                             // Add date chooser controller
                             var $picker = $('.js-date-selector').pickadate(),
