@@ -7,7 +7,6 @@
     "jquery": "2.0.2",
     "jquery-simulate": "*",
     "jquery-ui": "1.10.3",
-    "enquire": "2.0.2",
     "pickadate": "3.0.5",
     "moment": "2.0.0",
     "iscroll": "5.0.1",

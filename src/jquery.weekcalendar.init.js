@@ -20,5 +20,6 @@ TimelyUi.init = function(id, conf) {
     TimelyUi.calendar.lastHeight = window.innerHeight;
     TimelyUi.calendar.initedHeight = false;
 
+    TimelyUi.calendar._mediaQueryCheck();
     TimelyUi.utils._resetIScrolls();
 };

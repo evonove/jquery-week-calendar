@@ -332,34 +332,36 @@
 
                 window.onresize = function (e) {
                     if (typeof e.originalEvent === 'undefined') {
+                        self._mediaQueryCheck();
                         TimelyUi.utils._resetIScrolls();
                     }
                 };
+            },
 
-                /**
-                 * Register a callback for mobile view
-                 */
-                enquire
-                    .register('screen and (max-width: 767px)', function () {
-                        self.lastRefresh = new Date().getTime();
-                        if (compat.isTablet) {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 2;
-                        } else {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 1;
-                        }
-                    })
-                    .register('screen and (min-width: 768px) and (max-width: 991px)', function () {
-                        self.lastRefresh = new Date().getTime();
-                        if (compat.isTablet) {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 3;
-                        } else {
-                            TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
-                        }
-                    })
-                    .register('screen and (min-width: 992px)', function () {
-                        self.lastRefresh = new Date().getTime();
-                        TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = 5;
-                    });
+            _mediaQueryCheck: function() {
+                var self = this,
+                    _columnsToShow = 7;
+
+                self.setReadOnly(false);
+
+                // Distinct mobile from tablet (on landscape always set widget "insert mode" to read only)
+                if (compat.isMobile) {
+                    if (window.matchMedia('(orientation:portrait)').matches) {
+                        _columnsToShow = 1;
+                    } else {
+                        _columnsToShow = 4;
+                        self.setReadOnly(true);
+                    }
+                } else if (compat.isTablet) {
+                    if (window.matchMedia('(orientation:portrait)').matches) {
+                        _columnsToShow = 3;
+                    } else {
+                        self.setReadOnly(true);
+                    }
+                }
+
+                // TODO: it's better to avoid namespace pollution
+                TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = _columnsToShow;
             },
 
             /********************
