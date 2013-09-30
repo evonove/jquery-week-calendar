@@ -325,13 +325,6 @@
                 if (compat.isMobile || compat.isTablet) {
                     // Load modal form for search
                     self._loadModalSearch();
-
-                    // Avoid bouncing on mobile devices
-                    compat.on($(document), compat.events.move,
-                        function (e) {
-                            e.preventDefault();
-                        }
-                    );
                 }
                 self._loadPopoverForm();
                 self._renderCalendar();
@@ -966,19 +959,6 @@
                                 $('#modal-search').modal({show: true, backdrop: false});
                             });
                             _searchButton.appendTo($rightMenuContainer);
-
-                            // Add swipe capabilities (with HammerJs) only if the swipe is quickly
-                            compat.on($('body'), 'swipe', function(event) {
-                                if (event.gesture.velocityX > 1.2) {
-                                    var $animationDay = $('.js-animation-day');
-                                    $animationDay.removeClass('fade-in-left fade-in-right');
-                                    if (event.gesture.direction === 'left') {
-                                        $animationDay.addClass('fade-left');
-                                    } else if (event.gesture.direction === 'right') {
-                                        $animationDay.addClass('fade-right');
-                                    }
-                                }
-                            });
                         } else {
                             // Add date chooser controller
                             var $picker = $('.js-date-selector').pickadate(),
@@ -1202,7 +1182,6 @@
                             _fadeClass,
                             _newDay;
 
-                        //window.alert($self.hasClass('fade-left') + " / " + $self.hasClass('fade-right'));
                         if ($self.hasClass('fade-left') === true)  {
                             _fadeClass = 'fade-in-left';
                             _newDay = 'next';
@@ -1236,7 +1215,7 @@
                 // Create the structure
                 $calendarBody = '';
 
-                $calendarBody += '<div id="scrollbar-wrapper" class=\"row-fluid wc-scrollbar-wrapper\">';
+                $calendarBody += '<div id="scrollbar-wrapper" class=\"js-calendar-wrapper row-fluid wc-scrollbar-wrapper\">';
                 $calendarBody += '<div class=\"wc-scroller-height\">';
 
                 $calendarBody += '<div id="calendar-body-wrapper" class=\"wc-scrollable-grid wc-calendar-body-wrapper\">';
@@ -1261,6 +1240,19 @@
                 self._renderCalendarBodyEvents($calendarTableTbody);
 
                 $calendarBody.appendTo($calendarContainer);
+
+                // Add swipe capabilities (with HammerJs) only if the swipe is quickly
+                compat.on($('.js-calendar-wrapper'), 'swipe', function(event) {
+                    if (event.gesture.velocityX > 1.2) {
+                        var $animationDay = $('.js-animation-day');
+                        $animationDay.removeClass('fade-in-left fade-in-right');
+                        if (event.gesture.direction === 'left') {
+                            $animationDay.addClass('fade-left');
+                        } else if (event.gesture.direction === 'right') {
+                            $animationDay.addClass('fade-right');
+                        }
+                    }
+                });
 
                 // Set the column height
                 $calendarContainer.find('.wc-full-height-column').height(options.timeslotHeight * options.timeslotsPerDay);
