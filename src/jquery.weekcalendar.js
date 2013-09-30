@@ -802,9 +802,15 @@
              */
             _loadModalForm: function () {
                 var calendarContainer = this.element,
-                    modal = TimelyUi.modal;
+                    modal = TimelyUi.modal,
+                    htmlNode = $('<div id="ajax-modal" class="modal modal-event hide"/>');
 
-                calendarContainer.append('<div id="ajax-modal" class="modal modal-event hide fade"/>');
+                calendarContainer.append(htmlNode);
+
+                // Add fade effect on desktops
+                if (!compat.isMobile && !compat.isTablet) {
+                    htmlNode.addClass('fade');
+                }
 
                 var modalNode = $('#ajax-modal');
                 modalNode.load(this.options.modalTemplate, function() {

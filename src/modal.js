@@ -7,7 +7,7 @@
 	var self = TimelyUi.modal,
 		utils = TimelyUi.utils,
 		timeInterval = 60 / 4,
-        isMobile = TimelyUi.compat.isMobile;
+        compat = TimelyUi.compat;
 
 	$.extend(self, {
         init: function(selector) {
@@ -26,7 +26,7 @@
             self.title = $('.modal-header #title');
             self.content = $('.modal-body #description');
 
-            if(!isMobile){
+            if(!compat.isMobile){
                 /* Set all date and time widgets */
                 $('.modal-body .datepicker').pickadate({ format: 'dd/mm/yyyy' });
                 $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
@@ -65,7 +65,9 @@
             });
 
             self.instance.$element.on('shown', function() {
-                self.title.focus();
+                if (!compat.isMobile && !compat.isTablet) {
+                    self.title.focus();
+                }
             });
 
             self.instance.$element.on('hide', function() {
@@ -209,7 +211,7 @@
 
         createEventDate: function(selector){
             var $obj = $(selector);
-            if (!isMobile){
+            if (!compat.isMobile){
                $obj = $obj.pickadate('picker');
             }
             return $obj;
@@ -217,14 +219,14 @@
 
         createEventTime: function(selector){
             var $obj = $(selector);
-            if (!isMobile){
+            if (!compat.isMobile){
                 $obj = $obj.pickatime('picker');
             }
             return $obj;
         },
 
         setDate: function($obj, date) {
-            if (!isMobile){
+            if (!compat.isMobile){
                 $obj.set('select', utils.toDate(date));
             } else {
                 $obj.val(utils.formatDate(date, 'YYYY-MM-DD'));
@@ -232,7 +234,7 @@
         },
 
         setTime: function($obj, time) {
-            if (!isMobile){
+            if (!compat.isMobile){
                 $obj.set('select', utils.timeToArray(time));
             } else {
                 $obj.val(utils.formatDate(time, 'HH:mm'));
@@ -240,7 +242,7 @@
         },
 
         getTime: function(date, $time) {
-            if (!isMobile){
+            if (!compat.isMobile){
                 return utils.datetimeISOFormat(date, $time.get('select', 'HH:i'));
             } else {
                 return utils.datetimeISOFormat(date, $time.val());
@@ -248,7 +250,7 @@
         },
 
         getDate: function($obj) {
-            if (!isMobile){
+            if (!compat.isMobile){
                 return utils.formatDate($obj.get('select').obj, 'MM-DD-YYYY');
             } else {
                 return utils.formatDate($obj.val(), 'MM-DD-YYYY');
