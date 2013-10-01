@@ -1145,8 +1145,13 @@
                     calendarHeaderHtml += '</tr>';
                 }
                 calendarHeaderHtml += '</thead></table>';
-                calendarHeaderHtml += '<div class=\"wc-go-left\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-left"></i></button></div>';
-                calendarHeaderHtml += '<div class=\"wc-go-right\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-right"></i></button></div>';
+
+                // Avoid go left/right buttons to scroll users if they fit on window
+                if (options.users.length > TimelyUi.columnsToShow) {
+                    calendarHeaderHtml += '<div class=\"wc-go-left\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-left"></i></button></div>';
+                    calendarHeaderHtml += '<div class=\"wc-go-right\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-right"></i></button></div>';
+                }
+
                 calendarHeaderHtml += '</div>';
 
 
