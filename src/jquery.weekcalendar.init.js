@@ -11,15 +11,12 @@ TimelyUi.init = function(id, conf) {
     moment.lang(_selectedLanguage);
 
     // Calendar initialization
+    TimelyUi._widgetStatus = TimelyUi.utils.mediaQueryCheck();
+    TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = TimelyUi._widgetStatus.columns;
+
     TimelyUi.calendar = $('#' + id).weekCalendar(conf).data('ui-weekCalendar');
     TimelyUi.calendar.conf = conf;
     TimelyUi.calendar.id = id;
 
-    TimelyUi.calendar.lastRefresh = new Date().getTime();
-    TimelyUi.calendar.lastWidth = window.innerWidth;
-    TimelyUi.calendar.lastHeight = window.innerHeight;
-    TimelyUi.calendar.initedHeight = false;
-
-    TimelyUi.calendar._mediaQueryCheck();
     TimelyUi.utils._resetIScrolls();
 };

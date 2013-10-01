@@ -333,36 +333,13 @@
 
                 window.onresize = function (e) {
                     if (typeof e.originalEvent === 'undefined') {
-                        self._mediaQueryCheck();
+                        // Get widget status according to active media query and reset iScroll
+                        TimelyUi._widgetStatus = TimelyUi.utils.mediaQueryCheck();
+                        TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = TimelyUi._widgetStatus.columns;
+
                         TimelyUi.utils._resetIScrolls();
                     }
                 };
-            },
-
-            _mediaQueryCheck: function() {
-                var self = this,
-                    _columnsToShow = 7;
-
-                self.setReadOnly(false);
-
-                // Distinct mobile from tablet (on landscape always set widget "insert mode" to read only)
-                if (compat.isMobile) {
-                    if (window.matchMedia('(orientation:portrait)').matches) {
-                        _columnsToShow = 1;
-                    } else {
-                        _columnsToShow = 4;
-                        self.setReadOnly(true);
-                    }
-                } else if (compat.isTablet) {
-                    if (window.matchMedia('(orientation:portrait)').matches) {
-                        _columnsToShow = 3;
-                    } else {
-                        self.setReadOnly(true);
-                    }
-                }
-
-                // TODO: it's better to avoid namespace pollution
-                TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = _columnsToShow;
             },
 
             /********************

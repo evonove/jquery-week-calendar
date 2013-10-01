@@ -1,6 +1,7 @@
-(function (TimelyUi) {
-    'use strict';
+;(function (TimelyUi) { 'use strict';
     TimelyUi.utils = TimelyUi.utils || {};
+
+    var compat = TimelyUi.compat;
 
     /*************************
      * Javascript prototypes *
@@ -23,6 +24,34 @@
     /*****************
      * Generic utils *
      ****************/
+
+    /**
+     * According to devices informations, returns maximum number of columns and if the widget is in read only mode
+     * @public
+     * @returns {{columns: number, readOnly: boolean}}
+     */
+    TimelyUi.utils.mediaQueryCheck = function() {
+        var _columnsToShow = 7;
+        var _readOnly = false;
+
+        // Distinct mobile from tablet (on landscape always set widget "insert mode" to read only)
+        if (compat.isMobile) {
+            if (window.matchMedia('(orientation:portrait)').matches) {
+                _columnsToShow = 1;
+            } else {
+                _columnsToShow = 4;
+                _readOnly = true;
+            }
+        } else if (compat.isTablet) {
+            if (window.matchMedia('(orientation:portrait)').matches) {
+                _columnsToShow = 3;
+            } else {
+                _readOnly = true;
+            }
+        }
+
+        return {columns: _columnsToShow, readOnly: _readOnly}
+    };
 
     /**
      * Array.filter method is implemented in JavaScript 1.6, supported by most modern browsers.
