@@ -95,7 +95,7 @@
         TimelyUi.utils._initIScrolls();
         TimelyUi.utils._redimColumnsWidth();
 
-        TimelyUi.calendar._scrollToHour(TimelyUi.calendar.options.date.getHours(), true);
+        TimelyUi.calendar._scrollToHour((new Date()).getHours());
     };
 
     TimelyUi.utils._initIScrolls  = function() {

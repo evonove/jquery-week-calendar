@@ -2335,7 +2335,7 @@
             /*
              * Scroll the calendar to a specific hour
              */
-            _scrollToHour: function (hour, animate) {
+            _scrollToHour: function (hour) {
                 var self = this;
                 var iscroll = TimelyUi.iScrollEls[0];
                 var $scrollable = this.element.find('.wc-scroller-height');
