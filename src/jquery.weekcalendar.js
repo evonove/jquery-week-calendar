@@ -239,7 +239,7 @@
                  * @param {jQuery} calendar the calendar object.
                  * @return {String} the label which is not more length than selected characters.
                  */
-                getUserName: function (user, index, calendar) {
+                getUserName: function (user) {
                     var userLabel = user.last_name ? "{0} {1}.".format(user.first_name, user.last_name[0]) : user.username;
                     return userLabel.trunc(15);
                 },
@@ -986,18 +986,39 @@
                             userNavHtml += '<i class="icon-group"></i> <span class="hidden-phone">Users</span> ';
                             userNavHtml += '<span class="caret"></span>';
                             userNavHtml += '</a>';
-                            userNavHtml += '<ul id="dropdown-user" class="dropdown-menu">';
+                            userNavHtml += '<ul class="js-user-list user-list dropdown-menu">';
                             userNavHtml += '</ul>';
                             userNavHtml += '</div>';
                             $(userNavHtml).appendTo($rightMenuContainer);
 
-                            $container = $calendarContainer.find('#dropdown-user');
+                            // Add user's filter
+                            $container = $calendarContainer.find('.js-user-list');
                             $.each(options.users, function (index, user) {
-                                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn active" data-toggle="button" data-propagation="false" data-user-id="' + user.id + '">' + options.getUserName(user) + '</button></a></li>');
-                                $container.append(_input);
+                                var _userAvatar = user.avatar_url || 'https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=mm&s=30';
+                                var _userButton = '';
+
+                                _userButton += '<li class="item enabled">';
+                                _userButton += '<a href="#" class="js-select-member name" data-user-id="' + user.id + '">';
+                                _userButton += '<span class="member">';
+                                _userButton += '<img class="member-avatar" height="30" width="30" src="' + _userAvatar + '" alt="' + options.getUserName(user) + '">';
+                                _userButton += '</span>';
+                                _userButton += '<span class="full-name">' + options.getUserName(user) + ' (<span class="username">' + user.username + '</span>)</span> <span class="icon-sm icon-ok"></span>';
+                                _userButton += '</a>';
+                                _userButton += '</li>';
+
+                                $container.append($(_userButton));
                             });
-                            $container.find('[data-propagation=\"false\"]').click(function (event) {
-                                utils.toggleUserByButton(event, $(this));
+
+                            // Add filter event on selection
+                            $container.find('.js-select-member').click(function(e) {
+                                var $this = $(this);
+                                var $parent = $this.parent();
+                                var _userId = $this.data('user-id');
+                                var _userIsVisible = $parent.hasClass('enabled');
+
+                                utils.toggleUser(_userId, _userIsVisible);
+                                _userIsVisible ? $parent.removeClass('enabled') : $parent.addClass('enabled');
+
                                 return false;
                             });
                         }
@@ -1023,7 +1044,7 @@
                             });
                             $container.find('button').click(function (event) {
                                 var organizationId = $(this).data('organization-id');
-                                utils.showUsers(organizationId);
+                                utils.showAllUsers(organizationId);
                             });
                         }
 

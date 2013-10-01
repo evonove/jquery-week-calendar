@@ -504,20 +504,17 @@
         });
     };
 
-    TimelyUi.utils.toggleUserByButton = function (event, $button) {
+    TimelyUi.utils.toggleUser = function (userId, userIsVisible) {
         var calendar = TimelyUi.calendar,
-            utils = TimelyUi.utils,
-            userId = $button.data('user-id'),
             $wcUser = $('.wc-user-' + userId);
 
-        if ($wcUser.is(':visible')) {
-            utils._hideUserColumn(userId);
+        if (userIsVisible) {
+            this._hideUserColumn(userId);
         } else {
-            utils._showUserColumn(userId);
+            this._showUserColumn(userId);
         }
 
         $wcUser.toggle();
-        $button.button('toggle');
         calendar._drawCurrentHourLine();
     };
 
@@ -562,23 +559,21 @@
     };
 
     /**
-     * Show a multiple users in all widget, toggling the bounded organization button
-     * @param {int} organizationId is the id of organization to show, included all linked users.
+     * Show all users of selected organization
+     * @param {int} organizationId
      */
-    TimelyUi.utils.showUsers = function (organizationId) {
-        var options = TimelyUi.calendar.options,
-            utils = TimelyUi.utils,
-            filter = TimelyUi.utils._filter,
-            endArray = [];
+    TimelyUi.utils.showAllUsers = function (organizationId) {
+        var self = this;
+        var options = TimelyUi.calendar.options;
+        var _organization = this._findById(options.currentUserOrganizations, organizationId);
 
-        endArray = filter(options.currentUserOrganizations, 'id', organizationId, true);
-        if (endArray.length === 1) {
-            var organization = endArray[0];
-            $.each(organization.users, function (index, userId) {
-                var event = jQuery.Event('click');
-                var $button = $('button[data-user-id="' + userId + '"]');
-                if (!$button.hasClass('active')) {
-                    utils.toggleUserByButton(event, $button);
+        if (_organization) {
+            var $userList = $('.js-user-list');
+
+            $.each(_organization.users, function (index, userId) {
+                if (_.contains(options.removedUserIds, userId)) {
+                    $userList.find('a[data-user-id=' + userId + ']').parent().addClass('enabled');
+                    self.toggleUser(userId, false);
                 }
             });
         }

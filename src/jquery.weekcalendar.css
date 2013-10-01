@@ -735,3 +735,49 @@ header {
     from { left: -50px; }
     to { left: 0; }
 }
+
+/* Users and organizations avatar */
+.member {
+    background-color: #d6d6d6;
+    border: 1px solid #c7c7c7;
+    border-bottom-color: #adadad;
+    border-radius: 3px;
+    color: #444;
+    float: left;
+    height: 30px;
+    margin: 0 8px 0 8px;
+}
+
+.member .member-avatar {
+    border-radius: 3px;
+    vertical-align: inherit;
+}
+
+.user-list li a {
+    border-radius: 3px;
+    width: 250px;
+    line-height: 30px;
+    overflow: hidden;
+    position: relative;
+    padding: 4px;
+}
+
+.icon-sm {
+    font-size: 12px;
+    line-height: 18px;
+    width: 18px;
+    color: #a9a9a9;
+    text-align: center;
+    padding: 11px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+a .icon-sm {
+    display: none;
+}
+
+li.enabled > a > span.icon-sm {
+    display: inline-block;
+}
