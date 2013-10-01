@@ -986,7 +986,7 @@
                             userNavHtml += '<i class="icon-group"></i> <span class="hidden-phone">Users</span> ';
                             userNavHtml += '<span class="caret"></span>';
                             userNavHtml += '</a>';
-                            userNavHtml += '<ul class="js-user-list user-list dropdown-menu">';
+                            userNavHtml += '<ul class="js-user-list avatar-list dropdown-menu">';
                             userNavHtml += '</ul>';
                             userNavHtml += '</div>';
                             $(userNavHtml).appendTo($rightMenuContainer);
@@ -998,11 +998,11 @@
                                 var _userButton = '';
 
                                 _userButton += '<li class="item enabled">';
-                                _userButton += '<a href="#" class="js-select-member name" data-user-id="' + user.id + '">';
-                                _userButton += '<span class="member">';
-                                _userButton += '<img class="member-avatar" height="30" width="30" src="' + _userAvatar + '" alt="' + options.getUserName(user) + '">';
+                                _userButton += '<a href="#" class="js-select-user" data-user-id="' + user.id + '">';
+                                _userButton += '<span class="placeholder-avatar">';
+                                _userButton += '<img class="placeholder-img" height="30" width="30" src="' + _userAvatar + '" alt="' + options.getUserName(user) + '">';
                                 _userButton += '</span>';
-                                _userButton += '<span class="full-name">' + options.getUserName(user) + ' (<span class="username">' + user.username + '</span>)</span> <span class="icon-sm icon-ok"></span>';
+                                _userButton += '<span>' + options.getUserName(user) + ' (<span>' + user.username + '</span>)</span> <span class="icon-sm icon-ok"></span>';
                                 _userButton += '</a>';
                                 _userButton += '</li>';
 
@@ -1010,7 +1010,7 @@
                             });
 
                             // Add filter event on selection
-                            $container.find('.js-select-member').click(function(e) {
+                            $container.find('.js-select-user').click(function(e) {
                                 var $this = $(this);
                                 var $parent = $this.parent();
                                 var _userId = $this.data('user-id');
@@ -1032,17 +1032,27 @@
                             orgNavHtml += '<i class="icon-building"></i> <span class="hidden-phone">Teams</span> ';
                             orgNavHtml += '<span class="caret"></span>';
                             orgNavHtml += '</a>';
-                            orgNavHtml += '<ul id="dropdown-organization" class="dropdown-menu">';
+                            orgNavHtml += '<ul class="js-organization-list avatar-list dropdown-menu">';
                             orgNavHtml += '</ul>';
                             orgNavHtml += '</div>';
                             $(orgNavHtml).appendTo($rightMenuContainer);
 
-                            $container = $calendarContainer.find('#dropdown-organization');
+                            $container = $calendarContainer.find('.js-organization-list');
                             $.each(options.currentUserOrganizations, function (index, organization) {
-                                var _input = $('<li><a tabindex="-1" href="#"><button type="button" class="btn" data-organization-id="' + organization.id + '">' + options.getOrganizationName(organization) + '</button></a></li>');
-                                $container.append(_input);
+                                var _organizationAvatar = organization.logo_url || 'https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=mm&s=30';
+                                var _organizationButton = '';
+
+                                _organizationButton += '<li class="item enabled">';
+                                _organizationButton += '<a href="#" class="js-select-organization" data-organization-id="' + organization.id + '">';
+                                _organizationButton += '<span class="placeholder-avatar">';
+                                _organizationButton += '<img class="placeholder-img" height="30" width="30" src="' + _organizationAvatar + '" alt="' + organization.name + '">';
+                                _organizationButton += '</span>';
+                                _organizationButton += '<span>' + organization.name + '</span>';
+                                _organizationButton += '</a>';
+                                _organizationButton += '</li>';
+                                $container.append(_organizationButton);
                             });
-                            $container.find('button').click(function (event) {
+                            $container.find('.js-select-organization').click(function (event) {
                                 var organizationId = $(this).data('organization-id');
                                 utils.showAllUsers(organizationId);
                             });

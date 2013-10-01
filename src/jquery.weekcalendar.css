@@ -737,7 +737,7 @@ header {
 }
 
 /* Users and organizations avatar */
-.member {
+.placeholder-avatar {
     background-color: #d6d6d6;
     border: 1px solid #c7c7c7;
     border-bottom-color: #adadad;
@@ -748,12 +748,12 @@ header {
     margin: 0 8px 0 8px;
 }
 
-.member .member-avatar {
+.placeholder-avatar .placeholder-img {
     border-radius: 3px;
     vertical-align: inherit;
 }
 
-.user-list li a {
+.avatar-list li a {
     border-radius: 3px;
     width: 250px;
     line-height: 30px;
