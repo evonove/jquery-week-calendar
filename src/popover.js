@@ -30,7 +30,7 @@
 			    self.options.calEvent.id = calendar.getLastEventId();
             }
             self.options.calEvent.owner = calendar.options.currentUser.id;
-            self.options.calEvent.organization = calendar.options.currentUser.id === _.first(self.options.calEvent.assignees) ? null : utils.chooseOrganization(calendar.options.currentUser.organizations, calendar._getUserFromId(_.first(self.options.calEvent.assignees)).organizations);
+            self.options.calEvent.organization = calendar.options.currentUser.id === _.first(self.options.calEvent.assignees) ? utils._defaultOrganizationOrPrivate(calendar.options.currentUser.organizations) : utils.chooseOrganization(calendar.options.currentUser.organizations, calendar._getUserFromId(_.first(self.options.calEvent.assignees)).organizations);
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);

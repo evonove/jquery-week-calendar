@@ -697,4 +697,16 @@
         var commonOrganizations = this._commonOrganizations(currentUserOrganizations, userOrganizations);
         return this._chooseDefaultOrganization(commonOrganizations);
     };
+
+    /**
+     * Default logic to choose an organization instead of Private
+     * @param {Array} organizations belong to user
+     * @return {Object} valid organization or private
+     */
+    TimelyUi.utils._defaultOrganizationOrPrivate = function (organizations) {
+        // TODO this behaviour should be removed and stored inside user settings
+        var _defaultOrganization = 5;
+
+        return _.contains(organizations, _defaultOrganization) ? _defaultOrganization : null;
+    };
 })(TimelyUi);
