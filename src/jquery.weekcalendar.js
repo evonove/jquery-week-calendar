@@ -240,7 +240,7 @@
                  * @return {String} the label which is not more length than selected characters.
                  */
                 getUserName: function (user) {
-                    var userLabel = user.last_name ? "{0} {1}.".format(user.first_name, user.last_name[0]) : user.username;
+                    var userLabel = user.last_name && user.first_name ? "{0} {1}.".format(user.first_name, user.last_name[0]) : user.first_name || user.last_name || user.username;
                     return userLabel.trunc(15);
                 },
                 /**
