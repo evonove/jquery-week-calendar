@@ -54,7 +54,7 @@
             });
 
             $('.js-modal-delete').click(function(e) {
-                self.delete();
+                self.remove();
                 self.instance.hide();
                 e.preventDefault();
             });
@@ -202,7 +202,7 @@
 			return self;
 		},
 
-		delete: function() {
+		remove: function() {
             var calendar = TimelyUi.calendar;
 
             calendar.onDelete(self.instance.options.calEvent);
