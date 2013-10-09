@@ -161,9 +161,13 @@
 
 			// Disable/Enable delete button if chosen event is already persisted
 			if (!!chosenEvent.id) {
-				deleteButton.show();
+                self.content.removeClass('input-block-level').addClass('hidden');
+                self.contentParsed.removeClass('hidden');
+                deleteButton.show();
 			} else {
-				deleteButton.hide();
+                self.content.removeClass('hidden').addClass('input-block-level');
+                self.contentParsed.addClass('hidden');
+                deleteButton.hide();
 			}
 
             self.startDate = self.createEventDate('.modal-body .js-start-date');
@@ -194,10 +198,6 @@
 
 			self.content.val(chosenEvent.content);
             self.contentParsed.html(utils.phoneParsing(chosenEvent.content));
-
-            // Reset some class
-            self.content.removeClass('input-block-level').addClass('hidden');
-            self.contentParsed.removeClass('hidden');
 
 			return self;
 		},

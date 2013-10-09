@@ -32,13 +32,16 @@
      */
     TimelyUi.utils.phoneParsing = function (text) {
         var _phonePattern = /(?:\+?(\d{1,3}))?[\/]*(\d{3})[\/]*(\d{3})[\/]*(\d{4})?\b/g,
-            _foundPattern = _.unique(text.match(_phonePattern)) || [],
-            _sanitizedText = text;
+            _sanitizedText = text,
+            _sanitizedEntry;
 
-        _foundPattern.forEach(function (entry) {
-            var _sanitizedEntry = entry.trim().replace(/[^\w\s]/gi, '');
-            _sanitizedText = _sanitizedText.replace(new RegExp(entry, 'gi'), '<a href="tel:' + _sanitizedEntry + '">' + entry + '</a>');
-        });
+        if (!('undefined' === typeof text || text === "")) {
+            // For each found pattern or []
+            (_.unique(text.match(_phonePattern)) || []).forEach(function (entry) {
+                _sanitizedEntry = entry.trim().replace(/[^\w\s]/gi, '');
+                _sanitizedText = _sanitizedText.replace(new RegExp(entry, 'gi'), '<a href="tel:' + _sanitizedEntry + '">' + entry + '</a>');
+            });
+        }
 
         return _sanitizedText
     };
