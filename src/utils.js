@@ -26,6 +26,24 @@
      ****************/
 
     /**
+     * Parse a text replacing phone number with tel:link
+     * @param text to parse
+     * @returns {String} with phone number as a tel:link
+     */
+    TimelyUi.utils.phoneParsing = function (text) {
+        var _phonePattern = /(?:\+?(\d{1,3}))?[\/]*(\d{3})[\/]*(\d{3})[\/]*(\d{4})?\b/g,
+            _foundPattern = _.unique(text.match(_phonePattern)) || [],
+            _sanitizedText = text;
+
+        _foundPattern.forEach(function (entry) {
+            var _sanitizedEntry = entry.trim().replace(/[^\w\s]/gi, '');
+            _sanitizedText = _sanitizedText.replace(new RegExp(entry, 'gi'), '<a href="tel:' + _sanitizedEntry + '">' + entry + '</a>');
+        });
+
+        return _sanitizedText
+    };
+
+    /**
      * According to devices informations, returns maximum number of columns and if the widget is in read only mode
      * @public
      * @returns {{columns: number, readOnly: boolean}}

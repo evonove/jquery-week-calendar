@@ -15,21 +15,23 @@
             self.instance = selector.modal({ show: false }).data('modal');
 
             /* Assign all selector to local variables */
-            self.organizationSelect = $('.modal-body #organization');
-            self.ownerSelect = $('.modal-body #owner');
-            self.usersSelect = $('.modal-body #users').selectize({
+            var $modalBody = $('.modal-body');
+            self.organizationSelect = $modalBody.find('#organization');
+            self.ownerSelect = $modalBody.find('#owner');
+            self.usersSelect = $modalBody.find('#users').selectize({
                 plugins: ['remove_button'],
                 valueField: 'id',
                 labelField: 'username',
                 searchField: 'username'
             })[0].selectize;
             self.title = $('.modal-header #title');
-            self.content = $('.modal-body #description');
+            self.content = $modalBody.find('.js-description');
+            self.contentParsed = $modalBody.find('.js-description-parsing');
 
             if(!compat.isMobile){
                 /* Set all date and time widgets */
-                $('.modal-body .datepicker').pickadate({ format: 'dd/mm/yyyy' });
-                $('.modal-body .timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
+                $modalBody.find('.datepicker').pickadate({ format: 'dd/mm/yyyy' });
+                $modalBody.find('.timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
             }
 
             self.organizationSelect.on('change', function(e) {
@@ -47,6 +49,7 @@
                 }
             });
 
+            /* Button listener */
             $('.js-modal-save').click(function(e) {
                 self.save();
                 self.instance.hide();
@@ -57,6 +60,14 @@
                 self.remove();
                 self.instance.hide();
                 e.preventDefault();
+            });
+
+            $('.js-switch-edit').click(function(e) {
+                if (self.content.hasClass('hidden')) {
+                    // Going to edit mode
+                    self.content.removeClass('hidden').addClass('input-block-level');
+                    self.contentParsed.addClass('hidden');
+                }
             });
 
             /* Twitter bootstrap events handler */
@@ -136,6 +147,7 @@
 
 			self.title.val('');
 			self.content.val('');
+            self.contentParsed.html('');
 			TimelyUi.calendar.removeUnsavedEvents();
 			delete self.instance.options.calEvent;
 			return self;
@@ -181,6 +193,12 @@
             self.setTime(self.endTime, chosenEvent.end);
 
 			self.content.val(chosenEvent.content);
+            self.contentParsed.html(utils.phoneParsing(chosenEvent.content));
+
+            // Reset some class
+            self.content.removeClass('input-block-level').addClass('hidden');
+            self.contentParsed.removeClass('hidden');
+
 			return self;
 		},
 
