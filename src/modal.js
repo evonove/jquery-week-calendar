@@ -160,7 +160,7 @@
 				deleteButton = $('.modal-footer #modalDelete');
 
 			// Disable/Enable delete button if chosen event is already persisted
-			if (!!chosenEvent.id) {
+			if (!!chosenEvent.id && chosenEvent.content !== "") {
                 self.content.removeClass('input-block-level').addClass('hidden');
                 self.contentParsed.removeClass('hidden');
                 deleteButton.show();
