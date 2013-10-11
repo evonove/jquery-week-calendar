@@ -1255,17 +1255,21 @@
                 $calendarBody.appendTo($calendarContainer);
 
                 // Add swipe capabilities (with HammerJs) only if the swipe is quickly
-                compat.on($('.js-calendar-wrapper'), 'swipe', function(event) {
-                    if (event.gesture.velocityX > 1.2) {
-                        var $animationDay = $('.js-animation-day');
-                        $animationDay.removeClass('fade-in-left fade-in-right');
-                        if (event.gesture.direction === 'left') {
-                            $animationDay.addClass('fade-left');
-                        } else if (event.gesture.direction === 'right') {
-                            $animationDay.addClass('fade-right');
+                if (compat.isMobile || compat.isTablet) {
+                    compat.on($('.js-calendar-wrapper'), 'swipe', function(event) {
+                        // Require velocity condition for iPad
+                        var _swipe = compat.isSafariWebKit && compat.isTablet && event.gesture.velocityX < 1.2 ? false : true;
+                        if (_swipe) {
+                            var $animationDay = $('.js-animation-day');
+                            $animationDay.removeClass('fade-in-left fade-in-right');
+                            if (event.gesture.direction === 'left') {
+                                $animationDay.addClass('fade-left');
+                            } else if (event.gesture.direction === 'right') {
+                                $animationDay.addClass('fade-right');
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 // Set the column height
                 $calendarContainer.find('.wc-full-height-column').height(options.timeslotHeight * options.timeslotsPerDay);
