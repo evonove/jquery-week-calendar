@@ -21,7 +21,8 @@ var TimelyUi = TimelyUi || {};
         TimelyUi.calendar = $('#' + id).weekCalendar(conf).data('ui-weekCalendar');
         TimelyUi.calendar.conf = conf;
         TimelyUi.calendar.id = id;
-
         TimelyUi.utils._resetIScrolls();
+
+        return true;
     };
 })();
