@@ -68,7 +68,7 @@
                 allowCalEventOverlap: true,
                 overlapEventsSeparate: true,
                 totalEventsWidthPercentInOneColumn: 100,
-                readonly: false,
+                readOnly: false,
                 allowEventCreation: true,
                 hourLine: true,
                 modalTemplate: '/template/modal.html',
@@ -351,6 +351,12 @@
             setReadOnly: function (value) {
                 this.options.readOnly = value;
                 this.options.allowEventCreation = !value;
+            },
+            /**
+             * Return if widget is in read only mode
+             */
+            getWidgetStatus: function () {
+                return this.options.readOnly;
             },
             /*
              * Refresh the events for the currently displayed week.
@@ -851,7 +857,7 @@
 
                 $weekDayColumns = $calendarContainer.find('.wc-day-column-inner');
                 $weekDayColumns.each(function (i, val) {
-                    if (!options.readonly) {
+                    if (!options.readOnly) {
                         self._addDroppableToWeekDay($(this));
                         if (options.allowEventCreation) {
                             self._setupEventCreationForWeekDay($(this));
@@ -1117,8 +1123,12 @@
                 _alert.addClass('in');
                 // Remove after some delay
                 setTimeout(function () {
-                    _alert.alert('close');
+                    _self.closeErrorMessage();
                 }, _self.options.alertFadeOutInterval);
+            },
+
+            closeErrorMessage: function () {
+                $('.js-alert.alert-top').alert('close');
             },
 
             /*
@@ -1927,11 +1937,11 @@
 
                 $calEventList.show();
 
-                if (calEvent.id && (!options.readonly && options.resizable(calEvent, $calEventList))) {
+                if (calEvent.id && (!options.readOnly && options.resizable(calEvent, $calEventList))) {
                     self._addResizableToCalEvent(calEvent, $calEventList, $weekDay);
                 }
 
-                if (calEvent.id && (!options.readonly && options.draggable(calEvent, $calEventList))) {
+                if (calEvent.id && (!options.readOnly && options.draggable(calEvent, $calEventList))) {
                     self._addDraggableToCalEvent(calEvent, $calEventList);
                 }
 
@@ -2338,7 +2348,7 @@
              */
             _refreshEventDetails: function (calEvent, $calEvent) {
                 var suffix = '';
-                if (!this.options.readonly && this.options.allowEventDelete && this.options.deletable(calEvent, $calEvent)) {
+                if (!this.options.readOnly && this.options.allowEventDelete && this.options.deletable(calEvent, $calEvent)) {
                     suffix = '<div class="wc-cal-event-delete ui-icon ui-icon-close"></div>';
                 }
                 var wcTime = $calEvent.find('.wc-time');
