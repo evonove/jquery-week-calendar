@@ -380,6 +380,12 @@ input.input-title {
     right: 4px;
     text-align: center;
     z-index: 1040;
+    height: 13px;
+}
+
+.alert-min {
+    width: 0;
+    left: 47%;
 }
 
 /* Override HTML5 native controls (date and time) */

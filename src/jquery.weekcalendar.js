@@ -837,7 +837,7 @@
             _loadAlertMessage: function () {
                 var calendarContainer = this.element;
 
-                calendarContainer.append('<div class="js-alert alert alert-error fade"></div>');
+                calendarContainer.append('<div class="js-alert alert fade"></div>');
             },
 
             /*
@@ -1109,26 +1109,44 @@
             /**
              * Show an alert message with Twitter Bootstrap alert (fade in and fade out)
              * @param {String} text you want to show
+             * @param {String} fadeOut if error should fade out after some milliseconds
              */
-            showErrorMessage: function (text) {
+            showErrorMessage: function (text, fadeOut) {
+                var _self = this;
+                _self.showMessage(text, 'alert-error', fadeOut)
+            },
+
+            showSuccessMessage: function (text, fadeOut) {
+                var _self = this;
+                _self.showMessage(text, 'alert-success', fadeOut)
+            },
+
+            showMessage: function (text, type, fadeOut, fullsize) {
                 var _self = this,
                     _calendarContainer = _self.element,
                     _alert = $('.js-alert').clone();
 
-                _alert.text(text);
-                _alert.addClass('alert-top');
+                _alert.html(text);
+                _alert.removeClass('js-alert');
+                _alert.addClass(type + ' alert-top');
+                if (!fullsize) {
+                    _alert.addClass('alert-min');
+                }
                 _calendarContainer.append(_alert);
 
                 // Show alert
                 _alert.addClass('in');
+
                 // Remove after some delay
-                setTimeout(function () {
-                    _self.closeErrorMessage();
-                }, _self.options.alertFadeOutInterval);
+                if (fadeOut) {
+                    setTimeout(function () {
+                        _self.closeMessage();
+                    }, _self.options.alertFadeOutInterval);
+                }
             },
 
-            closeErrorMessage: function () {
-                $('.js-alert.alert-top').alert('close');
+            closeMessage: function () {
+                $('.alert-top').alert('close');
             },
 
             /*
