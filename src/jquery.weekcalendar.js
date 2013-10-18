@@ -1075,14 +1075,14 @@
              * @param {String} text you want to show
              * @param {String} fadeOut if error should fade out after some milliseconds
              */
-            showErrorMessage: function (text, fadeOut) {
+            showErrorMessage: function (text, fadeOut, fullsize) {
                 var _self = this;
-                _self.showMessage(text, 'alert-error', fadeOut)
+                _self.showMessage(text, 'alert-error', fadeOut, fullsize)
             },
 
-            showSuccessMessage: function (text, fadeOut) {
+            showSuccessMessage: function (text, fadeOut, fullsize) {
                 var _self = this;
-                _self.showMessage(text, 'alert-success', fadeOut)
+                _self.showMessage(text, 'alert-success', fadeOut, fullsize)
             },
 
             showMessage: function (text, type, fadeOut, fullsize) {
