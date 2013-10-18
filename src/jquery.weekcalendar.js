@@ -319,7 +319,6 @@
             _create: function () {
                 var self = this;
                 self._computeOptions();
-                self._setupEventDelegation();
                 self._addClassesWidget();
                 self._loadModalForm();
                 if (compat.isMobile || compat.isTablet) {
@@ -330,6 +329,7 @@
                 self._renderCalendar();
                 self._loadCalEvents();
                 self._loadAlertMessage();
+                self._setupEventDelegation();
 
                 window.onresize = function (e) {
                     if (typeof e.originalEvent === 'undefined') {
@@ -703,9 +703,7 @@
                         return;
                     }
 
-                    var $calEvent = $target.hasClass('wc-cal-event') ?
-                        $target :
-                        $target.parents('.wc-cal-event');
+                    var $calEvent = $target.hasClass('wc-cal-event') ? $target : $target.parents('.wc-cal-event');
                     if (!$calEvent.length || !$calEvent.data('calEvent')) {
                         return;
                     }
@@ -716,42 +714,8 @@
                         options.eventClick($calEvent.data('calEvent'), $calEvent, self.element, event);
                     }
                 };
-                var mouseoverEvent = function (event) {
-                    var $target = $(event.target);
-                    var $calEvent = $target.hasClass('wc-cal-event') ?
-                        $target :
-                        $target.parents('.wc-cal-event');
-
-                    if (!$calEvent.length || !$calEvent.data('calEvent')) {
-                        return;
-                    }
-
-                    if (self._isDraggingOrResizing($calEvent)) {
-                        return;
-                    }
-
-                    options.eventMouseover($calEvent.data('calEvent'), $calEvent, event);
-                };
-                var mouseoutEvent = function (event) {
-                    var $target = $(event.target);
-                    var $calEvent = $target.hasClass('wc-cal-event') ?
-                        $target :
-                        $target.parents('.wc-cal-event');
-
-                    if (!$calEvent.length || !$calEvent.data('calEvent')) {
-                        return;
-                    }
-
-                    if (self._isDraggingOrResizing($calEvent)) {
-                        return;
-                    }
-
-                    options.eventMouseout($calEvent.data('calEvent'), $calEvent, event);
-                };
-                var $element = $(this.element);
+                var $element = $('.js-calendar-wrapper');
                 compat.on($element, compat.events.click, clickEvent);
-                compat.on($element, compat.events.over, mouseoverEvent);
-                compat.on($element, compat.events.out, mouseoutEvent);
             },
 
             /*
