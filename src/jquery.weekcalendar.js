@@ -74,6 +74,7 @@
                 modalTemplate: '/template/modal.html',
                 modalSearchTemplate: '/template/modal-search.html',
                 popoverTemplate: '/template/popover.html',
+                settingsUrl: '/settings/',
                 deletable: function (calEvent, element) {
                     return true;
                 },
@@ -887,7 +888,7 @@
 
                         // Settings menu
                         settingsHtml += '<div class="btn-group btn-margin pull-right">';
-                        settingsHtml += '<a href="/settings/" class="btn btn-inverse visible-desktop"><i class="icon-cogs"></i> Settings</a>';
+                        settingsHtml += '<a href="' + options.settingsUrl + '" class="btn btn-inverse visible-desktop"><i class="icon-cogs"></i> Settings</a>';
                         settingsHtml += '</div>';
                         $(settingsHtml).appendTo($rightMenuContainer);
 
