@@ -830,6 +830,11 @@
                         }
                     }
                 });
+
+                // Hide users if they are in removedUserIds list
+                options.removedUserIds.forEach(function(removedId) {
+                    $('.wc-user-' + removedId).toggle();
+                });
             },
 
             _parseDate: function (value) {
@@ -969,7 +974,7 @@
                                 var _userAvatar = user.avatar_url || 'https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=mm&s=30';
                                 var _userButton = '';
 
-                                _userButton += '<li class="item enabled">';
+                                _userButton += '<li class="item">';
                                 _userButton += '<a href="#" class="js-select-user" data-user-id="' + user.id + '">';
                                 _userButton += '<span class="placeholder-avatar">';
                                 _userButton += '<img class="placeholder-img" height="30" width="30" src="' + _userAvatar + '" alt="' + options.getUserName(user) + '">';
@@ -977,8 +982,13 @@
                                 _userButton += '<span>' + options.getUserName(user) + ' (<span>' + user.username + '</span>)</span> <span class="icon-sm icon-ok"></span>';
                                 _userButton += '</a>';
                                 _userButton += '</li>';
+                                _userButton = $(_userButton);
 
-                                $container.append($(_userButton));
+                                if ($.inArray(user.id, options.removedUserIds) === -1) {
+                                    _userButton.addClass('enabled');
+                                }
+
+                                $container.append(_userButton);
                             });
 
                             // Add filter event on selection
