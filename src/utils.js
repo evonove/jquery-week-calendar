@@ -150,12 +150,12 @@
     };
 
     TimelyUi.utils._resetHelperValues = function () {
-        var conf = TimelyUi.calendar.conf,
+        var conf = TimelyUi.calendar.options,
             loadedUsers = conf.loadedUsers;
 
         TimelyUi.current = 0;
         TimelyUi.currentUserId = loadedUsers[0].id;
-        TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = TimelyUi.maxColumnNumber || TimelyUi.calendar.conf.maxColumnNumber || 5;
+        TimelyUi.maxColumnNumber = TimelyUi.columnsToShow = TimelyUi.maxColumnNumber || TimelyUi.calendar.options.maxColumnNumber || 5;
     };
 
     /***************************
@@ -225,7 +225,7 @@
      * TODO: Write a better code
      */
     TimelyUi.utils._shiftIfNeeded = function (controller, pointerIndexLimit) {
-        var conf = TimelyUi.calendar.conf,
+        var conf = TimelyUi.calendar.options,
             utils = TimelyUi.utils,
             loadedUsers = conf.loadedUsers,
             removedUserId,
@@ -273,7 +273,7 @@
 
     TimelyUi.utils.slidingUserRight = {
         refreshIfNoSufficientColumns: function (current, pointerIndexLimit) {
-            var conf = TimelyUi.calendar.conf,
+            var conf = TimelyUi.calendar.options,
                 loadedUsers = conf.loadedUsers;
 
             if (current >= pointerIndexLimit) {
@@ -290,7 +290,7 @@
             return (next <= pointerIndexLimit);
         },
         checkForShifting: function (current) {
-            var conf = TimelyUi.calendar.conf,
+            var conf = TimelyUi.calendar.options,
                 loadedUsers = conf.loadedUsers;
             return current < loadedUsers.length;
         }
@@ -298,7 +298,7 @@
 
     TimelyUi.utils.slidingUserLeft = {
         refreshIfNoSufficientColumns: function (current, pointerIndexLimit) {
-            var conf = TimelyUi.calendar.conf,
+            var conf = TimelyUi.calendar.options,
                 loadedUsers = conf.loadedUsers;
             if (current <= pointerIndexLimit) {
                 TimelyUi.current = pointerIndexLimit;
@@ -319,7 +319,7 @@
     };
 
     TimelyUi.utils.slidingUser = function (iScrolls, strategy, pointerIndexLimit) {
-        var conf = TimelyUi.calendar.conf,
+        var conf = TimelyUi.calendar.options,
             utils = TimelyUi.utils,
             loadedUsers = conf.loadedUsers,
             removedUserId,
@@ -356,7 +356,7 @@
     };
 
     TimelyUi.utils.getMaxPointerIndex = function () {
-        var conf = TimelyUi.calendar.conf,
+        var conf = TimelyUi.calendar.options,
             loadedUsers = conf.loadedUsers,
             arrayTds = $('td.wc-day-column:visible');
 
@@ -381,7 +381,7 @@
     };
 
     TimelyUi.utils.getMinPointerIndex = function () {
-        var conf = TimelyUi.calendar.conf,
+        var conf = TimelyUi.calendar.options,
             loadedUsers = conf.loadedUsers,
             arrayTds = $('td.wc-day-column:visible');
 
