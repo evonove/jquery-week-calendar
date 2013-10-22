@@ -115,7 +115,7 @@
                         maxColumnNumber = TimelyUi.maxColumnNumber;
 
                     utils.enableIScroll(0);
-                    if (maxColumnNumber <= calendar.options.users.length) {
+                    if (maxColumnNumber <= calendar.options.loadedUsers.length) {
                         utils.enableIScroll(1);
                         utils.enableIScroll(2);
                     }
@@ -162,7 +162,7 @@
                     var options = TimelyUi.calendar.options;
 
                     utils.enableIScroll(0);
-                    if (TimelyUi.maxColumnNumber <= options.users.length) {
+                    if (TimelyUi.maxColumnNumber <= options.loadedUsers.length) {
                         utils.enableIScroll(1);
                         utils.enableIScroll(2);
                     }
@@ -202,18 +202,18 @@
                     "id": 1,
                     "username": "evonove"
                 },
+
                 currentUserOrganizations: [],
 
-                /**
-                 * The available users for calendar.
-                 * if you want to display users separately, enable the
-                 * showAsSeparateUsers option.
-                 * if you provide a list of user and do not enable showAsSeparateUsers
-                 * option, then only the events that belongs to one or several of
-                 * given users will be displayed
-                 * @type {Array}
-                 */
+                // Available users for calendar
+                loadedUsers: [],
+
+                // Visible users
                 users: [],
+
+                // IDs of removed users
+                removedUserIds: [],
+
                 /**
                  * Should the calendar be displayed with separate column for each
                  * users.
@@ -633,7 +633,7 @@
 
             getUsernameById: function (id) {
                 var self = TimelyUi.calendar,
-                    foundItem = utils._findById(self.options.users, id);
+                    foundItem = utils._findById(self.options.loadedUsers, id);
 
                 return foundItem ? foundItem.username : "";
             },
@@ -948,7 +948,7 @@
                         });
 
                         // Rendering users filter if they are more than 1
-                        if (options.users && options.users.length > 1) {
+                        if (options.loadedUsers && options.loadedUsers.length > 1) {
                             var userNavHtml = '';
 
                             userNavHtml += '<div class="js-user btn-group btn-margin pull-right">';
@@ -963,7 +963,7 @@
 
                             // Add user's filter
                             $container = $calendarContainer.find('.js-user-list');
-                            $.each(options.users, function (index, user) {
+                            $.each(options.loadedUsers, function (index, user) {
                                 var _userAvatar = user.avatar_url || 'https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=mm&s=30';
                                 var _userButton = '';
 
@@ -1119,8 +1119,9 @@
             _renderCalendarHeader: function ($calendarContainer) {
                 var self = this,
                     options = self.options,
-                    showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
+                    showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length,
                     calendarHeaderHtml,
+                    userHeaderHtml,
                     rowspan = '', colspan = '',
                     $headerHtml = $('header');
 
@@ -1143,41 +1144,39 @@
                 if (showAsSeparatedUser) {
                     calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper wc-calendar-header-wrapper"><thead class="wc-scroller-width wc-head-scroller-placeholder">';
                     calendarHeaderHtml += '<tr><th class=\"wc-time-column-header\"></th>';
-                    var uLength = options.users.length, _headerClass = '';
+                    var uLength = options.loadedUsers.length, _headerClass = '';
 
-                    for (i = 1; i <= options.daysToShow; i++) {
-                        for (var j = 0; j < uLength; j++) {
-                            _headerClass = [];
-                            if (j === 0) {
-                                _headerClass.push('wc-day-column-first');
-                            }
-                            if (j === uLength - 1) {
-                                _headerClass.push('wc-day-column-last');
-                            }
-                            if (!_headerClass.length) {
-                                _headerClass = 'wc-day-column-middle';
-                            }
-                            else {
-                                _headerClass = _headerClass.join(' ');
-                            }
-                            calendarHeaderHtml += '<th class=\"' + _headerClass + ' wc-user-header wc-day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
-                            calendarHeaderHtml += self._getUserName(j);
-                            calendarHeaderHtml += '</th>';
+                    for (var j = 0; j < uLength; j++) {
+                        _headerClass = [];
+                        if (j === 0) {
+                            _headerClass.push('wc-day-column-first');
                         }
+                        if (j === uLength - 1) {
+                            _headerClass.push('wc-day-column-last');
+                        }
+                        if (!_headerClass.length) {
+                            _headerClass = 'wc-day-column-middle';
+                        }
+                        else {
+                            _headerClass = _headerClass.join(' ');
+                        }
+                        userHeaderHtml = '<th class=\"' + _headerClass + ' wc-user-header wc-day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
+                        userHeaderHtml += self._getUserName(j);
+                        userHeaderHtml += '</th>';
+
+                        calendarHeaderHtml += userHeaderHtml;
                     }
                     calendarHeaderHtml += '</tr>';
                 }
                 calendarHeaderHtml += '</thead></table>';
 
                 // Avoid go left/right buttons to scroll users if they fit on window
-                if (options.users.length > TimelyUi.columnsToShow) {
+                if (options.loadedUsers.length > TimelyUi.columnsToShow) {
                     calendarHeaderHtml += '<div class=\"wc-go-left\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-left"></i></button></div>';
                     calendarHeaderHtml += '<div class=\"wc-go-right\"><button type="button" class="btn btn-inverse"><i class="icon-chevron-right"></i></button></div>';
                 }
 
                 calendarHeaderHtml += '</div>';
-
-
                 $(calendarHeaderHtml).appendTo($headerHtml);
 
                 // Append fade effect on mobile devices
@@ -1214,7 +1213,7 @@
             _renderCalendarBody: function ($calendarContainer) {
                 var self = this;
                 var options = this.options;
-                var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+                var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
                 var $calendarBody, $calendarTableTbody;
 
                 // Create the structure
@@ -1282,9 +1281,9 @@
 
                 // Add the user data to every impacted column
                 if (showAsSeparatedUser) {
-                    for (var i = 0, uLength = options.users.length; i < uLength; i++) {
+                    for (var i = 0, uLength = options.loadedUsers.length; i < uLength; i++) {
                         $calendarContainer.find('.wc-user-' + self._getUserIdFromIndex(i))
-                            .data('wcUser', options.getUserName(options.users[i]))
+                            .data('wcUser', options.getUserName(options.loadedUsers[i]))
                             .data('wcUserIndex', i)
                             .data('wcUserId', self._getUserIdFromIndex(i));
                     }
@@ -1297,7 +1296,7 @@
             _renderCalendarBodyTimeSlots: function ($calendarTableTbody) {
                 var options = this.options;
                 var renderRow, i, j;
-                var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+                var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
                 var start = (options.businessHours.limitDisplay ? options.businessHours.start : 0);
                 var end = (options.businessHours.limitDisplay ? options.businessHours.end : 24);
                 var rowspan = 1;
@@ -1342,7 +1341,7 @@
                     var self = this,
                         options = self.options,
                         renderRow = '<tr class=\"wc-grid-row-oddeven\">',
-                        showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
+                        showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length,
                         oddEvenClasses = {'odd': 'wc-column-odd', 'even': 'wc-column-even'},
                         oddEven;
 
@@ -1356,7 +1355,7 @@
                             renderRow += '</div>';
                             renderRow += '</td>';
                         } else {
-                            var uLength = options.users.length;
+                            var uLength = options.loadedUsers.length;
                             for (var j = 0; j < uLength; j++) {
                                 oddEven = (oddEven === 'odd' ? 'even' : 'odd');
                                 renderRow += '<td class=\"wc-day-column day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
@@ -1399,7 +1398,7 @@
                 var self = this,
                     options = this.options,
                     renderRow,
-                    showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+                    showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
 
                 renderRow = '<tr class=\"wc-grid-row-events\">';
                 renderRow += '<td class=\"wc-grid-timeslot-header\">';
@@ -1415,7 +1414,7 @@
                         renderRow += '</div>';
                         renderRow += '</td>';
                     } else {
-                        var uLength = options.users.length;
+                        var uLength = options.loadedUsers.length;
                         var columnclass;
                         for (var j = 0; j < uLength; j++) {
                             columnclass = [];
@@ -1471,7 +1470,7 @@
                             var top = parseInt($newEvent.css('top'), 10);
                             var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $newEvent, top);
 
-                            var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+                            var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
                             var userId = showAsSeparatedUser ? $weekDay.data('wcUserId') : self._getUserIdFromIndex(0);
                             var organization = options.currentUser.id === userId ? null : utils.chooseOrganization(options.currentUser.organizations, self._getUserFromId(userId).organizations);
                             var newCalEvent = {title: options.newEventText, start: eventDuration.start, end: eventDuration.end, organization: organization};
@@ -1728,7 +1727,7 @@
                 var self = this,
                     options = self.options,
                     currentDay = self._cloneDate(self.element.data('startDate')),
-                    showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length,
+                    showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length,
                     todayClass = 'state-active';
 
                 self.element.find('.wc-header th.wc-day-column-header').each(function (i, val) {
@@ -2035,7 +2034,7 @@
             _findWeekDayForEvent: function (calEvent, $weekDayColumns) {
                 var $weekDay;
                 var options = this.options;
-                var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+                var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
                 var user_ids = this._getEventUserId(calEvent);
 
                 if (!$.isArray(user_ids)) {
@@ -2212,7 +2211,7 @@
                         var options = TimelyUi.calendar.options,
                             maxColumnNumber = TimelyUi.maxColumnNumber;
 
-                        if (event.clientX + ui.position.left > window.screen.availWidth - 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.users.length) {
+                        if (event.clientX + ui.position.left > window.screen.availWidth - 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.loadedUsers.length) {
                             options.dragTicTime = new Date().getTime();
                             if (TimelyUi.columnsToShow !== 1) {
                                 $('.wc-go-right').click();
@@ -2220,7 +2219,7 @@
                             }
                             return false;
                         }
-                        if (ui.offset.left < 50 && event.clientX + ui.position.left < 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.users.length) {
+                        if (ui.offset.left < 50 && event.clientX + ui.position.left < 100 && new Date().getTime() > options.dragTicTime + 600 && maxColumnNumber < options.loadedUsers.length) {
                             options.dragTicTime = new Date().getTime();
                             if (TimelyUi.columnsToShow !== 1) {
                                 $('.wc-go-left').click();
@@ -2247,7 +2246,7 @@
                         var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $calEvent, top);
                         var calEvent = $calEvent.data('calEvent');
                         var newCalEvent = $.extend(true, {}, calEvent, {start: eventDuration.start, end: eventDuration.end});
-                        var showAsSeparatedUser = options.showAsSeparateUsers && options.users && options.users.length;
+                        var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
                         if (showAsSeparatedUser) {
                             var newUserId = $weekDay.data('wcUserId');
                             var userIdList = self._getEventUserId(calEvent);
@@ -2595,7 +2594,7 @@
             _getUserName: function (index) {
                 var self = this;
                 var options = this.options;
-                var user = options.users[index];
+                var user = options.loadedUsers[index];
 
                 return $.isFunction(options.getUserName) ? options.getUserName(user, index, self.element) : user;
             },
@@ -2607,7 +2606,7 @@
                 var self = this;
                 var options = this.options;
 
-                return $.isFunction(options.getUserId) ? options.getUserId(options.users[index], index, self.element) : index;
+                return $.isFunction(options.getUserId) ? options.getUserId(options.loadedUsers[index], index, self.element) : index;
             },
 
             /*
@@ -2616,7 +2615,7 @@
             _getUserIndexFromId: function (id) {
                 var self = this;
                 var options = this.options;
-                for (var i = 0; i < options.users.length; i++) {
+                for (var i = 0; i < options.loadedUsers.length; i++) {
                     if (self._getUserIdFromIndex(i) === id) {
                         return i;
                     }
@@ -2630,7 +2629,7 @@
             _getUserFromId: function (id) {
                 var self = this;
 
-                return self.options.users[self._getUserIndexFromId(id)];
+                return self.options.loadedUsers[self._getUserIndexFromId(id)];
             },
 
             /*
@@ -2640,7 +2639,7 @@
             _getEventUserId: function (calEvent) {
                 var self = this;
                 var options = this.options;
-                if (options.showAsSeparateUsers && options.users && options.users.length) {
+                if (options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length) {
                     return $.extend(true, [], calEvent.assignees);
                 }
                 return [];
