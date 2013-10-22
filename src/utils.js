@@ -537,6 +537,7 @@
 
         $wcUser.toggle();
         calendar._drawCurrentHourLine();
+        calendar.options.userVisibilityChanged();
     };
 
     TimelyUi.utils.disableIScroll = function (index) {

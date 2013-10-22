@@ -192,6 +192,8 @@
                 eventBody: function (calEvent, calendar) {
                     return calEvent.assignees.length === 1 ? calEvent.title : '<i class="icon-group"></i> ' + calEvent.title;
                 },
+                userVisibilityChanged: function () {
+                },
 
                 /*** Users configuration ***/
 
