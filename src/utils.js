@@ -680,12 +680,14 @@
     };
 
     /**
-     * Default logic to choose an organization from a list of shared organizations
+     * Logic to choose an organization from a list of shared organizations
      * @param {Array} organizations shared by two users
      * @return {Object} valid organization
      */
-    TimelyUi.utils._chooseDefaultOrganization = function (organizations) {
-        return organizations[0];
+    TimelyUi.utils._chooseBestOrganization = function (organizations) {
+        var _defaultOrganization = TimelyUi.calendar.options.defaultOrganization;
+
+        return _.contains(organizations, _defaultOrganization) ? _defaultOrganization : organizations[0];
     };
 
     /**
@@ -696,7 +698,7 @@
      */
     TimelyUi.utils.chooseOrganization = function (currentUserOrganizations, userOrganizations) {
         var commonOrganizations = this._commonOrganizations(currentUserOrganizations, userOrganizations);
-        return this._chooseDefaultOrganization(commonOrganizations);
+		return this._chooseBestOrganization(commonOrganizations);
     };
 
     /**
@@ -710,17 +712,5 @@
             _validElementsId = _.map(validElements, function(item) { return item.id; });
 
         return _.difference(_currentElementsId, _validElementsId);
-    };
-
-    /**
-     * Default logic to choose an organization instead of Private
-     * @param {Array} organizations belong to user
-     * @return {Object} valid organization or private
-     */
-    TimelyUi.utils._defaultOrganizationOrPrivate = function (organizations) {
-        // TODO this behaviour should be removed and stored inside user settings
-        var _defaultOrganization = 5;
-
-        return _.contains(organizations, _defaultOrganization) ? _defaultOrganization : null;
     };
 })(TimelyUi);
