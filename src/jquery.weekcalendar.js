@@ -207,6 +207,7 @@
                 },
 
                 currentUserOrganizations: [],
+                defaultOrganization: null,
 
                 // Available users for calendar
                 loadedUsers: [],

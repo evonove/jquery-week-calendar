@@ -181,9 +181,9 @@
 
             // Set correct organization value
             if ((_.contains(chosenEvent.assignees, options.currentUser.id)) && (chosenEvent.organization === null || typeof chosenEvent.id === 'undefined')) {
-                self.organizationSelect.val(String(null));
+                self.organizationSelect.val(String(options.defaultOrganization));
             } else {
-                self.organizationSelect.val(chosenEvent.organization || utils._chooseDefaultOrganization(_validOrganizations).id);
+                self.organizationSelect.val(chosenEvent.organization || utils.chooseOrganization(options.currentUser.organizations, calendar._getUserFromId(_.first(chosenEvent.assignees)).organizations));
             }
 
             // Set all others input with chosen event
