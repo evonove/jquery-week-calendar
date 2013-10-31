@@ -69,7 +69,7 @@
 }
 
 /* First user color override */
-th.wc-day-column-first {
+th.wc-current-user {
     color: #006ccc;
 }
 

@@ -191,7 +191,12 @@
                     }
                 },
                 eventBody: function (calEvent, calendar) {
-                    return calEvent.assignees.length === 1 ? calEvent.title : '<i class="icon-group"></i> ' + calEvent.title;
+                    var _body = calEvent.title;
+
+                    _body = calEvent.assignees && calEvent.assignees.length > 1 ? '<i class="icon-group"></i> ' + _body : _body;
+                    _body = calEvent.resources && calEvent.resources.length > 0 ? '<i class="icon-truck"></i> ' + _body : _body;
+
+                    return _body;
                 },
                 userVisibilityChanged: function () {
                 },
@@ -1156,7 +1161,7 @@
 
                 if (showAsSeparatedUser) {
                     rowspan = ' rowspan=\"2\"';
-                    colspan = ' colspan=\"' + options.users.length + '\" ';
+                    colspan = ' colspan=\"' + (options.users.length + options.resources.length) + '\" ';
                 }
 
                 // Header containers
@@ -1169,18 +1174,22 @@
                 }
                 calendarHeaderHtml += '</thead></table>';
 
-                // Users row
+                // Users and resources row
                 if (showAsSeparatedUser) {
+                    var _uLength = options.loadedUsers.length,
+                        _rLength = options.loadedResources.length,
+                        _headerClass = [];
+
                     calendarHeaderHtml += '<table id="calendar-header-wrapper" class="wrapper wc-calendar-header-wrapper"><thead class="wc-scroller-width wc-head-scroller-placeholder">';
                     calendarHeaderHtml += '<tr><th class=\"wc-time-column-header\"></th>';
-                    var uLength = options.loadedUsers.length, _headerClass = '';
 
-                    for (var j = 0; j < uLength; j++) {
+                    // Users
+                    for (var j = 0; j < _uLength; j++) {
                         _headerClass = [];
                         if (j === 0) {
-                            _headerClass.push('wc-day-column-first');
+                            _headerClass.push('wc-day-column-first wc-current-user');
                         }
-                        if (j === uLength - 1) {
+                        if (j === _uLength - 1 && _rLength === 0) {
                             _headerClass.push('wc-day-column-last');
                         }
                         if (!_headerClass.length) {
@@ -1191,6 +1200,28 @@
                         }
                         userHeaderHtml = '<th class=\"' + _headerClass + ' wc-user-header wc-day-' + i + ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
                         userHeaderHtml += self._getUserName(j);
+                        userHeaderHtml += '</th>';
+
+                        calendarHeaderHtml += userHeaderHtml;
+                    }
+
+                    // Resources
+                    for (var j = 0; j < _rLength; j++) {
+                        _headerClass = [];
+                        if (j === 0) {
+                            _headerClass.push('wc-day-column-first');
+                        }
+                        if (j === _rLength - 1) {
+                            _headerClass.push('wc-day-column-last');
+                        }
+                        if (!_headerClass.length) {
+                            _headerClass = 'wc-day-column-middle';
+                        }
+                        else {
+                            _headerClass = _headerClass.join(' ');
+                        }
+                        userHeaderHtml = '<th class=\"' + _headerClass + ' wc-user-header wc-day-' + i + ' wc-resource-' + options.loadedResources[j].id + '\">';
+                        userHeaderHtml += options.loadedResources[j].name;
                         userHeaderHtml += '</th>';
 
                         calendarHeaderHtml += userHeaderHtml;
@@ -1308,13 +1339,20 @@
                     padding: 5
                 });
 
-                // Add the user data to every impacted column
+                // Add user and resource data to every impacted column
                 if (showAsSeparatedUser) {
-                    for (var i = 0, uLength = options.loadedUsers.length; i < uLength; i++) {
+                    for (var i = 0, _uLength = options.loadedUsers.length; i < _uLength; i++) {
                         $calendarContainer.find('.wc-user-' + self._getUserIdFromIndex(i))
                             .data('wcUser', options.getUserName(options.loadedUsers[i]))
                             .data('wcUserIndex', i)
                             .data('wcUserId', self._getUserIdFromIndex(i));
+                    }
+
+                    for (var i = 0, _rLength = options.loadedResources.length; i < _rLength; i++) {
+                        $calendarContainer.find('.wc-resource-' + options.loadedResources[i].id)
+                            .data('wcResource', options.loadedResources[i].name)
+                            .data('wcResourceIndex', i)
+                            .data('wcResourceId', options.loadedResources[i].id);
                     }
                 }
             },
@@ -1325,7 +1363,6 @@
             _renderCalendarBodyTimeSlots: function ($calendarTableTbody) {
                 var options = this.options;
                 var renderRow, i, j;
-                var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
                 var start = (options.businessHours.limitDisplay ? options.businessHours.start : 0);
                 var end = (options.businessHours.limitDisplay ? options.businessHours.end : 24);
                 var rowspan = 1;
@@ -1343,7 +1380,7 @@
 
                 renderRow = '<tr class=\"wc-grid-row-timeslot\">';
                 renderRow += '<td class=\"wc-grid-timeslot-header\"' + rowspan + '></td>';
-                renderRow += '<td class=\"wc-timeslot-placeholder\" colspan=\"' + options.users.length + '\">';
+                renderRow += '<td class=\"wc-timeslot-placeholder\" colspan=\"' + (options.users.length + options.resources.length) + '\">';
                 renderRow += '<div class=\"wc-no-height-wrapper wc-time-slot-wrapper\">';
                 renderRow += '<div class=\"wc-time-slots\">';
 
@@ -1434,7 +1471,7 @@
                 renderRow += self._renderDayHours();
                 renderRow += '</td>';
 
-                // Now let's display events placeholders
+                // Now let's display events placeholders (TODO: this is a code duplication)
                 var _columnBaseClass = 'ui-state-default wc-day-column';
                 for (var i = 1; i <= options.daysToShow; i++) {
                     if (!showAsSeparatedUser) {
@@ -1443,25 +1480,50 @@
                         renderRow += '</div>';
                         renderRow += '</td>';
                     } else {
-                        var uLength = options.loadedUsers.length;
-                        var columnclass;
-                        for (var j = 0; j < uLength; j++) {
-                            columnclass = [];
+                        var _uLength = options.loadedUsers.length,
+                            _rLength = options.loadedResources.length,
+                            _columnClass;
+
+                        for (var j = 0; j < _uLength; j++) {
+                            _columnClass = [];
                             if (j === 0) {
-                                columnclass.push('wc-day-column-first wc-user-' + self._getUserIdFromIndex(j));
+                                _columnClass.push('wc-day-column-first wc-user-' + self._getUserIdFromIndex(j));
                             }
-                            if (j === uLength - 1) {
-                                columnclass.push('wc-day-column-last wc-user-' + self._getUserIdFromIndex(j));
+                            if (j === _uLength - 1 && _columnClass === 0) {
+                                _columnClass.push('wc-day-column-last wc-user-' + self._getUserIdFromIndex(j));
                             }
-                            if (!columnclass.length) {
-                                columnclass = 'wc-day-column-middle wc-user-' + self._getUserIdFromIndex(j);
+                            if (!_columnClass.length) {
+                                _columnClass = 'wc-day-column-middle wc-user-' + self._getUserIdFromIndex(j);
                             }
                             else {
-                                columnclass = columnclass.join(' ');
+                                _columnClass = _columnClass.join(' ');
                             }
-                            renderRow += '<td class=\"' + _columnBaseClass + ' ' + columnclass + ' day-' + i + '\">';
+                            renderRow += '<td class=\"' + _columnBaseClass + ' ' + _columnClass + ' day-' + i + '\">';
                             renderRow += '<div class=\"wc-full-height-column wc-day-column-inner day-' + i;
                             renderRow += ' wc-user-' + self._getUserIdFromIndex(j) + '\">';
+                            renderRow += '</div>';
+                            renderRow += '</div>';
+                            renderRow += '</td>';
+                        }
+
+                        // Resources
+                        for (var j = 0; j < _rLength; j++) {
+                            _columnClass = [];
+                            if (j === 0) {
+                                _columnClass.push('wc-day-column-first');
+                            }
+                            if (j === _rLength - 1) {
+                                _columnClass.push('wc-day-column-last');
+                            }
+                            if (!_columnClass.length) {
+                                _columnClass = 'wc-day-column-middle';
+                            }
+                            else {
+                                _columnClass = _columnClass.join(' ');
+                            }
+                            renderRow += '<td class=\"' + _columnBaseClass + ' ' + _columnClass + ' day-' + i + '\">';
+                            renderRow += '<div class=\"wc-full-height-column wc-day-column-inner day-' + i;
+                            renderRow += ' wc-resource-' + options.resources[j].id + '\">';
                             renderRow += '</div>';
                             renderRow += '</div>';
                             renderRow += '</td>';
@@ -1499,12 +1561,17 @@
                             var top = parseInt($newEvent.css('top'), 10);
                             var eventDuration = self._getEventDurationFromPositionedEventElement($weekDay, $newEvent, top);
 
-                            var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
-                            var userId = showAsSeparatedUser ? $weekDay.data('wcUserId') : self._getUserIdFromIndex(0);
                             var organization = options.currentUser.id === userId ? null : utils.chooseOrganization(options.currentUser.organizations, self._getUserFromId(userId).organizations);
                             var newCalEvent = {title: options.newEventText, start: eventDuration.start, end: eventDuration.end, organization: organization};
 
-                            newCalEvent = self._setEventUser(newCalEvent, userId);
+                            // Check if the new event is assigned to a user or resource
+                            if ($weekDay.data('wcUserId') !== undefined) {
+                                var userId = $weekDay.data('wcUserId');
+                                newCalEvent = self._setEventUser(newCalEvent, userId);
+                            } else {
+                                var resourceId = $weekDay.data('wcResourceId');
+                                newCalEvent = self._setEventResource(newCalEvent, resourceId);
+                            }
 
                             var $renderedCalEvent = self._renderEvent(newCalEvent, $weekDay);
                             $newEvent.remove();
@@ -2061,19 +2128,18 @@
              * Find the weekday in the current calendar that the calEvent falls within
              */
             _findWeekDayForEvent: function (calEvent, $weekDayColumns) {
-                var $weekDay;
-                var options = this.options;
-                var showAsSeparatedUser = options.showAsSeparateUsers && options.loadedUsers && options.loadedUsers.length;
-                var user_ids = this._getEventUserId(calEvent);
+                var $weekDay,
+                    userIds = calEvent.assignees,
+                    resourceIds = calEvent.resources;
 
-                if (!$.isArray(user_ids)) {
-                    user_ids = [user_ids];
+                if (!$.isArray(userIds)) {
+                    userIds = [userIds];
                 }
 
                 $weekDayColumns.each(function (index, curDay) {
                     if ($(this).data('startDate').getTime() <= calEvent.start.getTime() &&
                         $(this).data('endDate').getTime() >= calEvent.end.getTime() &&
-                        (!showAsSeparatedUser || $.inArray($(this).data('wcUserId'), user_ids) !== -1)) {
+                        ($.inArray($(this).data('wcUserId'), userIds) !== -1 || $.inArray($(this).data('wcResourceId'), resourceIds) !== -1)) {
                         if ($weekDay) {
                             $weekDay = $weekDay.add($(curDay));
                         }
@@ -2683,6 +2749,20 @@
                     calEvent.assignees = userId;
                 } else {
                     calEvent.assignees = [userId];
+                }
+
+                return calEvent;
+            },
+
+            /*
+             * Sets the event resource id on given calEvent
+             * Default is calEvent.userId field.
+             */
+            _setEventResource: function (calEvent, resourceId) {
+                if ($.isArray(resourceId)) {
+                    calEvent.resources = resourceId;
+                } else {
+                    calEvent.resources = [resourceId];
                 }
 
                 return calEvent;
