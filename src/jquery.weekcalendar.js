@@ -196,7 +196,7 @@
                 userVisibilityChanged: function () {
                 },
 
-                /*** Users configuration ***/
+                /*** Users and resources configuration ***/
 
                 /**
                  * Used to quickly grab current user informations
@@ -216,6 +216,15 @@
 
                 // IDs of removed users
                 removedUserIds: [],
+
+                // Available resources for calendar
+                loadedResources: [],
+
+                // Resources
+                resources: [],
+
+                // IDs of removed resources
+                removedResourceIds: [],
 
                 /**
                  * Should the calendar be displayed with separate column for each
@@ -639,6 +648,13 @@
                     foundItem = utils._findById(self.options.loadedUsers, id);
 
                 return foundItem ? foundItem.username : "";
+            },
+
+            getResourceById: function (id) {
+                var self = TimelyUi.calendar,
+                    foundItem = utils._findById(self.options.loadedResources, id);
+
+                return foundItem ? foundItem : {};
             },
 
             _getOrganizationById: function (id) {

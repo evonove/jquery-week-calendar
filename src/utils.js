@@ -700,6 +700,19 @@
     };
 
     /**
+     * Intersect current elements againts valid elements
+     * @param {Array} currentElements which are already chosen
+     * @param {Array} validElements allowed by selected parent
+     * @return {Array} intersected valid objects
+     */
+    TimelyUi.utils.intersectOrganizationElements = function (currentElements, validElements) {
+        var _currentElementsId = _.map(currentElements, function(item) { return item.id; }),
+            _validElementsId = _.map(validElements, function(item) { return item.id; });
+
+        return _.difference(_currentElementsId, _validElementsId);
+    };
+
+    /**
      * Default logic to choose an organization instead of Private
      * @param {Array} organizations belong to user
      * @return {Object} valid organization or private

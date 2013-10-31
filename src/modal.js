@@ -18,12 +18,21 @@
             var $modalBody = $('.modal-body');
             self.organizationSelect = $modalBody.find('#organization');
             self.ownerSelect = $modalBody.find('#owner');
+
             self.usersSelect = $modalBody.find('#users').selectize({
                 plugins: ['remove_button'],
                 valueField: 'id',
                 labelField: 'username',
                 searchField: 'username'
             })[0].selectize;
+
+            self.resourcesSelect = $modalBody.find('#resources').selectize({
+                plugins: ['remove_button'],
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name'
+            })[0].selectize;
+
             self.title = $('.modal-header #title');
             self.content = $modalBody.find('.js-description');
             self.contentParsed = $modalBody.find('.js-description-parsing');
@@ -34,19 +43,27 @@
                 $modalBody.find('.timepicker').pickatime({ interval: timeInterval, format: 'H:i' });
             }
 
+            /* Switch elements when a new organization is selected */
             self.organizationSelect.on('change', function(e) {
-                var _value = $(this).val() === "null" ? null : parseInt($(this).val(), 10),
-                    _users = self._getUsers(_value),
-                    _usersOldSelectedOrganization = _.map(self.usersSelect.options, function(item) { return item.id; }),
-                    _usersSelectedOrganization = _.map(_users, function(item) { return item.id; }),
-                    _oldUsers = _.difference(_usersOldSelectedOrganization, _usersSelectedOrganization);
+                var _value = $(this).val() === "null" ? null : parseInt($(this).val(), 10);
 
-                _.each(_oldUsers, function(userId) { self.usersSelect.removeOption(userId); });
+                // Switch users according to selected organization
+                var _users = self._getUsers(_value),
+                    _intersectUsers = utils.intersectOrganizationElements(self.usersSelect.options, _users);
+
+                _.each(_intersectUsers, function(userId) { self.usersSelect.removeOption(userId); });
                 self.usersSelect.addOption(_users);
 
                 if(_value === null) {
                     self.usersSelect.addItem(_.first(_users).id);
                 }
+
+                // Switch resources according to selected organization
+                var _resources = self._getResources(_value),
+                    _intersectResources = utils.intersectOrganizationElements(self.resourcesSelect.options, _resources);
+
+                _.each(_intersectResources, function(resourceId) { self.resourcesSelect.removeOption(resourceId); });
+                self.resourcesSelect.addOption(_resources);
             });
 
             /* Button listener */
@@ -121,6 +138,22 @@
             return _results;
         },
 
+        _getResources: function(organizationId) {
+            var calendar = TimelyUi.calendar,
+                options = calendar.options,
+                _results = [],
+                _organizationResources = [];
+
+            if(organizationId !== null) {
+                _organizationResources = utils._findById(options.currentUserOrganizations, organizationId).resources;
+                _.each(_organizationResources, function(resourceId) {
+                    _results.push({ id: resourceId, name: calendar.getResourceById(resourceId).name });
+                });
+            }
+
+            return _results;
+        },
+
         initUsers: function(organizationId) {
             var options = TimelyUi.calendar.options;
 
@@ -138,6 +171,13 @@
             $.each(organizations, function(index, organization) {
                 self.organizationSelect.append('<option value="{0}">{1}</option>'.format(organization.id, organization.name));
             });
+
+            return this;
+        },
+
+        initResources: function(organizationId) {
+            self.resourcesSelect.clear();
+            self.resourcesSelect.addOption(self._getResources(organizationId));
 
             return this;
         },
@@ -175,9 +215,9 @@
             self.endDate = self.createEventDate('.modal-body .js-end-date');
             self.endTime = self.createEventTime('.modal-body .js-end-time');
 
-            // Load users and organizations dynamically
+            // Load users, resources and organizations dynamically
             var _validOrganizations = self._getValidOrganizations(chosenEvent.assignees);
-            self.initUsers(chosenEvent.organization).initOrganizations(_validOrganizations);
+            self.initUsers(chosenEvent.organization).initOrganizations(_validOrganizations).initResources(chosenEvent.organization);
 
             // Set correct organization value
             if ((_.contains(chosenEvent.assignees, options.currentUser.id)) && (chosenEvent.organization === null || typeof chosenEvent.id === 'undefined')) {
@@ -190,6 +230,7 @@
 			self.title.val(chosenEvent.title);
             self.ownerSelect.val(chosenEvent.owner || calendar.options.currentUser.id);
             self.usersSelect.setValue(chosenEvent.assignees);
+            self.resourcesSelect.setValue(chosenEvent.resources);
 
             self.setDate(self.startDate, chosenEvent.start);
             self.setTime(self.startTime, chosenEvent.start);
@@ -212,6 +253,7 @@
                 organization: self.organizationSelect.val() === "null" ? null : parseInt(self.organizationSelect.val(), 10),
                 owner: parseInt(self.ownerSelect.val(), 10),
                 assignees: self.usersSelect.getValue(),
+                resources: self.resourcesSelect.getValue(),
 				start: this.getTime(self.getDate(this.startDate), self.startTime),
 				end: this.getTime(self.getDate(this.endDate), self.endTime),
 				content: self.content.val()
