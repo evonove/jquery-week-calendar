@@ -30,7 +30,14 @@
 			    self.options.calEvent.id = calendar.getLastEventId();
             }
             self.options.calEvent.owner = calendar.options.currentUser.id;
-            self.options.calEvent.organization = calendar.options.currentUser.id === _.first(self.options.calEvent.assignees) ? TimelyUi.calendar.options.defaultOrganization : utils.chooseOrganization(calendar.options.currentUser.organizations, calendar._getUserFromId(_.first(self.options.calEvent.assignees)).organizations);
+
+            // Check if this is a resource assignment or user assignment
+            if (self.options.calEvent.assignees === undefined && self.options.calEvent.resources.length === 1) {
+                self.options.calEvent.organization = utils.chooseOrganization(calendar.options.currentUser.organizations, utils._findById(calendar.options.loadedResources, _.first(self.options.calEvent.resources)).organizations);
+            } else {
+                self.options.calEvent.organization = calendar.options.currentUser.id === _.first(self.options.calEvent.assignees) ? TimelyUi.calendar.options.defaultOrganization : utils.chooseOrganization(calendar.options.currentUser.organizations, calendar._getUserFromId(_.first(self.options.calEvent.assignees)).organizations);
+            }
+
 			self.options.calEvent.title = self.title.val();
 
             calendar.onSave(self.options.calEvent);
