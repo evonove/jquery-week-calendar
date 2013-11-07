@@ -57,8 +57,11 @@
             });
 
             $('.js-modal-delete').click(function(e) {
-                self.remove();
-                self.instance.hide();
+                var _result = window.confirm("Sei sicuro di voler cancellare l'evento?");
+                if (_result) {
+                    self.remove();
+                    self.instance.hide();
+                }
                 e.preventDefault();
             });
 
