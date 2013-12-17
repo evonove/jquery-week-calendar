@@ -1804,16 +1804,20 @@
                 this._clearCalendar(onlyPersistedItem);
 
                 // Render a multi day event as various event
-                    var initialStart = new Date(calEvent.start),
-                        initialEnd = new Date(calEvent.end),
                 $.each(data, function (i, calEvent) {
+                    var initialStart = new Date(calEvent.date_start || calEvent.start),
+                        initialEnd = new Date(calEvent.date_end || calEvent.end),
                         maxHour = self.options.businessHours.limitDisplay ? self.options.businessHours.end : 24,
                         minHour = self.options.businessHours.limitDisplay ? self.options.businessHours.start : 0,
-                        start = new Date(initialStart),
+                        start = initialStart,
                         startDate = utils.formatDate(start, options.dateFormat),
                         endDate = utils.formatDate(initialEnd, options.dateFormat),
                         $weekDay,
                         isMultiday = false;
+
+                    // Internal mapping
+                    calEvent.start = initialStart;
+                    calEvent.end = initialEnd;
 
                     while (startDate < endDate) {
                         calEvent.start = start;
@@ -2025,6 +2029,10 @@
                 if (!$.isArray(user_ids)) {
                     user_ids = [user_ids];
                 }
+
+                // Internal mapping
+                calEvent.start = new Date(calEvent.start);
+                calEvent.end = new Date(calEvent.end);
 
                 $weekDayColumns.each(function (index, curDay) {
                     if ($(this).data('startDate').getTime() <= calEvent.start.getTime() &&
