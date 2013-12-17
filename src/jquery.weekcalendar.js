@@ -1800,42 +1800,13 @@
             _renderEvents: function (data, $weekDayColumns, onlyPersistedItem) {
                 var self = this;
                 var options = this.options;
-                var eventsToRender;
-
-                if (data.options) {
-                    var updateLayout = false;
-                    // Update options
-                    $.each(data.options, function (key, value) {
-                        if (value !== options[key]) {
-                            options[key] = value;
-                            updateLayout = updateLayout || $.ui.weekCalendar.updateLayoutOptions[key];
-                        }
-                    });
-
-                    self._computeOptions();
-
-                    if (updateLayout) {
-                        var hour = self._getCurrentScrollHour();
-                        self.element.empty();
-                        self._renderCalendar();
-                        $weekDayColumns = self.element.find('.wc-time-slots .wc-day-column-inner');
-                        self._updateDayColumnHeader($weekDayColumns);
-                        self._scrollToHour(hour, false);
-                    }
-                }
 
                 this._clearCalendar(onlyPersistedItem);
 
-                if ($.isArray(data)) {
-                    eventsToRender = self._cleanEvents(data);
-                } else if (data.events) {
-                    eventsToRender = self._cleanEvents(data.events);
-                }
-
                 // Render a multi day event as various event
-                $.each(eventsToRender, function (i, calEvent) {
                     var initialStart = new Date(calEvent.start),
                         initialEnd = new Date(calEvent.end),
+                $.each(data, function (i, calEvent) {
                         maxHour = self.options.businessHours.limitDisplay ? self.options.businessHours.end : 24,
                         minHour = self.options.businessHours.limitDisplay ? self.options.businessHours.start : 0,
                         start = new Date(initialStart),
@@ -2076,11 +2047,10 @@
              */
             _updateEventInCalendar: function (calEvent) {
                 var self = this;
-                self._cleanEvent(calEvent);
 
                 /* TODO: avoid this useless loop. Use selector to find event */
                 if (typeof calEvent.id !== 'undefined') {
-                    self.element.find('.wc-cal-event').each(function () {
+                    self.element.find('.wc-cal-event').each(function() {
                         if ($(this).data('calEvent').id === calEvent.id || $(this).hasClass('wc-new-cal-event')) {
                             $(this).remove();
                             return false;
@@ -2420,31 +2390,6 @@
                 var today = new Date();
                 this._clearTime(today);
                 return today.getTime() === clonedDate.getTime();
-            },
-
-            /*
-             * Clean events to ensure correct format
-             */
-            _cleanEvents: function (events) {
-                var self = this;
-                $.each(events, function (i, event) {
-                    self._cleanEvent(event);
-                });
-                return events;
-            },
-
-            /*
-             * Clean specific event
-             */
-            _cleanEvent: function (event) {
-                if (event.date) {
-                    event.start = event.date;
-                }
-                event.start = this._cleanDate(event.start);
-                event.end = this._cleanDate(event.end);
-                if (!event.end) {
-                    event.end = this._addDays(this._cloneDate(event.start), 1);
-                }
             },
 
             /*
